@@ -1,0 +1,178 @@
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
+import React from 'react';
+import Container from '../components/Container';
+import NavigationHeader from '../components/NavigationHeader';
+import CartItem from '../components/CartItem';
+import { useCart, useGetCart } from '../lib/queries';
+import { ActivityIndicator, Button } from 'react-native-paper';
+import { colors } from '../constants/Colors';
+import { FlashList } from '@shopify/flash-list';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRemoveFromCart } from '../lib/mutation';
+import { CartType } from '../lib/types';
+import { useRouter } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
+type Props = {};
+
+const cart = (props: Props) => {
+  const router = useRouter();
+  const { mutateAsync: removeFromCart, isPending: removeFromCartPending } =
+    useRemoveFromCart();
+  const { data, isFetching, isPaused, isError, isPending } = useGetCart();
+  if (isPaused) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+          Please check your internet connection
+        </Text>
+      </View>
+    );
+  }
+  if (isError) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+          Something went wrong
+        </Text>
+      </View>
+    );
+  }
+  console.log(data);
+
+  return (
+    <Container>
+      <NavigationHeader back title="Cart" />
+      <View
+        style={{
+          marginTop: 30,
+          flex: 1,
+
+          justifyContent: 'center',
+        }}
+      >
+        {isPending || isFetching ? (
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <ActivityIndicator size={'large'} color="black" animating />
+          </View>
+        ) : (
+          <View style={{ flex: 1 }}>
+            <Pressable
+              style={({ pressed }) => [
+                { opacity: pressed ? 0.5 : 1 },
+                {
+                  marginBottom: 10,
+                  alignItems: 'flex-end',
+                  justifyContent: 'flex-end',
+                  fle1x: 1,
+                },
+              ]}
+              onPress={() => router.push('/updateProfile')}
+            >
+              <Text
+                style={{
+                  color: 'skyblue',
+                  fontWeight: 'bold',
+                  alignSelf: 'flex-end',
+                }}
+              >
+                Change delivery address
+              </Text>
+            </Pressable>
+            <FlatList
+              ListHeaderComponent={() =>
+                data.length > 0 ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginBottom: 20,
+                      flex: 1,
+                    }}
+                  >
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                      Subtotal (1 item)
+                    </Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                      ₦{67778}
+                    </Text>
+                  </View>
+                ) : null
+              }
+              contentContainerStyle={{ paddingBottom: 30 }}
+              showsVerticalScrollIndicator={false}
+              data={data}
+              keyExtractor={(item, index) => item.productid + index}
+              renderItem={({ item }) => (
+                <CartItem
+                  {...item}
+                  removeFromCart={removeFromCart}
+                  removeFromCartPending={removeFromCartPending}
+                />
+              )}
+              ListFooterComponent={() => {
+                return data.length > 0 ? (
+                  <Button
+                    onPress={() => router.push('/checkout')}
+                    buttonColor={colors.lightGreen}
+                    textColor="#fff"
+                  >
+                    Checkout
+                  </Button>
+                ) : null;
+              }}
+              ListFooterComponentStyle={{
+                marginBottom: 50,
+              }}
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 'bold',
+                      color: 'black',
+                    }}
+                  >
+                    No items in cart
+                  </Text>
+                  <Pressable
+                    style={({ pressed }) => [
+                      pressed && { opacity: 0.5 },
+                      {
+                        marginTop: 20,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 10,
+                      },
+                    ]}
+                    onPress={() => router.push('/(tabs)/')}
+                  >
+                    <FontAwesome name="arrow-left" size={20} color="skyblue" />
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: 'skyblue',
+                      }}
+                    >
+                      Continue Shopping
+                    </Text>
+                  </Pressable>
+                </View>
+              )}
+            />
+          </View>
+        )}
+      </View>
+    </Container>
+  );
+};
+
+export default cart;
+
+const styles = StyleSheet.create({});
