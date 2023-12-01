@@ -127,3 +127,49 @@ export const useRemoveFromCart = () => {
     },
   });
 };
+
+type PaystackType = {
+  totalcost: string;
+  salesref: string;
+};
+export const usePayStack = () => {
+  const queryClient = useQueryClient();
+  const { show } = useToast();
+  const { user, id } = useStoreId();
+  return useMutation({
+    mutationKey: ['payStack'],
+    mutationFn: async ({
+      productInCart,
+      couponCode,
+    }: {
+      productInCart: string;
+      couponCode: string;
+    }) => {
+      const response = await axios.post(
+        `https://247api.netpro.software/api.aspx?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
+      );
+
+      return response.data as PaystackType;
+    },
+    onSuccess: async (data) => {
+      // queryClient.invalidateQueries({ queryKey: ['cartList'] });
+      // queryClient.invalidateQueries({ queryKey: ['user'] });
+      // show('Removed from cart', {
+      //   type: 'success',
+      //   placement: 'bottom',
+      //   duration: 4000,
+      //   animationType: 'slide-in',
+      // });
+      console.log('Mutation', data);
+    },
+
+    onError: async () => {
+      show('Something went wrong removing from cart', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    },
+  });
+};

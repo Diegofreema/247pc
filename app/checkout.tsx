@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Container from '../components/Container';
 import NavigationHeader from '../components/NavigationHeader';
 import {
@@ -17,14 +17,19 @@ import axios from 'axios';
 import { useStoreId } from '../lib/zustand/auth';
 import { useToast } from 'react-native-toast-notifications';
 import { useQueryClient } from '@tanstack/react-query';
+import { Paystack, paystackProps } from 'react-native-paystack-webview';
+import { usePayStack } from '../lib/mutation';
 type Props = {};
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
 });
 const CheckOut = (props: Props) => {
-  const { id } = useStoreId();
+  const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
+  const { id, user } = useStoreId();
   const { show } = useToast();
   const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending: loading, data: paystackData } = usePayStack();
   const {
     handleChange,
     handleSubmit,
@@ -63,7 +68,19 @@ const CheckOut = (props: Props) => {
       }
     },
   });
-  const { data, isPaused, isPending, isFetching, isError } = useGetOrder();
+  useEffect(() => {
+    if (paystackData) {
+      paystackWebViewRef?.current?.startTransaction();
+    }
+  }, [paystackData]);
+  const {
+    data,
+    isPaused,
+    isPending,
+    isFetching,
+    isError,
+    isLoading: loadingOrder,
+  } = useGetOrder();
   if (isPaused) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -83,7 +100,10 @@ const CheckOut = (props: Props) => {
       </View>
     );
   }
-  console.log(data);
+  console.log(paystackData, 'page');
+
+  const amount = parseInt(data?.total.replace(',', '') as string);
+  console.log(amount, 'page');
 
   return (
     <Container>
@@ -113,6 +133,37 @@ const CheckOut = (props: Props) => {
         <ActivityIndicator color="black" size={'large'} />
       ) : (
         <Card>
+          <Paystack
+            paystackKey="pk_live_616edbbc0c4a079dd0d866045da2a1f765386f43"
+            billingEmail={user?.email as string}
+            amount={amount}
+            channels={['card']}
+            onCancel={(e) => {
+              show('Payment cancelled', {
+                type: 'success',
+                placement: 'bottom',
+                duration: 4000,
+                animationType: 'slide-in',
+              });
+            }}
+            onSuccess={(res) => {
+              axios
+                .post(
+                  `https://247pharmacy.net/checkout.aspx?zxc=${paystackData?.salesref}`
+                )
+                .then((response) => console.log(response));
+
+              show('Payment successful', {
+                type: 'success',
+                placement: 'bottom',
+                duration: 4000,
+                animationType: 'slide-in',
+              });
+            }}
+            refNumber={paystackData?.salesref}
+            // @ts-ignore
+            ref={paystackWebViewRef}
+          />
           <Card.Content>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -197,6 +248,13 @@ const CheckOut = (props: Props) => {
             style={{ flexDirection: 'column', marginTop: 20, gap: 10 }}
           >
             <Button
+              onPress={() =>
+                mutateAsync({
+                  couponCode: values?.coupon,
+                  productInCart: data?.items,
+                })
+              }
+              loading={loading}
               icon={'credit-card'}
               buttonColor={colors.lightGreen}
               textColor="white"

@@ -25,9 +25,16 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 const index = (props: Props) => {
-  const { setId, getId, getUser, setUser, user } = useStoreId();
+  const { setId, getUser, setUser, id } = useStoreId();
   const router = useRouter();
-
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (id) {
+        router.replace('/(tabs)/');
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, []);
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
     useFormik({

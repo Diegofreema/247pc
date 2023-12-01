@@ -19,6 +19,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
           marginBottom: 10,
           paddingBottom: 20,
           paddingHorizontal: 10,
+          width: item.alsoLike ? width * 0.6 : width * 0.9,
         },
       ]}
       key={item.id}
@@ -81,7 +82,6 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
 
 const styles = StyleSheet.create({
   newArrival: {
-    width: width * 0.9,
     height: 300,
     overflow: 'hidden',
     marginBottom: 10,

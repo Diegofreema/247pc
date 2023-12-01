@@ -1,22 +1,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, usePathname } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
-import {
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  useColorScheme,
-} from 'react-native';
-import { PaperProvider, Text } from 'react-native-paper';
-import { View } from '../components/Themed';
+import { Platform, SafeAreaView, StatusBar } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -64,9 +54,6 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const pathName = usePathname();
-  console.log(pathName);
-
   return (
     <ThemeProvider value={DefaultTheme}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -118,6 +105,7 @@ function RootLayoutNav() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="checkout" options={{ headerShown: false }} />
+          <Stack.Screen name="wallet" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaView>
     </ThemeProvider>

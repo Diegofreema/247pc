@@ -31,6 +31,11 @@ const pages = [
     link: '/updatePassword',
     icon: <Entypo name="lock" size={30} color="black" />,
   },
+  {
+    name: 'Wallet',
+    link: '/wallet',
+    icon: <Entypo name="wallet" size={30} color="black" />,
+  },
 ];
 const Account = (props: Props) => {
   const [loading, setLoading] = useState(false);

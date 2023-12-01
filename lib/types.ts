@@ -60,6 +60,7 @@ export type SellerType = {
 };
 export type SearchType = {
   Dealer?: string;
+  alsoLike?: boolean;
 };
 
 export type Searched = SearchType & WishlistType;

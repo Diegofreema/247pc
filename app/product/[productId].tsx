@@ -1,7 +1,7 @@
 import { StyleSheet, View, useWindowDimensions, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useProduct, useWishlist } from '../../lib/queries';
+import { useProduct, useProductCat, useWishlist } from '../../lib/queries';
 import Container from '../../components/Container';
 import NavigationHeader from '../../components/NavigationHeader';
 import { Button, Card, Text } from 'react-native-paper';
@@ -16,6 +16,7 @@ import { useStoreId } from '../../lib/zustand/auth';
 import { WishlistType } from '../../lib/types';
 import { Image } from 'expo-image';
 import { colors } from '../../constants/Colors';
+import { ProductItem } from '../../components/ProductItem';
 type Props = {};
 
 const ProductDetail = (props: Props) => {
@@ -47,7 +48,14 @@ const ProductDetail = (props: Props) => {
     error,
     isPaused: isProductPaused,
   } = useProduct(productId);
-  if (isPaused || isProductPaused) {
+  const {
+    data: category,
+    isPending: isCategoryPending,
+    isFetching: isCategoryFetching,
+    isError: isCategoryError,
+    isPaused: isCategoryPaused,
+  } = useProductCat(data?.category as string);
+  if (isPaused || isProductPaused || isCategoryPaused) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -57,7 +65,7 @@ const ProductDetail = (props: Props) => {
     );
   }
 
-  if (error || isError) {
+  if (error || isError || isCategoryError) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -220,6 +228,43 @@ const ProductDetail = (props: Props) => {
               />
             </Card.Actions>
           </Card>
+          <View
+            style={{
+              marginVertical: 20,
+              width: '100%',
+              borderColor: 'gray',
+              borderWidth: StyleSheet.hairlineWidth,
+            }}
+          />
+          {category && category?.length > 0 && (
+            <View>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: 'black',
+                  marginBottom: 10,
+                  fontSize: 18,
+                }}
+              >
+                You might also like
+              </Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: 10 }}
+              >
+                {isCategoryPending || isCategoryFetching ? (
+                  <ActivityIndicator animating={true} size="large" />
+                ) : (
+                  category
+                    ?.slice(0, 5)
+                    .map((item) => (
+                      <ProductItem {...item} key={item.id} alsoLike />
+                    ))
+                )}
+              </ScrollView>
+            </View>
+          )}
         </ScrollView>
       )}
     </Container>

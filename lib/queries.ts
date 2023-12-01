@@ -133,9 +133,18 @@ export const useSpecialInfo = (state?: string, id?: string) => {
   return useQuery({
     queryKey: ['specialInfo', state, id],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `https://247api.netpro.software/api.aspx?api=specialofferinfo&statename=${state}&specialId=${id}`
       );
+
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
 
       return data;
     },
@@ -145,9 +154,18 @@ export const useSpecialOfferProducts = (productId?: string) => {
   return useQuery({
     queryKey: ['specialOfferProducts', productId],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `https://247api.netpro.software/api.aspx?api=specialofferproducts&productlist=${productId}`
       );
+
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
 
       return data;
     },
@@ -158,9 +176,17 @@ export const useWishlist = () => {
   return useQuery({
     queryKey: ['wishlist', id],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `https://247api.netpro.software/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
       );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
 
       return data as WishlistType[];
     },
@@ -172,9 +198,17 @@ export const useNewArrival = () => {
   return useQuery({
     queryKey: ['newArrival', user?.statename],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `https://247api.netpro.software/api.aspx?api=newarrivals&statename=${user?.statename}`
       );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
 
       return data as WishlistType[];
     },
@@ -228,9 +262,17 @@ export const useProductCat = (cat: string) => {
   return useQuery({
     queryKey: ['productCat', cat],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `https://247api.netpro.software/api.aspx?api=productbycategory&statename=${user?.statename}&category=${replacedPhrase}`
       );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
 
       return data as WishlistType[];
     },
@@ -240,9 +282,17 @@ export const useSeller = (id: string) => {
   return useQuery({
     queryKey: ['seller', id],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `https://247api.netpro.software/api.aspx?api=dealercategories&dealerid=${id} `
       );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
 
       return data as SellerType[];
     },
@@ -253,9 +303,17 @@ export const useSellerCat = (cat: string, id: string) => {
   return useQuery({
     queryKey: ['sellerCat', cat, id],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `https://247api.netpro.software/api.aspx?api=dealercategoryproducts&dealerid=${id}&category=${replacedPhrase} `
       );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
 
       return data as WishlistType[];
     },
@@ -284,6 +342,48 @@ export const useSearch = () => {
       );
 
       return data as Searched[];
+    },
+  });
+};
+export const useGetRecentlyViewed = () => {
+  const { id } = useStoreId();
+  return useQuery({
+    queryKey: ['recentlyViewed', id],
+    queryFn: async () => {
+      const response = await axios.get(
+        `https://247api.netpro.software/api.aspx?api=recentlyviewed&statename=imo&myuserid=${id}`
+      );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
+
+      return data as WishlistType[];
+    },
+  });
+};
+export const useWallet = () => {
+  const { id } = useStoreId();
+  return useQuery({
+    queryKey: ['wallet', id],
+    queryFn: async () => {
+      const response = await axios.get(
+        `https://247api.netpro.software/api.aspx?api=walletinfo&myuserid=${id}`
+      );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
+
+      return data;
     },
   });
 };

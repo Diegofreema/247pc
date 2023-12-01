@@ -1,8 +1,18 @@
-import { ScrollView, StyleSheet, Dimensions, Pressable } from 'react-native';
-import { View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  View,
+} from 'react-native';
+
 import { ActivityIndicator } from 'react-native-paper';
 
-import { useNewArrival, useSpecial } from '../../lib/queries';
+import {
+  useGetRecentlyViewed,
+  useNewArrival,
+  useSpecial,
+} from '../../lib/queries';
 import ProductCard, { ProductProps } from '../../components/ProductCard';
 import { Text } from 'react-native-paper';
 import { TopHeader } from '../../components/TopHeader';
@@ -13,13 +23,20 @@ const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, user } = useStoreId();
   const router = useRouter();
+  const {
+    data: recentlyViewed,
+    isFetching: isFetchingRecentlyViewed,
+    isPending: isPendingRecentlyViewed,
+    isPaused: isPausedRecentlyViewed,
+    error: errorRecentlyViewed,
+  } = useGetRecentlyViewed();
 
   const {
     data: special,
     isFetching: isFetchingSpecial,
     isPaused,
     isPending: isPendingSpecial,
-    refetch: refetchSpecial,
+
     error,
   } = useSpecial(user?.statename.toLowerCase() as string);
   const {
@@ -118,7 +135,16 @@ export default function TabOneScreen() {
           </View>
         )}
       </View>
-
+      {!isFetchingSpecial && !isPendingSpecial && (
+        <View
+          style={{
+            marginVertical: 20,
+            width: '100%',
+            borderColor: 'gray',
+            borderWidth: StyleSheet.hairlineWidth,
+          }}
+        />
+      )}
       <View style={{ marginBottom: 20, flex: 1 }}>
         {isFetchingNewArrival || isPending ? (
           <View
@@ -229,6 +255,110 @@ export default function TabOneScreen() {
           </View>
         )}
       </View>
+      <View style={{ marginBottom: 20, flex: 1 }}>
+        {isFetchingRecentlyViewed || isPendingRecentlyViewed ? (
+          <View
+            style={{
+              minHeight: 300,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ActivityIndicator animating color="#000" size="large" />
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <View
+              style={{
+                marginVertical: 20,
+                width: '100%',
+                borderColor: 'gray',
+                borderWidth: StyleSheet.hairlineWidth,
+              }}
+            />
+
+            {recentlyViewed && recentlyViewed?.length > 0 && (
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  color: '#000',
+                  marginBottom: 20,
+                }}
+              >
+                Recently Viewed
+              </Text>
+            )}
+            {Array.isArray(recentlyViewed) && recentlyViewed.length > 0 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 10,
+                }}
+              >
+                {recentlyViewed?.map((item) => {
+                  return (
+                    <Pressable
+                      onPress={() => router.push(`/product/${item?.id}`)}
+                      style={[
+                        styles.newArrival,
+                        {
+                          alignItems: 'center',
+                          justifyContent: 'center',
+
+                          marginBottom: 10,
+                        },
+                      ]}
+                      key={item.id}
+                    >
+                      <Image
+                        source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
+                        style={{ width: 250, height: 100, marginBottom: 5 }}
+                        contentFit="contain"
+                      />
+                      <Text
+                        style={{
+                          color: 'black',
+                          fontWeight: '400',
+                          fontSize: 15,
+                          marginBottom: 5,
+                          textAlign: 'center',
+                        }}
+                      >
+                        {item?.category}
+                      </Text>
+                      <Text
+                        style={{
+                          color: 'black',
+                          fontWeight: '600',
+                          fontSize: 17,
+                          marginBottom: 5,
+                          textAlign: 'center',
+                        }}
+                      >
+                        {item?.product}
+                      </Text>
+                      <Text
+                        style={{
+                          color: 'black',
+                          fontWeight: 'bold',
+                          fontSize: 20,
+                          textAlign: 'center',
+                        }}
+                      >
+                        ₦{item?.sellingprice}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : null}
+          </View>
+        )}
+      </View>
     </ScrollView>
   );
 }
@@ -242,7 +372,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     height: 200,
     overflow: 'hidden',
-    marginBottom: 10,
+    marginBottom: 5,
     borderRadius: 6,
   },
   container: {

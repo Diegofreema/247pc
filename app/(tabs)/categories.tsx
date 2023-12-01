@@ -21,7 +21,7 @@ export default function Categories() {
   const [active, setActive] = useState(0);
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);
   const scrollRef = useRef<ScrollView>(null);
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const { data: allCat, isPending, isFetching, isError, isPaused } = useCat();
   const {
     data: subCat,
@@ -119,7 +119,11 @@ export default function Categories() {
             ))}
           </ScrollView>
           {isPendingSub || isFetchingSub ? (
-            <ActivityIndicator size={'large'} color="black" />
+            <ActivityIndicator
+              style={{ position: 'absolute', top: height / 2, left: width / 2 }}
+              size={'large'}
+              color="black"
+            />
           ) : (
             <FlatList
               showsVerticalScrollIndicator={false}
