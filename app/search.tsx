@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SearchHeader } from '../components/SearchHeader';
 import Container from '../components/Container';
@@ -57,28 +57,32 @@ const search = () => {
       <SearchHeader value={value} onChangeText={setValue} />
       <Container>
         {isPending || isFetching ? (
-          <ActivityIndicator />
+          <ActivityIndicator color="black" size="large" />
         ) : (
-          <FlashList
-            showsVerticalScrollIndicator={false}
-            data={products}
-            renderItem={({ item }) => {
-              return <ProductItem {...item} />;
-            }}
-            keyExtractor={(item) => item.id}
-            ListEmptyComponent={() => (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Text>No products found</Text>
-              </View>
-            )}
-            estimatedItemSize={500}
-          />
+          <View style={{ flex: 1, width: '100%' }}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
+              data={products}
+              renderItem={({ item }) => {
+                return <ProductItem {...item} />;
+              }}
+              keyExtractor={(item) => item.id}
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text>No products found</Text>
+                </View>
+              )}
+            />
+          </View>
         )}
       </Container>
     </View>

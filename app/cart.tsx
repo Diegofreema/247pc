@@ -3,7 +3,7 @@ import React from 'react';
 import Container from '../components/Container';
 import NavigationHeader from '../components/NavigationHeader';
 import CartItem from '../components/CartItem';
-import { useCart, useGetCart, useGetOrder } from '../lib/queries';
+import { useCart, useGetCart, useGetOrder, useWishlist } from '../lib/queries';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import { colors } from '../constants/Colors';
 import { FlashList } from '@shopify/flash-list';
@@ -24,10 +24,24 @@ const cart = (props: Props) => {
     isError: isErrorOrder,
     isLoading: isLoadingOrder,
   } = useGetOrder();
+  const {
+    data: wishList,
+    isFetching: isFetchingWishlist,
+    isError: isErrorWishlist,
+    isPaused: isPausedWishlist,
+    isPending: isPendingWishlist,
+  } = useWishlist();
   const { mutateAsync: removeFromCart, isPending: removeFromCartPending } =
     useRemoveFromCart();
-  const { data, isFetching, isPaused, isError, isPending } = useGetCart();
-  if (isPaused || isPausedOrder) {
+  const {
+    data,
+    isFetching,
+    isPaused,
+    isError,
+    isPending,
+    isLoading: isLoadingCart,
+  } = useGetCart();
+  if (isPaused || isPausedOrder || isPausedWishlist) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -36,7 +50,7 @@ const cart = (props: Props) => {
       </View>
     );
   }
-  if (isError || isErrorOrder) {
+  if (isError || isErrorOrder || isErrorWishlist) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -45,7 +59,6 @@ const cart = (props: Props) => {
       </View>
     );
   }
-  console.log(data);
 
   return (
     <Container>
@@ -58,7 +71,10 @@ const cart = (props: Props) => {
           justifyContent: 'center',
         }}
       >
-        {isPending || isFetching || isLoadingOrder || isFetchingOrder ? (
+        {isLoadingOrder ||
+        isLoadingCart ||
+        isPendingWishlist ||
+        isFetchingWishlist ? (
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <ActivityIndicator size={'large'} color="black" animating />
           </View>
@@ -89,7 +105,7 @@ const cart = (props: Props) => {
             <FlatList
               ListHeaderComponentStyle={{ paddingHorizontal: 10 }}
               ListHeaderComponent={() =>
-                data.length > 0 ? (
+                data && data?.length > 0 ? (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -112,15 +128,17 @@ const cart = (props: Props) => {
               showsVerticalScrollIndicator={false}
               data={data}
               keyExtractor={(item, index) => item.productid + index}
-              renderItem={({ item }) => (
+              renderItem={({ item, index }) => (
                 <CartItem
+                  wishList={wishList}
+                  index={index}
                   {...item}
                   removeFromCart={removeFromCart}
                   removeFromCartPending={removeFromCartPending}
                 />
               )}
               ListFooterComponent={() => {
-                return data.length > 0 ? (
+                return data && data?.length > 0 ? (
                   <Button
                     onPress={() => router.push('/checkout')}
                     buttonColor={colors.lightGreen}

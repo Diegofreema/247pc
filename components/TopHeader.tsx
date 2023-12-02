@@ -35,8 +35,10 @@ export const TopHeader = ({}: Props): JSX.Element => {
         <Searchbar
           style={{
             backgroundColor: 'transparent',
+            color: 'black',
             borderWidth: 1,
-            borderColor: '#000',
+            borderColor: 'black',
+            borderRadius: 8,
           }}
           editable={false}
           value=""

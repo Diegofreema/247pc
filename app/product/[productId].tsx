@@ -108,7 +108,7 @@ const ProductDetail = (props: Props) => {
             marginTop: 20,
           }}
         >
-          <ActivityIndicator animating={true} size="large" />
+          <ActivityIndicator animating={true} size="large" color="black" />
         </View>
       ) : (
         <ScrollView

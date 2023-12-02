@@ -146,17 +146,7 @@ export default function TabOneScreen() {
         />
       )}
       <View style={{ marginBottom: 20, flex: 1 }}>
-        {isFetchingNewArrival || isPending ? (
-          <View
-            style={{
-              minHeight: 300,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <ActivityIndicator animating color="#000" size="large" />
-          </View>
-        ) : (
+        {isFetchingNewArrival || isPending ? null : (
           <View style={styles.container}>
             <Text
               style={{
@@ -256,17 +246,7 @@ export default function TabOneScreen() {
         )}
       </View>
       <View style={{ marginBottom: 20, flex: 1 }}>
-        {isFetchingRecentlyViewed || isPendingRecentlyViewed ? (
-          <View
-            style={{
-              minHeight: 300,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <ActivityIndicator animating color="#000" size="large" />
-          </View>
-        ) : (
+        {isFetchingRecentlyViewed || isPendingRecentlyViewed ? null : (
           <View style={styles.container}>
             <View
               style={{

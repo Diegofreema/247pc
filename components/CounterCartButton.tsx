@@ -81,12 +81,11 @@ const CounterCartButton = ({
       {pathname !== '/cart' && (
         <Button
           loading={addingToCart}
-          disabled={addingToCart}
           mode="contained"
           style={{ marginTop: 20 }}
           rippleColor={colors.ripple}
           buttonColor={colors.lightGreen}
-          textColor={addingToCart ? 'black' : 'white'}
+          textColor={'white'}
           onPress={onAddToCart}
           labelStyle={{ fontSize: 20, fontWeight: 'bold' }}
         >

@@ -105,7 +105,7 @@ const Forgot = (props: Props) => {
             text="Submit"
             onPress={() => handleSubmit()}
             loading={isSubmitting}
-            textColor={isSubmitting ? 'black' : 'white'}
+            textColor={'white'}
           />
         </View>
       </Container>

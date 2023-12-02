@@ -40,20 +40,6 @@ const NavigationHeader = ({ title, back }: Props) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<View>(null);
 
-  useEffect(() => {
-    const handleClickOutside = () => {
-      console.log('clicked');
-    };
-
-    const listen = EventRegister.addEventListener(
-      'clickOutside',
-      handleClickOutside
-    );
-
-    return () => {
-      EventRegister.removeEventListener(listen as string);
-    };
-  }, []);
   const { data: user, isLoading, isFetching, isPending } = useUser(id);
   const loading = isLoading || isFetching || isPending;
   return (
@@ -89,8 +75,16 @@ const NavigationHeader = ({ title, back }: Props) => {
             justifyContent: 'center',
             alignItems: 'center',
             padding: 20,
+            paddingHorizontal: 40,
           }}
         >
+          <FontAwesome
+            name="times"
+            size={20}
+            color="white"
+            style={{ position: 'absolute', top: 10, right: 8, padding: 5 }}
+            onPress={() => setShowMenu(false)}
+          />
           {links.map((link) => (
             <Pressable
               style={({ pressed }) => [

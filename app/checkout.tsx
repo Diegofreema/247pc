@@ -130,7 +130,14 @@ const CheckOut = (props: Props) => {
       {isFetching || isPending ? (
         <ActivityIndicator color="black" size={'large'} />
       ) : (
-        <Card>
+        <Card
+          contentStyle={{
+            padding: 5,
+            backgroundColor: 'white',
+            elevation: 0,
+            shadowColor: 'transparent',
+          }}
+        >
           <Paystack
             paystackKey="pk_live_616edbbc0c4a079dd0d866045da2a1f765386f43"
             billingEmail={user?.email as string}

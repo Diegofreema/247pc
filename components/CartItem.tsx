@@ -13,6 +13,8 @@ import { useGetOrder, useWishlist } from '../lib/queries';
 type Props = {
   removeFromCart: ({ salesId }: { salesId: string }) => void;
   removeFromCartPending: boolean;
+  index: number;
+  wishlist: WishlistType[];
 };
 
 const CartItem = ({
@@ -24,19 +26,16 @@ const CartItem = ({
   unitprice,
   removeFromCart,
   removeFromCartPending,
+  index,
+  wishlist,
 }: Props & CartType) => {
   const { mutateAsync, isPending } = useAddToWishlist();
-  const {
-    data: wishList,
-    isFetching: isFetchingWishlist,
-    isError,
-    isPaused,
-    isPending: isPendingWishlist,
-  } = useWishlist();
 
   const [wished, setWished] = useState(false);
+  const [clickedIndex, setClickedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
-    const inWishlist = wishList?.find(
+    const inWishlist = wishlist?.find(
       (item: WishlistType) => item?.id === productid
     );
     if (inWishlist?.id === productid) {
@@ -44,7 +43,12 @@ const CartItem = ({
     } else {
       setWished(false);
     }
-  }, [wishList, productid]);
+  }, [wishlist, productid]);
+  console.log(selectedIndex, clickedIndex);
+  const handleRemoveFromCart = (saleid: string, index: number) => {
+    setSelectedIndex(index);
+    // removeFromCart({ salesId: saleid });
+  };
   return (
     <View style={styles.containerStyle}>
       <View
@@ -112,8 +116,8 @@ const CartItem = ({
       >
         {!wished && (
           <Button
-            loading={isPending}
-            onPress={() => mutateAsync(productid)}
+            loading={isPending && index == clickedIndex}
+            onPress={() => handleRemoveFromCart(saleid, index)}
             icon={'heart'}
             buttonColor={colors.lightGreen}
             textColor="white"
@@ -127,8 +131,8 @@ const CartItem = ({
           </Button>
         )}
         <Button
-          onPress={() => removeFromCart({ salesId: saleid })}
-          loading={removeFromCartPending}
+          onPress={() => handleRemoveFromCart(saleid, index)}
+          loading={removeFromCartPending && index == selectedIndex}
           icon="delete"
           buttonColor={colors.danger}
           textColor={removeFromCartPending ? 'black' : 'white'}

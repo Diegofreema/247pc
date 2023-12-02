@@ -154,7 +154,7 @@ const index = (props: Props) => {
             loading={isSubmitting}
             text="Sign in"
             onPress={() => handleSubmit()}
-            textColor={isSubmitting ? 'black' : 'white'}
+            textColor={'white'}
           />
           <View style={{ marginTop: 20 }}>
             <MyButton
