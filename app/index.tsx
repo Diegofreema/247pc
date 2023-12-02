@@ -151,10 +151,9 @@ const index = (props: Props) => {
           </>
           <MyButton
             buttonColor={colors.lightGreen}
-            disabled={isSubmitting}
+            loading={isSubmitting}
             text="Sign in"
             onPress={() => handleSubmit()}
-            loading={isSubmitting}
             textColor={isSubmitting ? 'black' : 'white'}
           />
           <View style={{ marginTop: 20 }}>

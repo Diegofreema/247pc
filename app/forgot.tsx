@@ -102,7 +102,6 @@ const Forgot = (props: Props) => {
 
           <MyButton
             buttonColor={colors.lightGreen}
-            disabled={isSubmitting}
             text="Submit"
             onPress={() => handleSubmit()}
             loading={isSubmitting}

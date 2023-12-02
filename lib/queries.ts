@@ -12,6 +12,7 @@ import {
   Product,
   Searched,
   SellerType,
+  Special,
   State,
   SubProps,
   WishlistType,
@@ -146,7 +147,7 @@ export const useSpecialInfo = (state?: string, id?: string) => {
         data = [...response.data];
       }
 
-      return data;
+      return data as Special[];
     },
   });
 };

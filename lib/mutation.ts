@@ -108,6 +108,7 @@ export const useRemoveFromCart = () => {
     onSuccess: async (data) => {
       queryClient.invalidateQueries({ queryKey: ['cartList'] });
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.invalidateQueries({ queryKey: ['order'] });
       show('Removed from cart', {
         type: 'success',
         placement: 'bottom',
@@ -160,6 +161,56 @@ export const usePayStack = () => {
       //   duration: 4000,
       //   animationType: 'slide-in',
       // });
+      console.log('Mutation', data);
+    },
+
+    onError: async () => {
+      show('Something went wrong removing from cart', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    },
+  });
+};
+export const useWallet = () => {
+  const { show } = useToast();
+  const { user, id } = useStoreId();
+  return useMutation({
+    mutationKey: ['wallet'],
+    mutationFn: async ({
+      productInCart,
+      couponCode,
+    }: {
+      productInCart: string;
+      couponCode: string;
+    }) => {
+      const response = await axios.post(
+        `https://247api.netpro.software/api.aspx?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
+      );
+
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      if (data === 'saved') {
+        return show('Purchased successful', {
+          type: 'success',
+          placement: 'bottom',
+          duration: 4000,
+          animationType: 'slide-in',
+        });
+      }
+
+      if (data === 'insufficient fund') {
+        return show('Insufficient fund , Please top up', {
+          type: 'danger',
+          placement: 'bottom',
+          duration: 4000,
+          animationType: 'slide-in',
+        });
+      }
+
       console.log('Mutation', data);
     },
 

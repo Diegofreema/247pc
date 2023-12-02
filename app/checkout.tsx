@@ -18,7 +18,7 @@ import { useStoreId } from '../lib/zustand/auth';
 import { useToast } from 'react-native-toast-notifications';
 import { useQueryClient } from '@tanstack/react-query';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
-import { usePayStack } from '../lib/mutation';
+import { usePayStack, useWallet } from '../lib/mutation';
 type Props = {};
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
@@ -28,7 +28,7 @@ const CheckOut = (props: Props) => {
   const { id, user } = useStoreId();
   const { show } = useToast();
   const queryClient = useQueryClient();
-
+  const { mutateAsync: walletPay, isPending: walletLoading } = useWallet();
   const { mutateAsync, isPending: loading, data: paystackData } = usePayStack();
   const {
     handleChange,
@@ -58,7 +58,7 @@ const CheckOut = (props: Props) => {
 
       if (data === 'Free delivery has been applied!') {
         queryClient.invalidateQueries({ queryKey: ['order'] });
-        resetForm();
+
         return show('Free delivery has been applied', {
           type: 'success',
           placement: 'bottom',
@@ -100,10 +100,8 @@ const CheckOut = (props: Props) => {
       </View>
     );
   }
-  console.log(paystackData, 'page');
 
   const amount = parseInt(data?.total.replace(',', '') as string);
-  console.log(amount, 'page');
 
   return (
     <Container>
@@ -263,6 +261,13 @@ const CheckOut = (props: Props) => {
               Pay with Card
             </Button>
             <Button
+              disabled={walletLoading}
+              onPress={() =>
+                walletPay({
+                  productInCart: data?.items,
+                  couponCode: values?.coupon,
+                })
+              }
               icon={'wallet'}
               textColor="white"
               buttonColor={colors.black}

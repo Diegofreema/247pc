@@ -10,7 +10,7 @@ import { colors } from '../constants/Colors';
 import { EventRegister } from 'react-native-event-listeners';
 
 type Props = {
-  title: string;
+  title?: string;
   back?: boolean;
 };
 

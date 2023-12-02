@@ -131,7 +131,7 @@ const UpdatePassword = (props: Props) => {
               mode="contained"
               buttonColor={colors.lightGreen}
               onPress={() => handleSubmit()}
-              textColor={isSubmitting ? 'black' : 'white'}
+              textColor={'white'}
             >
               Update
             </Button>

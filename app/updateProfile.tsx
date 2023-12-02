@@ -342,11 +342,10 @@ const Update = (props: Props) => {
               <MyButton
                 loading={isSubmitting}
                 style={{ marginTop: 20, borderRadius: 5 }}
-                disabled={isSubmitting}
                 buttonColor={colors.lightGreen}
                 onPress={() => handleSubmit()}
                 text="Update"
-                textColor={isSubmitting ? 'black' : 'white'}
+                textColor={'white'}
               />
             </View>
           </Container>

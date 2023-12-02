@@ -26,10 +26,10 @@ const Special = (props: Props) => {
 
   useEffect(() => {
     setLoading(true);
-    if (data?.productlist) {
+    if (data && data[0]?.productlist) {
       axios
         .get(
-          `https://247api.netpro.software/api.aspx?api=specialofferproducts&productlist=${data?.productlist}`
+          `https://247api.netpro.software/api.aspx?api=specialofferproducts&productlist=${data[0]?.productlist}`
         )
         .then(({ data }) => {
           setProducts(data);
@@ -41,7 +41,7 @@ const Special = (props: Props) => {
           setLoading(false);
         });
     }
-  }, [data?.productlist]);
+  }, [data]);
 
   //   const { data: products } = useSpecialOfferProducts(data.productlist);
 
@@ -64,9 +64,11 @@ const Special = (props: Props) => {
       </View>
     );
   }
+  console.log(data);
+
   return (
     <Container>
-      <NavigationHeader back title={data?.GroupTitle} />
+      <NavigationHeader back title={data && (data[0]?.GroupTitle as string)} />
       <View style={{ marginBottom: 20 }} />
       <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
         {isPending || isFetching || loading ? (

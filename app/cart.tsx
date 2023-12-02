@@ -3,7 +3,7 @@ import React from 'react';
 import Container from '../components/Container';
 import NavigationHeader from '../components/NavigationHeader';
 import CartItem from '../components/CartItem';
-import { useCart, useGetCart } from '../lib/queries';
+import { useCart, useGetCart, useGetOrder } from '../lib/queries';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import { colors } from '../constants/Colors';
 import { FlashList } from '@shopify/flash-list';
@@ -16,10 +16,18 @@ type Props = {};
 
 const cart = (props: Props) => {
   const router = useRouter();
+  const {
+    data: order,
+    isPaused: isPausedOrder,
+    isPending: loadingOrder,
+    isFetching: isFetchingOrder,
+    isError: isErrorOrder,
+    isLoading: isLoadingOrder,
+  } = useGetOrder();
   const { mutateAsync: removeFromCart, isPending: removeFromCartPending } =
     useRemoveFromCart();
   const { data, isFetching, isPaused, isError, isPending } = useGetCart();
-  if (isPaused) {
+  if (isPaused || isPausedOrder) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -28,7 +36,7 @@ const cart = (props: Props) => {
       </View>
     );
   }
-  if (isError) {
+  if (isError || isErrorOrder) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -50,7 +58,7 @@ const cart = (props: Props) => {
           justifyContent: 'center',
         }}
       >
-        {isPending || isFetching ? (
+        {isPending || isFetching || isLoadingOrder || isFetchingOrder ? (
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <ActivityIndicator size={'large'} color="black" animating />
           </View>
@@ -79,6 +87,7 @@ const cart = (props: Props) => {
               </Text>
             </Pressable>
             <FlatList
+              ListHeaderComponentStyle={{ paddingHorizontal: 10 }}
               ListHeaderComponent={() =>
                 data.length > 0 ? (
                   <View
@@ -86,14 +95,15 @@ const cart = (props: Props) => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       marginBottom: 20,
+                      paddingHorizontal: 10,
                       flex: 1,
                     }}
                   >
                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-                      Subtotal (1 item)
+                      {order?.items} item(s)
                     </Text>
                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-                      ₦{67778}
+                      ₦{order?.total}
                     </Text>
                   </View>
                 ) : null

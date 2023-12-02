@@ -80,3 +80,8 @@ export type OrderType = {
   subtotal: string;
   total: string;
 };
+
+export type Special = {
+  GroupTitle: string;
+  productlist: string;
+};

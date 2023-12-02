@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     height: 200,
     overflow: 'hidden',
-    marginBottom: 5,
+    marginBottom: 3,
     borderRadius: 6,
   },
   container: {
@@ -386,6 +386,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 6,
     paddingHorizontal: 5,
+    backgroundColor: '#fff',
     shadowColor: '#000',
 
     shadowOffset: {

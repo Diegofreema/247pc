@@ -17,7 +17,12 @@ type Props = {
 const Wishlist = ({ id, category, price, title }: Props) => {
   return (
     <View
-      style={{ minHeight: 150, alignItems: 'center', justifyContent: 'center' }}
+      style={{
+        minHeight: 150,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+      }}
     >
       <Link href={`/product/${id}`} asChild>
         <Pressable
@@ -39,9 +44,16 @@ const Wishlist = ({ id, category, price, title }: Props) => {
             />
           </View>
           <View style={{ flex: 0.6 }}>
-            <Text variant="titleSmall">{category}</Text>
-            <Text variant="titleMedium">{trimTitle(title as string)}</Text>
-            <Text variant="bodyLarge" style={{ fontWeight: 'bold' }}>
+            <Text style={{ color: 'black' }} variant="titleSmall">
+              {category}
+            </Text>
+            <Text style={{ color: 'black' }} variant="titleMedium">
+              {trimTitle(title as string)}
+            </Text>
+            <Text
+              variant="bodyLarge"
+              style={{ fontWeight: 'bold', color: 'black' }}
+            >
               ₦{price}
             </Text>
           </View>

@@ -8,7 +8,7 @@ import CounterCartButton from './CounterCartButton';
 import { colors } from '../constants/Colors';
 import { CartType, WishlistType } from '../lib/types';
 import { useAddToWishlist } from '../lib/mutation';
-import { useWishlist } from '../lib/queries';
+import { useGetOrder, useWishlist } from '../lib/queries';
 
 type Props = {
   removeFromCart: ({ salesId }: { salesId: string }) => void;
@@ -33,6 +33,7 @@ const CartItem = ({
     isPaused,
     isPending: isPendingWishlist,
   } = useWishlist();
+
   const [wished, setWished] = useState(false);
   useEffect(() => {
     const inWishlist = wishList?.find(
@@ -101,11 +102,17 @@ const CartItem = ({
           ₦{unitprice}
         </Text>
       </View>
-      <View style={{ flexDirection: 'column', gap: 10, marginTop: 20 }}>
+      <View
+        style={{
+          flexDirection: 'column',
+          gap: 10,
+          marginTop: 20,
+          alignItems: 'center',
+        }}
+      >
         {!wished && (
           <Button
             loading={isPending}
-            disabled={isPending}
             onPress={() => mutateAsync(productid)}
             icon={'heart'}
             buttonColor={colors.lightGreen}
@@ -113,7 +120,7 @@ const CartItem = ({
             rippleColor={colors.lightGreen}
             mode="outlined"
             style={{
-              width: '100%',
+              width: '90%',
             }}
           >
             Save to wishlist
@@ -121,7 +128,6 @@ const CartItem = ({
         )}
         <Button
           onPress={() => removeFromCart({ salesId: saleid })}
-          disabled={removeFromCartPending}
           loading={removeFromCartPending}
           icon="delete"
           buttonColor={colors.danger}
@@ -129,7 +135,7 @@ const CartItem = ({
           mode="outlined"
           rippleColor={colors.danger}
           style={{
-            width: '100%',
+            width: '90%',
           }}
         >
           Remove from cart
@@ -152,6 +158,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     paddingBottom: 25,
+    paddingHorizontal: 10,
     shadowColor: '#000',
 
     shadowOffset: {

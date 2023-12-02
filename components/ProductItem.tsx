@@ -19,7 +19,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
           marginBottom: 10,
           paddingBottom: 20,
           paddingHorizontal: 10,
-          width: item.alsoLike ? width * 0.6 : width * 0.9,
+          width: item.alsoLike ? width * 0.6 : width * 0.8,
         },
       ]}
       key={item.id}

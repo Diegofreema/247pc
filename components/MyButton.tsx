@@ -5,7 +5,7 @@ type Props = {
   buttonColor?: string;
   textColor?: string;
   onPress: () => void;
-  disabled?: boolean;
+
   text: string;
   loading?: boolean;
   style?: any;
@@ -15,9 +15,9 @@ export const MyButton = ({
   buttonColor = 'transparent',
   textColor = '#fff',
   onPress,
-  disabled = false,
-  text,
   loading = false,
+  text,
+
   style,
 }: Props): JSX.Element => {
   return (
@@ -27,7 +27,6 @@ export const MyButton = ({
       textColor={textColor}
       buttonColor={buttonColor}
       onPress={onPress}
-      disabled={disabled}
       loading={loading}
     >
       {text}

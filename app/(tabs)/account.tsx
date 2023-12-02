@@ -12,16 +12,6 @@ type Props = {};
 
 const pages = [
   {
-    name: 'Orders',
-    link: '/Orders',
-    icon: <Entypo name="box" size={30} color="black" />,
-  },
-  {
-    name: 'Dealers',
-    link: '/dealers',
-    icon: <Entypo name="shop" size={30} color="black" />,
-  },
-  {
     name: 'Update Profile',
     link: '/updateProfile',
     icon: <Entypo name="user" size={30} color="black" />,

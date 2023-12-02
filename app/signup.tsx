@@ -363,8 +363,7 @@ const SignUp = (props: Props) => {
               mode="contained"
               buttonColor={colors.lightGreen}
               onPress={() => handleSubmit()}
-              disabled={isSubmitting}
-              textColor={isSubmitting ? 'black' : 'white'}
+              textColor={'white'}
             >
               Sign up
             </Button>
