@@ -19,6 +19,7 @@ const Profile = ({ isLoggedIn, email, name, loading }: Props) => {
   const toast = useToast();
   const logout = async () => {
     removeId();
+    removeUser();
     toast.show('Logged out successfully', {
       type: 'success',
       placement: 'bottom',

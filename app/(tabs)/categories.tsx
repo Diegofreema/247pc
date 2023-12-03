@@ -118,13 +118,7 @@ export default function Categories() {
               </TouchableOpacity>
             ))}
           </ScrollView>
-          {isPendingSub || isFetchingSub ? (
-            <ActivityIndicator
-              style={{ position: 'absolute', top: height / 2, left: width / 2 }}
-              size={'large'}
-              color="black"
-            />
-          ) : (
+          {isPendingSub || isFetchingSub ? null : (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={subCat}

@@ -128,15 +128,19 @@ const cart = (props: Props) => {
               showsVerticalScrollIndicator={false}
               data={data}
               keyExtractor={(item, index) => item.productid + index}
-              renderItem={({ item, index }) => (
-                <CartItem
-                  wishList={wishList}
-                  index={index}
-                  {...item}
-                  removeFromCart={removeFromCart}
-                  removeFromCartPending={removeFromCartPending}
-                />
-              )}
+              renderItem={({ item, index }) => {
+                return (
+                  <>
+                    <CartItem
+                      wishList={wishList}
+                      index={index + Math.random() * 400}
+                      {...item}
+                      removeFromCart={removeFromCart}
+                      removeFromCartPending={removeFromCartPending}
+                    />
+                  </>
+                );
+              }}
               ListFooterComponent={() => {
                 return data && data?.length > 0 ? (
                   <Button

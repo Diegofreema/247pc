@@ -10,9 +10,7 @@ import { ActivityIndicator, Button } from 'react-native-paper';
 import { colors } from '../constants/Colors';
 import { useRouter } from 'expo-router';
 
-import { useCommunities, useStates } from '../lib/queries';
-import RNPickerSelect from 'react-native-picker-select';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -187,7 +185,8 @@ const Update = (props: Props) => {
   }
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: 50,
         }}
@@ -197,7 +196,8 @@ const Update = (props: Props) => {
         <View style={{ alignItems: 'center', marginTop: 30 }}>
           <Image
             source={require('../assets/images/logo.png')}
-            style={{ width: width, height: 150 }}
+            style={{ width: width * 0.8, height: 100 }}
+            contentFit="cover"
           />
           <View style={{ marginVertical: 30 }}>
             <Text style={{ fontSize: 25, fontWeight: 'bold' }}>
@@ -350,7 +350,7 @@ const Update = (props: Props) => {
             </View>
           </Container>
         )}
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 };

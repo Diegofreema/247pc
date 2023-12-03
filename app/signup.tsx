@@ -18,6 +18,7 @@ import { useStoreId } from '../lib/zustand/auth';
 import { useToast } from 'react-native-toast-notifications';
 import { getProfile } from '../lib/helpers';
 import { Community, State } from '../lib/types';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {};
 const width = Dimensions.get('window').width;
@@ -179,7 +180,8 @@ const SignUp = (props: Props) => {
   }
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: 50,
         }}
@@ -189,7 +191,8 @@ const SignUp = (props: Props) => {
         <View style={{ alignItems: 'center', marginTop: 30 }}>
           <Image
             source={require('../assets/images/logo.png')}
-            style={{ width: width, height: 150 }}
+            style={{ width: width * 0.8, height: 100 }}
+            contentFit="cover"
           />
           <View style={{ marginTop: 30 }}>
             <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Sign up</Text>
@@ -369,7 +372,7 @@ const SignUp = (props: Props) => {
             </Button>
           </View>
         </Container>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 };

@@ -22,6 +22,8 @@ import { useRouter } from 'expo-router';
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, user } = useStoreId();
+  console.log(id);
+
   const router = useRouter();
   const {
     data: recentlyViewed,

@@ -32,8 +32,8 @@ const CartItem = ({
   const { mutateAsync, isPending } = useAddToWishlist();
 
   const [wished, setWished] = useState(false);
-  const [clickedIndex, setClickedIndex] = useState(0);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [clickedIndex, setClickedIndex] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState('');
   useEffect(() => {
     const inWishlist = wishlist?.find(
       (item: WishlistType) => item?.id === productid
@@ -45,10 +45,7 @@ const CartItem = ({
     }
   }, [wishlist, productid]);
   console.log(selectedIndex, clickedIndex);
-  const handleRemoveFromCart = (saleid: string, index: number) => {
-    setSelectedIndex(index);
-    // removeFromCart({ salesId: saleid });
-  };
+  const handleRemoveFromCart = (saleid: string, index: number) => {};
   return (
     <View style={styles.containerStyle}>
       <View
@@ -116,8 +113,11 @@ const CartItem = ({
       >
         {!wished && (
           <Button
-            loading={isPending && index == clickedIndex}
-            onPress={() => handleRemoveFromCart(saleid, index)}
+            loading={isPending && productid == clickedIndex}
+            onPress={() => {
+              setClickedIndex(productid);
+              mutateAsync(productid);
+            }}
             icon={'heart'}
             buttonColor={colors.lightGreen}
             textColor="white"
@@ -131,11 +131,14 @@ const CartItem = ({
           </Button>
         )}
         <Button
-          onPress={() => handleRemoveFromCart(saleid, index)}
-          loading={removeFromCartPending && index == selectedIndex}
+          onPress={() => {
+            setSelectedIndex(saleid);
+            removeFromCart({ salesId: saleid });
+          }}
+          loading={removeFromCartPending && saleid == selectedIndex}
           icon="delete"
           buttonColor={colors.danger}
-          textColor={removeFromCartPending ? 'black' : 'white'}
+          textColor={'white'}
           mode="outlined"
           rippleColor={colors.danger}
           style={{

@@ -15,6 +15,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { useStoreId } from '../lib/zustand/auth';
 import { MyButton } from '../components/MyButton';
 import { getProfile } from '../lib/helpers';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 type Props = {};
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
@@ -29,7 +30,7 @@ const index = (props: Props) => {
   const router = useRouter();
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (id) {
+      if (id !== null) {
         router.replace('/(tabs)/');
       }
     }, 1000);
@@ -96,7 +97,7 @@ const index = (props: Props) => {
   const { email, password } = values;
 
   return (
-    <ScrollView
+    <KeyboardAwareScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
       showsVerticalScrollIndicator={false}
       style={{ flex: 1 }}
@@ -106,7 +107,8 @@ const index = (props: Props) => {
       <View style={{ alignItems: 'center', marginTop: 30 }}>
         <Image
           source={require('../assets/images/logo.png')}
-          style={{ width: width - 40, height: 150 }}
+          style={{ width: width * 0.8, height: 100 }}
+          contentFit="cover"
         />
         <View style={{ marginTop: 20 }}>
           <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Sign in</Text>
@@ -165,7 +167,7 @@ const index = (props: Props) => {
           </View>
         </View>
       </Container>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
