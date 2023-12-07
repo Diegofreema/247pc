@@ -3,13 +3,29 @@ import { StyleSheet, View, Text, Pressable, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 
 import { Searched, WishlistType } from '../lib/types';
+import axios from 'axios';
+import { useStoreId } from '../lib/zustand/auth';
 
 const { width } = Dimensions.get('window');
 export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
   const router = useRouter();
+  const { id } = useStoreId();
+  const handlePress = () => {
+    axios
+      .post(
+        `https://247api.netpro.software/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    router.push(`/product/${item?.id}`);
+  };
   return (
     <Pressable
-      onPress={() => router.push(`/product/${item?.id}`)}
+      onPress={handlePress}
       style={[
         styles.newArrival,
         {
@@ -19,7 +35,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
           marginBottom: 10,
           paddingBottom: 20,
           paddingHorizontal: 10,
-          width: item.alsoLike ? width * 0.6 : width * 0.8,
+          flex: 1,
         },
       ]}
       key={item.id}

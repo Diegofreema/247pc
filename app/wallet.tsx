@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import React, { useRef, useState } from 'react';
-import { useWallet } from '../lib/queries';
+import { useWallet, useWalletBalance } from '../lib/queries';
 import Container from '../components/Container';
 import NavigationHeader from '../components/NavigationHeader';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { Button, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
 import { colors } from '../constants/Colors';
 import { useFormik } from 'formik';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
@@ -18,8 +18,22 @@ const validationSchema = yup.object().shape({
   amount: yup.string().required('Amount is required'),
 });
 const Wallet = (props: Props) => {
-  const { data, refetch, isFetching, isError, isPaused, isRefetching } =
-    useWallet();
+  const {
+    data,
+    refetch,
+    isFetching,
+    isError,
+    isPaused,
+    isRefetching,
+    isPending,
+  } = useWallet();
+  const {
+    data: walletBalance,
+    isFetching: walletBalanceIsFetching,
+    isPaused: walletBalanceIsPaused,
+    isPending: walletBalanceIsPending,
+    isError: walletBalanceIsError,
+  } = useWalletBalance();
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const [reference, setReference] = useState('');
   const { id, user } = useStoreId();
@@ -61,7 +75,7 @@ const Wallet = (props: Props) => {
     },
   });
 
-  if (isPaused) {
+  if (isPaused || walletBalanceIsPaused) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -71,7 +85,7 @@ const Wallet = (props: Props) => {
     );
   }
 
-  if (isError) {
+  if (isError || walletBalanceIsError) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
@@ -81,9 +95,18 @@ const Wallet = (props: Props) => {
     );
   }
   const { amount } = values;
-  console.log(reference);
+
   const finalAmount = parseInt(amount.replace(',', '')) * 100;
-  return (
+  const isLoading =
+    isPending ||
+    walletBalanceIsPending ||
+    isFetching ||
+    walletBalanceIsFetching;
+  return isLoading ? (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size={'large'} color={'black'} />
+    </View>
+  ) : (
     <Container>
       <NavigationHeader title="Wallet" back />
       <View style={{ marginTop: 20 }} />
@@ -132,16 +155,18 @@ const Wallet = (props: Props) => {
             My Wallet
           </Text>
         </View>
-        <Text
+        <View
           style={{
-            fontSize: 15,
-            fontWeight: '500',
-            color: 'black',
-            marginBottom: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            marginLeft: 10,
+            marginTop: 15,
           }}
         >
-          Current Balance: 0
-        </Text>
+          <FontAwesome name="money" size={25} color="#fff" />
+          <Text style={{ color: 'white' }}>Your Balance: ₦{walletBalance}</Text>
+        </View>
 
         <View
           style={{
@@ -209,9 +234,13 @@ const Wallet = (props: Props) => {
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item}
+        keyExtractor={(item, index) => item}
         data={data}
-        renderItem={({ item }) => <Text>{item}</Text>}
+        renderItem={({ item }) => (
+          <Text style={{ color: 'black', fontWeight: '500', marginBottom: 10 }}>
+            {item?.info}
+          </Text>
+        )}
         refreshing={isRefetching}
         onRefresh={refetch}
         ListEmptyComponent={() => (

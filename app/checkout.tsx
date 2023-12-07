@@ -19,6 +19,9 @@ import { useToast } from 'react-native-toast-notifications';
 import { useQueryClient } from '@tanstack/react-query';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
 import { usePayStack, useWallet } from '../lib/mutation';
+import { ModalComponent } from '../components/Modal';
+import { useModalState } from '../lib/zustand/modalState';
+import { MyButton } from '../components/MyButton';
 type Props = {};
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
@@ -80,23 +83,47 @@ const CheckOut = (props: Props) => {
     isFetching,
     isError,
     isLoading: loadingOrder,
+    refetch,
   } = useGetOrder();
   if (isPaused) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
-
   if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
@@ -105,10 +132,18 @@ const CheckOut = (props: Props) => {
 
   return (
     <Container>
+      <ModalComponent />
       <NavigationHeader back title="Checkout" />
       <View style={{ marginTop: 20 }} />
       <View style={{ marginBottom: 20 }}>
         <TextInput
+          mode="outlined"
+          style={{ backgroundColor: 'transparent', color: 'black' }}
+          contentStyle={{ backgroundColor: 'transparent', color: 'black' }}
+          placeholderTextColor={'black'}
+          textColor="black"
+          activeOutlineColor="black"
+          outlineStyle={{ borderColor: 'black', borderWidth: 1 }}
           disabled={isSubmitting}
           value={values.coupon}
           onChangeText={handleChange('coupon')}

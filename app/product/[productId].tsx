@@ -17,11 +17,13 @@ import { WishlistType } from '../../lib/types';
 import { Image } from 'expo-image';
 import { colors } from '../../constants/Colors';
 import { ProductItem } from '../../components/ProductItem';
+import { MyButton } from '../../components/MyButton';
+import { FloatingNav } from '../../components/FloatingNav';
 type Props = {};
 
 const ProductDetail = (props: Props) => {
   const { id } = useStoreId();
-  console.log(id);
+
   const router = useRouter();
   const { productId } = useLocalSearchParams();
   const { mutateAsync, isPending: isMutatingWishlist } = useAddToWishlist();
@@ -47,6 +49,7 @@ const ProductDetail = (props: Props) => {
     isPending,
     error,
     isPaused: isProductPaused,
+    refetch,
   } = useProduct(productId);
   const {
     data: category,
@@ -57,20 +60,44 @@ const ProductDetail = (props: Props) => {
   } = useProductCat(data?.category as string);
   if (isPaused || isProductPaused || isCategoryPaused) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
 
   if (error || isError || isCategoryError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
@@ -87,8 +114,6 @@ const ProductDetail = (props: Props) => {
   };
 
   const handleWishlist = async (productId?: string, id?: any) => {
-    console.log('50', productId, id);
-
     mutateAsync(productId as string, id);
   };
   const source: HTMLSource = {
@@ -267,6 +292,7 @@ const ProductDetail = (props: Props) => {
           )}
         </ScrollView>
       )}
+      <FloatingNav />
     </Container>
   );
 };

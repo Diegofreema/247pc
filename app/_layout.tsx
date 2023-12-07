@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
@@ -52,10 +52,16 @@ export default function RootLayout() {
     </QueryClientProvider>
   );
 }
+const MyTheme = {
+  ...DefaultTheme,
+  backgroundColor: '#ffffff',
+};
 
 function RootLayoutNav() {
+  const pathname = usePathname();
+
   return (
-    <ThemeProvider value={DefaultTheme}>
+    <ThemeProvider value={MyTheme}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
       <SafeAreaView
         style={{

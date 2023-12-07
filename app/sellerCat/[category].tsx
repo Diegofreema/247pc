@@ -7,37 +7,60 @@ import NavigationHeader from '../../components/NavigationHeader';
 import { Image } from 'expo-image';
 import { ActivityIndicator } from 'react-native-paper';
 import { ProductItem } from '../../components/ProductItem';
+import { MyButton } from '../../components/MyButton';
+import { colors } from '../../constants/Colors';
+import { FloatingNav } from '../../components/FloatingNav';
 
 type Props = {};
 
 const SellerCat = (props: Props) => {
   const { category, id } = useLocalSearchParams();
   const router = useRouter();
-  const { data, isPending, isFetching, isError, isPaused } = useSellerCat(
-    category as string,
-    id as string
-  );
+  const { data, isPending, isFetching, isError, isPaused, refetch } =
+    useSellerCat(category as string, id as string);
   if (isPaused) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
 
   if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
-
-  console.log(data);
 
   return (
     <Container>
@@ -56,6 +79,7 @@ const SellerCat = (props: Props) => {
           />
         )}
       </View>
+      <FloatingNav />
     </Container>
   );
 };

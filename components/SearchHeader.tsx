@@ -22,7 +22,7 @@ export const SearchHeader = ({ value, onChangeText }: Props): JSX.Element => {
           />
         )}
         onChangeText={onChangeText}
-        placeholder="Search"
+        placeholder="Search by key words"
         placeholderTextColor={'black'}
         style={{
           backgroundColor: 'transparent',

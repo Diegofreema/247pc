@@ -4,6 +4,7 @@ import {
   Dimensions,
   Pressable,
   View,
+  NativeScrollEvent,
 } from 'react-native';
 
 import { ActivityIndicator } from 'react-native-paper';
@@ -13,16 +14,21 @@ import {
   useNewArrival,
   useSpecial,
 } from '../../lib/queries';
-import ProductCard, { ProductProps } from '../../components/ProductCard';
 import { Text } from 'react-native-paper';
 import { TopHeader } from '../../components/TopHeader';
 import { Image } from 'expo-image';
 import { useStoreId } from '../../lib/zustand/auth';
-import { useRouter } from 'expo-router';
+import { Redirect, useFocusEffect, useRouter } from 'expo-router';
+import { MyButton } from '../../components/MyButton';
+import { colors } from '../../constants/Colors';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { NativeSyntheticEvent } from 'react-native';
+import axios from 'axios';
+import { Toast, useToast } from 'react-native-toast-notifications';
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, user } = useStoreId();
-  console.log(id);
+  const { show } = useToast();
 
   const router = useRouter();
   const {
@@ -38,9 +44,40 @@ export default function TabOneScreen() {
     isFetching: isFetchingSpecial,
     isPaused,
     isPending: isPendingSpecial,
-
+    refetch,
     error,
   } = useSpecial(user?.statename.toLowerCase() as string);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollViewRef = useRef<ScrollView | null>(null);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const contentOffset = event.nativeEvent.contentOffset;
+    const currentIndex = Math.round(
+      contentOffset.x / Dimensions.get('window').width
+    );
+    setCurrentIndex(currentIndex);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      const timer = setInterval(() => {
+        if (special && currentIndex === special?.length - 1) {
+          scrollViewRef?.current?.scrollTo({ x: 0, animated: true });
+          setCurrentIndex(0);
+        } else {
+          scrollViewRef?.current?.scrollTo({
+            x: (currentIndex + 1) * Dimensions.get('window').width,
+            animated: true,
+          });
+          setCurrentIndex(currentIndex + 1);
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(timer);
+      };
+    }, [currentIndex])
+  );
   const {
     data: newArrival,
     isFetching: isFetchingNewArrival,
@@ -48,22 +85,56 @@ export default function TabOneScreen() {
     isPaused: isPausedNew,
     error: errorNew,
   } = useNewArrival();
+  if (id === null) {
+    show('Unauthorized, please login ', {
+      type: 'danger',
+      placement: 'bottom',
+      duration: 3000,
+      animationType: 'slide-in',
+    });
+
+    return <Redirect href="/" />;
+  }
   if (error || errorNew) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
 
   if (isPaused || isPausedNew) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
@@ -74,7 +145,7 @@ export default function TabOneScreen() {
       style={{ paddingBottom: 40 }}
     >
       <TopHeader />
-      <View style={{ marginBottom: 20, flex: 1 }}>
+      <View style={{ flex: 1 }}>
         {isFetchingSpecial || isPendingSpecial ? (
           <View
             style={{
@@ -86,37 +157,46 @@ export default function TabOneScreen() {
             <ActivityIndicator animating color="#000" size="large" />
           </View>
         ) : (
-          <View style={styles.container}>
+          <View style={{ flex: 1 }}>
             <Text
               style={{
                 fontSize: 18,
                 fontWeight: 'bold',
                 textAlign: 'center',
-                marginBottom: 10,
+
                 marginTop: 20,
                 color: '#000',
+                marginBottom: -30,
               }}
             >
               Special offers
             </Text>
 
-            {Array.isArray(special) && special.length > 0 ? (
-              <View>
-                {special?.map((item) => {
-                  return (
-                    <Pressable
-                      onPress={() => router.push(`/special/${item.id}`)}
-                      style={styles.imageContainer}
-                      key={item.id}
-                    >
-                      <Image
-                        source={`https://247pharmacy.net/Uploads/specialoffer-${item.id}.jpg`}
-                        style={styles.image}
-                        contentFit="contain"
-                      />
-                    </Pressable>
-                  );
-                })}
+            {Array.isArray(special) && special?.length > 0 ? (
+              <View style={{ flex: 1 }}>
+                <ScrollView
+                  ref={scrollViewRef}
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  onScroll={handleScroll}
+                >
+                  {special?.map((item, index) => {
+                    return (
+                      <Pressable
+                        onPress={() => router.push(`/special/${item?.id}`)}
+                        style={styles.imageContainer}
+                        key={item?.id}
+                      >
+                        <Image
+                          source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
+                          style={styles.image}
+                          contentFit="contain"
+                        />
+                      </Pressable>
+                    );
+                  })}
+                </ScrollView>
               </View>
             ) : (
               <View
@@ -140,7 +220,7 @@ export default function TabOneScreen() {
       {!isFetchingSpecial && !isPendingSpecial && (
         <View
           style={{
-            marginVertical: 20,
+            marginBottom: 10,
             width: '100%',
             borderColor: 'gray',
             borderWidth: StyleSheet.hairlineWidth,
@@ -173,9 +253,22 @@ export default function TabOneScreen() {
                 }}
               >
                 {newArrival?.map((item) => {
+                  const handlePress = () => {
+                    axios
+                      .post(
+                        `https://247api.netpro.software/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+                      )
+                      .then((res) => {
+                        console.log(res.data);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                    router.push(`/product/${item?.id}`);
+                  };
                   return (
                     <Pressable
-                      onPress={() => router.push(`/product/${item?.id}`)}
+                      onPress={handlePress}
                       style={[
                         styles.newArrival,
                         {
@@ -247,7 +340,7 @@ export default function TabOneScreen() {
           </View>
         )}
       </View>
-      <View style={{ marginBottom: 20, flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {isFetchingRecentlyViewed || isPendingRecentlyViewed ? null : (
           <View style={styles.container}>
             <View
@@ -279,18 +372,23 @@ export default function TabOneScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: 10,
+                  marginBottom: 20,
                 }}
               >
                 {recentlyViewed?.map((item) => {
+                  const handlePress = () => {
+                    router.push(`/product/${item?.id}`);
+                  };
+
                   return (
                     <Pressable
-                      onPress={() => router.push(`/product/${item?.id}`)}
+                      onPress={handlePress}
                       style={[
                         styles.newArrival,
                         {
                           alignItems: 'center',
                           justifyContent: 'center',
-
+                          alignSelf: 'flex-start',
                           marginBottom: 10,
                         },
                       ]}
@@ -298,7 +396,7 @@ export default function TabOneScreen() {
                     >
                       <Image
                         source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
-                        style={{ width: 250, height: 100, marginBottom: 5 }}
+                        style={{ width: 200, height: 100, marginBottom: 5 }}
                         contentFit="contain"
                       />
                       <Text
@@ -351,15 +449,20 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   imageContainer: {
-    width: width * 0.9,
-    height: 200,
+    height: 300,
     overflow: 'hidden',
-    marginBottom: 3,
+    width: width,
     borderRadius: 6,
   },
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1,
+  },
+  anotherContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
   newArrival: {
     width: width * 0.45,
@@ -379,5 +482,8 @@ const styles = StyleSheet.create({
     shadowRadius: 2.22,
 
     elevation: 3,
+  },
+  pager: {
+    flex: 1,
   },
 });

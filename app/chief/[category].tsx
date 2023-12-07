@@ -7,6 +7,7 @@ import { useNewCat } from '../../lib/queries';
 import { ActivityIndicator } from 'react-native-paper';
 import { ProductItem } from '../../components/ProductItem';
 import { FlashList } from '@shopify/flash-list';
+import { FloatingNav } from '../../components/FloatingNav';
 type Props = {};
 
 const Chief = (props: Props) => {
@@ -68,6 +69,7 @@ const Chief = (props: Props) => {
           />
         )}
       </View>
+      <FloatingNav />
     </Container>
   );
 };

@@ -10,6 +10,9 @@ import axios from 'axios';
 import { Image } from 'expo-image';
 import { FlashList } from '@shopify/flash-list';
 import { WishlistType } from '../../lib/types';
+import { MyButton } from '../../components/MyButton';
+import { colors } from '../../constants/Colors';
+import { FloatingNav } from '../../components/FloatingNav';
 
 type Props = {};
 
@@ -19,10 +22,8 @@ const Special = (props: Props) => {
   const [products, setProducts] = useState<WishlistType[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { data, isPaused, isFetching, isPending, error } = useSpecialInfo(
-    user?.statename,
-    specialId as string
-  );
+  const { data, isPaused, isFetching, isPending, error, refetch } =
+    useSpecialInfo(user?.statename, specialId as string);
 
   useEffect(() => {
     setLoading(true);
@@ -47,24 +48,47 @@ const Special = (props: Props) => {
 
   if (isPaused) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
 
   if (error) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
-  console.log(data);
 
   return (
     <Container>
@@ -99,6 +123,7 @@ const Special = (props: Props) => {
           />
         )}
       </View>
+      <FloatingNav />
     </Container>
   );
 };

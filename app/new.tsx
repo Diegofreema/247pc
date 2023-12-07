@@ -5,27 +5,54 @@ import { ActivityIndicator } from 'react-native-paper';
 import { SubCat } from '../components/SubCat';
 import NavigationHeader from '../components/NavigationHeader';
 import Container from '../components/Container';
+import { MyButton } from '../components/MyButton';
+import { colors } from '../constants/Colors';
+import { FloatingNav } from '../components/FloatingNav';
 
 type Props = {};
 
 const newCat = (props: Props) => {
-  const { data, isPending, isFetching, isError, isPaused } = useCat();
+  const { data, isPending, isFetching, isError, isPaused, refetch } = useCat();
   if (isPaused) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
 
   if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
@@ -59,6 +86,7 @@ const newCat = (props: Props) => {
             numColumns={2}
           />
         )}
+        <FloatingNav />
       </View>
     </Container>
   );

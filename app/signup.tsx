@@ -24,7 +24,8 @@ type Props = {};
 const width = Dimensions.get('window').width;
 
 const validationSchema = yup.object().shape({
-  name: yup.string().required('Name is required'),
+  firstName: yup.string().required('First name is required'),
+  lastName: yup.string().required('Last name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   password: yup
     .string()
@@ -63,7 +64,8 @@ const SignUp = (props: Props) => {
       initialValues: {
         email: '',
         password: '',
-        name: '',
+        firstName: '',
+        lastName: '',
         state: 'abuja',
         address: '',
         phoneNumber: '',
@@ -73,8 +75,9 @@ const SignUp = (props: Props) => {
       },
       validationSchema,
       onSubmit: async (values) => {
+        const name = `${values.firstName} ${values.lastName}`;
         const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=createaccount&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
+          `https://247api.netpro.software/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {
@@ -115,7 +118,8 @@ const SignUp = (props: Props) => {
     address,
     confirmPassword,
     email,
-    name,
+    firstName,
+    lastName,
     password,
     phoneNumber,
     state,
@@ -191,8 +195,8 @@ const SignUp = (props: Props) => {
         <View style={{ alignItems: 'center', marginTop: 30 }}>
           <Image
             source={require('../assets/images/logo.png')}
-            style={{ width: width * 0.8, height: 100 }}
-            contentFit="cover"
+            style={{ width: width * 0.8, height: 150 }}
+            contentFit="contain"
           />
           <View style={{ marginTop: 30 }}>
             <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Sign up</Text>
@@ -208,15 +212,29 @@ const SignUp = (props: Props) => {
           <View style={{ gap: 10 }}>
             <>
               <InputComponent
-                label="Your Name"
-                placeholder="Your name"
+                label="First Name"
+                placeholder="First name"
                 keyboardType="default"
-                onChangeText={handleChange('name')}
-                value={name}
+                onChangeText={handleChange('firstName')}
+                value={firstName}
               />
-              {touched.name && errors.name && (
+              {touched.firstName && errors.firstName && (
                 <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.name}
+                  {errors.firstName}
+                </Text>
+              )}
+            </>
+            <>
+              <InputComponent
+                label="Last Name"
+                placeholder="Last name"
+                keyboardType="default"
+                onChangeText={handleChange('lastName')}
+                value={lastName}
+              />
+              {touched.lastName && errors.lastName && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.lastName}
                 </Text>
               )}
             </>

@@ -4,8 +4,8 @@ import React from 'react';
 import { TextInput } from 'react-native-paper';
 
 type Props = {
-  label: string;
-  placeholder: string;
+  label?: string;
+  placeholder?: string;
   onChangeText: (text: string) => void;
   keyboardType?: 'email-address' | 'numeric' | 'default';
   secureTextEntry?: boolean;
@@ -28,7 +28,7 @@ const InputComponent = ({
       keyboardType={keyboardType}
       value={value}
       secureTextEntry={secureTextEntry}
-      style={{ backgroundColor: 'transparent', color: 'black' }}
+      style={{ backgroundColor: 'transparent', color: 'black', flex: 1 }}
       contentStyle={{ backgroundColor: 'transparent', color: 'black' }}
       placeholderTextColor={'black'}
       textColor="black"

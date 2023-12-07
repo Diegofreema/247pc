@@ -12,6 +12,8 @@ import { useRemoveFromCart } from '../lib/mutation';
 import { CartType } from '../lib/types';
 import { useRouter } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
+import { MyButton } from '../components/MyButton';
+import { FloatingNav } from '../components/FloatingNav';
 type Props = {};
 
 const cart = (props: Props) => {
@@ -40,22 +42,47 @@ const cart = (props: Props) => {
     isError,
     isPending,
     isLoading: isLoadingCart,
+    refetch,
   } = useGetCart();
   if (isPaused || isPausedOrder || isPausedWishlist) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
   if (isError || isErrorOrder || isErrorWishlist) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
@@ -201,6 +228,7 @@ const cart = (props: Props) => {
           </View>
         )}
       </View>
+      <FloatingNav />
     </Container>
   );
 };

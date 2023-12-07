@@ -8,6 +8,16 @@ import { useStoreId } from '../lib/zustand/auth';
 import { useUser } from '../lib/queries';
 import { colors } from '../constants/Colors';
 import { EventRegister } from 'react-native-event-listeners';
+import Animated, {
+  BounceIn,
+  BounceOut,
+  FadeInUp,
+  FadeOutUp,
+  SlideInDown,
+  SlideInUp,
+  SlideOutUp,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 
 type Props = {
   title?: string;
@@ -62,58 +72,8 @@ const NavigationHeader = ({ title, back }: Props) => {
       <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000' }}>
         {title}
       </Text>
-      {showMenu && (
-        <View
-          ref={menuRef}
-          style={{
-            position: 'absolute',
-            backgroundColor: colors.lightGreen,
-            borderRadius: 10,
-            zIndex: 1,
-            top: 5,
-            right: 20,
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 20,
-            paddingHorizontal: 40,
-          }}
-        >
-          <FontAwesome
-            name="times"
-            size={20}
-            color="white"
-            style={{ position: 'absolute', top: 10, right: 8, padding: 5 }}
-            onPress={() => setShowMenu(false)}
-          />
-          {links.map((link) => (
-            <Pressable
-              style={({ pressed }) => [
-                pressed && { opacity: 0.5 },
-                { marginBottom: 10 },
-              ]}
-              key={link.name}
-              onPress={() => {
-                router.push(link.href as any);
-                setShowMenu(false);
-              }}
-            >
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                {link.name}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-      )}
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        {pathname !== '/wishlist' && (
-          <AntDesign
-            name="ellipsis1"
-            size={30}
-            color="black"
-            onPress={() => setShowMenu(!showMenu)}
-          />
-        )}
 
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
         {pathname !== '/cart' && (
           <Pressable onPress={() => router.push('/cart')}>
             <FontAwesome name="shopping-cart" size={25} color={'#000'} />

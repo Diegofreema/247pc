@@ -6,6 +6,7 @@ import Container from '../../components/Container';
 import NavigationHeader from '../../components/NavigationHeader';
 import { ActivityIndicator } from 'react-native-paper';
 import { Image } from 'expo-image';
+import { FloatingNav } from '../../components/FloatingNav';
 
 type Props = {};
 
@@ -44,6 +45,26 @@ const Seller = (props: Props) => {
           <ActivityIndicator color="black" size={'large'} animating />
         ) : (
           <FlatList
+            ListHeaderComponent={() => (
+              <Text
+                style={{
+                  color: 'black',
+                  marginBottom: 20,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}
+              >
+                Please select the relevant category below to find the
+                appropriate products
+              </Text>
+            )}
+            ListEmptyComponent={() => (
+              <Text
+                style={{ color: 'black', marginBottom: 20, fontWeight: 'bold' }}
+              >
+                Nothing more from this dealer
+              </Text>
+            )}
             contentContainerStyle={{ paddingTop: 30, paddingBottom: 50 }}
             data={data}
             showsVerticalScrollIndicator={false}
@@ -92,6 +113,7 @@ const Seller = (props: Props) => {
           />
         )}
       </View>
+      <FloatingNav />
     </Container>
   );
 };
@@ -104,6 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     height: 300,
     shadowColor: '#000',
+    alignItems: 'center',
 
     shadowOffset: {
       width: 0,

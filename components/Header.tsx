@@ -8,7 +8,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { colors } from '../constants/Colors';
 import { LoggedUserType } from '../lib/types';
 import { useStoreId } from '../lib/zustand/auth';
-import { useUser } from '../lib/queries';
+import { useUser, useWalletBalance } from '../lib/queries';
+import { MyButton } from './MyButton';
 
 type Props = {
   user?: LoggedUserType;
@@ -18,11 +19,71 @@ type Props = {
 const Header = ({}: Props) => {
   const { id } = useStoreId();
   const pathname = usePathname();
-  const { data: user, isLoading, isFetching, isPending } = useUser(id);
+  const {
+    data: walletBalance,
+    isFetching: walletBalanceIsFetching,
+    isPaused,
+    isPending: walletBalanceIsPending,
+    isError: walletBalanceIsError,
+  } = useWalletBalance();
+  const {
+    data: user,
+    isFetching,
+    isPending,
+    isPaused: userIsPaused,
+    isError,
+    refetch,
+  } = useUser(id);
 
   const isLoggedIn = user ? true : false;
-  const loading = isLoading || isFetching || isPending;
+  const loading =
+    walletBalanceIsFetching ||
+    isFetching ||
+    isPending ||
+    walletBalanceIsPending;
   const router = useRouter();
+  if (isPaused || userIsPaused) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+          Please check your internet connection
+        </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
+      </View>
+    );
+  }
+  if (isError || walletBalanceIsError) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+          Something went wrong
+        </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -89,6 +150,20 @@ const Header = ({}: Props) => {
         email={user?.email}
         loading={loading}
       />
+      {!loading && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+            marginLeft: 10,
+            marginTop: 15,
+          }}
+        >
+          <FontAwesome name="money" size={25} color="#fff" />
+          <Text style={{ color: 'white' }}>Your Balance: ₦{walletBalance}</Text>
+        </View>
+      )}
     </View>
   );
 };

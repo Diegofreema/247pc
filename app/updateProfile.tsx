@@ -196,8 +196,8 @@ const Update = (props: Props) => {
         <View style={{ alignItems: 'center', marginTop: 30 }}>
           <Image
             source={require('../assets/images/logo.png')}
-            style={{ width: width * 0.8, height: 100 }}
-            contentFit="cover"
+            style={{ width: width * 0.8, height: 150 }}
+            contentFit="contain"
           />
           <View style={{ marginVertical: 30 }}>
             <Text style={{ fontSize: 25, fontWeight: 'bold' }}>

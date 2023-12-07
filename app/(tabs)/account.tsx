@@ -8,6 +8,7 @@ import { LoggedUserType } from '../../lib/types';
 import Container from '../../components/Container';
 import { Entypo, Foundation } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
+import { useWalletBalance } from '../../lib/queries';
 type Props = {};
 
 const pages = [
@@ -31,7 +32,6 @@ const Account = (props: Props) => {
   const [loading, setLoading] = useState(false);
 
   const { user, id } = useStoreId();
-  console.log(user, id);
 
   const router = useRouter();
 

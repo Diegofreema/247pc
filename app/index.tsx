@@ -7,7 +7,7 @@ import AuthHeader from '../components/AuthHeader';
 import Container from '../components/Container';
 import InputComponent from '../components/InputComponent';
 import { colors } from '../constants/Colors';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -25,17 +25,20 @@ const validationSchema = yup.object().shape({
     .min(5, 'Password must be at least 5 characters')
     .required('Password is required'),
 });
+
 const index = (props: Props) => {
   const { setId, getUser, setUser, id } = useStoreId();
   const router = useRouter();
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (id !== null) {
-        router.replace('/(tabs)/');
-      }
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, []);
+  console.log(id);
+
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     if (id !== null) {
+  //       router.replace('/(tabs)/');
+  //     }
+  //   }, 1000);
+  //   return () => clearTimeout(timeout);
+  // }, []);
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
     useFormik({
@@ -90,7 +93,7 @@ const index = (props: Props) => {
           animationType: 'slide-in',
         });
 
-        router.push('/(tabs)');
+        router.replace('/(tabs)');
       },
     });
 
@@ -107,8 +110,8 @@ const index = (props: Props) => {
       <View style={{ alignItems: 'center', marginTop: 30 }}>
         <Image
           source={require('../assets/images/logo.png')}
-          style={{ width: width * 0.8, height: 100 }}
-          contentFit="cover"
+          style={{ width: width * 0.8, height: 150 }}
+          contentFit="contain"
         />
         <View style={{ marginTop: 20 }}>
           <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Sign in</Text>

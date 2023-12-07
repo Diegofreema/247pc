@@ -16,13 +16,22 @@ import { TopHeader } from '../../components/TopHeader';
 import { useCat, useSubCat } from '../../lib/queries';
 import { SubCat } from '../../components/SubCat';
 import { Floating } from '../../components/Floating';
+import { MyButton } from '../../components/MyButton';
+import { colors } from '../../constants/Colors';
 
 export default function Categories() {
   const [active, setActive] = useState(0);
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);
   const scrollRef = useRef<ScrollView>(null);
   const { height, width } = useWindowDimensions();
-  const { data: allCat, isPending, isFetching, isError, isPaused } = useCat();
+  const {
+    data: allCat,
+    isPending,
+    isFetching,
+    isError,
+    isPaused,
+    refetch,
+  } = useCat();
   const {
     data: subCat,
     isPending: isPendingSub,
@@ -33,20 +42,44 @@ export default function Categories() {
 
   if (isPaused || isPausedSub) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
 
   if (isError || isErrorSub) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }

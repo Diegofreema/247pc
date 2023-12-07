@@ -3,6 +3,7 @@ import axios from 'axios';
 import { User } from './types';
 import { useToast } from 'react-native-toast-notifications';
 import { useStoreId } from './zustand/auth';
+import { useModalState } from './zustand/modalState';
 const api = process.env.EXPO_PUBLIC_PHP_API_KEY;
 
 // export const useNewUser = () => {
@@ -177,6 +178,8 @@ export const usePayStack = () => {
 export const useWallet = () => {
   const { show } = useToast();
   const { user, id } = useStoreId();
+  const { onOpen } = useModalState();
+
   return useMutation({
     mutationKey: ['wallet'],
     mutationFn: async ({
@@ -203,12 +206,7 @@ export const useWallet = () => {
       }
 
       if (data === 'insufficient fund') {
-        return show('Insufficient fund , Please top up', {
-          type: 'danger',
-          placement: 'bottom',
-          duration: 4000,
-          animationType: 'slide-in',
-        });
+        return onOpen();
       }
 
       console.log('Mutation', data);

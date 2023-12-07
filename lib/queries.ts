@@ -388,3 +388,16 @@ export const useWallet = () => {
     },
   });
 };
+export const useWalletBalance = () => {
+  const { id } = useStoreId();
+  return useQuery({
+    queryKey: ['walletBalance', id],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `https://247api.netpro.software/api.aspx?api=walletbalance&myuserid=${id}`
+      );
+
+      return data;
+    },
+  });
+};

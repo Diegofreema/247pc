@@ -35,6 +35,7 @@ export const SubCat = ({
           aspectRatio: 1,
           marginRight: index % 2 !== 0 ? 0 : 10,
           position: 'relative',
+          height: Math.floor(Math.random() * (200 - 100 + 1)) + 100,
         },
         styles.container,
       ]}
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
-    height: 200,
+
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'gray',

@@ -8,6 +8,8 @@ import { useStoreId } from '../../lib/zustand/auth';
 import { useFocusEffect } from 'expo-router';
 import { ActivityIndicator } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
+import { MyButton } from '../../components/MyButton';
+import { colors } from '../../constants/Colors';
 type Props = {};
 
 const wishlist = (props: Props) => {
@@ -40,19 +42,43 @@ const wishlist = (props: Props) => {
 
   if (isPaused) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Please check your internet connection
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
   if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
           Something went wrong
         </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={refetch}
+          text="Retry"
+        />
       </View>
     );
   }
