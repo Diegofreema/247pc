@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import Container from '../../components/Container';
 import NavigationHeader from '../../components/NavigationHeader';
@@ -16,6 +16,11 @@ const Cat = (props: Props) => {
   const { category } = useLocalSearchParams();
   const { data, isPending, isFetching, isError, isPaused, refetch } =
     useProductCat(category as string);
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   if (isPaused) {
     return (
       <View
@@ -31,7 +36,7 @@ const Cat = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -52,12 +57,13 @@ const Cat = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
     );
   }
+  console.log(data && data[0].product);
 
   return (
     <Container>

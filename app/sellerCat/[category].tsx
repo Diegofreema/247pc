@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Pressable, FlatList } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSellerCat } from '../../lib/queries';
 import Container from '../../components/Container';
@@ -18,6 +18,11 @@ const SellerCat = (props: Props) => {
   const router = useRouter();
   const { data, isPending, isFetching, isError, isPaused, refetch } =
     useSellerCat(category as string, id as string);
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   if (isPaused) {
     return (
       <View
@@ -33,7 +38,7 @@ const SellerCat = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -55,7 +60,7 @@ const SellerCat = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -63,24 +68,28 @@ const SellerCat = (props: Props) => {
   }
 
   return (
-    <Container>
-      <NavigationHeader back title={category as string} />
-      <View style={{ marginTop: 20 }} />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {isPending || isFetching ? (
-          <ActivityIndicator color="black" size={'large'} animating />
-        ) : (
-          <FlatList
-            contentContainerStyle={{ paddingTop: 30, paddingBottom: 50 }}
-            data={data}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ProductItem {...item} />}
-          />
-        )}
-      </View>
-      <FloatingNav />
-    </Container>
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+      <Container>
+        <NavigationHeader back title={category as string} />
+        <View style={{ marginTop: 20 }} />
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          {isPending || isFetching ? (
+            <ActivityIndicator color="black" size={'large'} animating />
+          ) : (
+            <FlatList
+              contentContainerStyle={{ paddingTop: 30, paddingBottom: 50 }}
+              data={data}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <ProductItem {...item} />}
+            />
+          )}
+        </View>
+        <FloatingNav />
+      </Container>
+    </View>
   );
 };
 

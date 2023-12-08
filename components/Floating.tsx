@@ -26,7 +26,7 @@ export const Floating = ({}: Props): JSX.Element => {
         },
       ]}
     >
-      <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>
+      <Text style={{ fontSize: 15, color: 'white', fontWeight: 'bold' }}>
         New
       </Text>
     </Pressable>

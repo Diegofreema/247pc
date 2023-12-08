@@ -48,52 +48,61 @@ const index = (props: Props) => {
       },
       validationSchema,
       onSubmit: async (values) => {
-        const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=userlogin&emailaddress=${values.email}&pasword=${values.password}`
-        );
+        try {
+          const response = await axios.post(
+            `https://247api.netpro.software/api.aspx?api=userlogin&emailaddress=${values.email}&pasword=${values.password}`
+          );
 
-        if (response.data === 'incorrect email or password') {
-          toast.show('Incorrect email or password', {
-            type: 'danger',
+          if (response.data === 'incorrect email or password') {
+            toast.show('Incorrect email or password', {
+              type: 'danger',
+              placement: 'bottom',
+              duration: 4000,
+
+              animationType: 'slide-in',
+            });
+            return;
+          }
+          if (response.data === 'failed') {
+            toast.show('Something went wrong, try again later', {
+              type: 'danger',
+              placement: 'bottom',
+              duration: 4000,
+
+              animationType: 'slide-in',
+            });
+            return;
+          }
+          if (response.data === '') {
+            toast.show('Something went wrong, try again later', {
+              type: 'danger',
+              placement: 'bottom',
+              duration: 4000,
+
+              animationType: 'slide-in',
+            });
+            return;
+          }
+          setId(response.data);
+          const user = await getProfile(response.data);
+          setUser(user);
+          getUser();
+          toast.show('login successful', {
+            type: 'success',
             placement: 'bottom',
             duration: 4000,
-
             animationType: 'slide-in',
           });
-          return;
-        }
-        if (response.data === 'failed') {
-          toast.show('Something went wrong, try again later', {
-            type: 'danger',
+
+          router.replace('/(tabs)');
+        } catch (error) {
+          toast.show('Something went wrong', {
+            type: 'error',
             placement: 'bottom',
             duration: 4000,
-
             animationType: 'slide-in',
           });
-          return;
         }
-        if (response.data === '') {
-          toast.show('Something went wrong, try again later', {
-            type: 'danger',
-            placement: 'bottom',
-            duration: 4000,
-
-            animationType: 'slide-in',
-          });
-          return;
-        }
-        setId(response.data);
-        const user = await getProfile(response.data);
-        setUser(user);
-        getUser();
-        toast.show('login successful', {
-          type: 'success',
-          placement: 'bottom',
-          duration: 4000,
-          animationType: 'slide-in',
-        });
-
-        router.replace('/(tabs)');
       },
     });
 
@@ -103,7 +112,7 @@ const index = (props: Props) => {
     <KeyboardAwareScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
       showsVerticalScrollIndicator={false}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: '#fff' }}
     >
       <AuthHeader />
 

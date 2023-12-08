@@ -35,7 +35,14 @@ const ProductCard = ({
   }
   return (
     <Link asChild href={`/product/${id}`}>
-      <Card style={{ width: width * 0.6, height: 300, marginRight: 10 }}>
+      <Card
+        style={{
+          width: width * 0.6,
+          height: 300,
+          marginRight: 10,
+          backgroundColor: '#fff',
+        }}
+      >
         <Card.Cover
           source={{ uri: image }}
           style={{ marginBottom: 20, resizeMode: 'contain' }}

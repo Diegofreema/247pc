@@ -95,6 +95,12 @@ export default function TabOneScreen() {
 
     return <Redirect href="/" />;
   }
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
+
   if (error || errorNew) {
     return (
       <View
@@ -110,7 +116,7 @@ export default function TabOneScreen() {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -132,7 +138,7 @@ export default function TabOneScreen() {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>

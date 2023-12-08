@@ -35,6 +35,7 @@ const Chief = (props: Props) => {
       </View>
     );
   }
+  console.log(data && data[0].product);
 
   return (
     <Container>

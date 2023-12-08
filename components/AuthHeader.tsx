@@ -4,6 +4,7 @@ import { View, StyleSheet, Pressable, Linking } from 'react-native';
 import { Text } from 'react-native-paper';
 import { colors } from '../constants/Colors';
 import { Platform } from 'react-native';
+import { Link } from 'expo-router';
 
 type Props = {};
 
@@ -19,6 +20,19 @@ const AuthHeader = (props: Props) => {
   };
   return (
     <View style={styles.container}>
+      <Link href={'/join'} asChild>
+        <Text
+          style={{
+            fontSize: 15,
+            fontWeight: 'bold',
+            color: '#000',
+            textDecorationStyle: 'solid',
+            textDecorationLine: 'underline',
+          }}
+        >
+          Join 247pharmacy
+        </Text>
+      </Link>
       <Pressable style={styles.subContainer} onPress={openDialScreen}>
         <FontAwesome name="phone" size={15} color="#000" />
         <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#000' }}>
@@ -34,7 +48,7 @@ export default AuthHeader;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
 
     height: 70,

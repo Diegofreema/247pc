@@ -71,6 +71,11 @@ const CheckOut = (props: Props) => {
       }
     },
   });
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   useEffect(() => {
     if (paystackData) {
       paystackWebViewRef?.current?.startTransaction();
@@ -100,7 +105,7 @@ const CheckOut = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -121,7 +126,7 @@ const CheckOut = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>

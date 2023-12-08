@@ -44,7 +44,11 @@ const Special = (props: Props) => {
     }
   }, [data]);
 
-  //   const { data: products } = useSpecialOfferProducts(data.productlist);
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
 
   if (isPaused) {
     return (
@@ -61,7 +65,7 @@ const Special = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -83,7 +87,7 @@ const Special = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -91,40 +95,47 @@ const Special = (props: Props) => {
   }
 
   return (
-    <Container>
-      <NavigationHeader back title={data && (data[0]?.GroupTitle as string)} />
-      <View style={{ marginBottom: 20 }} />
-      <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-        {isPending || isFetching || loading ? (
-          <ActivityIndicator color="black" size={'large'} />
-        ) : (
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 30 }}
-            data={products}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() => router.push(`/product/${item?.id}`)}
-                style={{ alignItems: 'center', gap: 5, marginBottom: 20 }}
-              >
-                <Image
-                  source={`https://247pharmacy.net/Uploads/${item?.id}.jpg`}
-                  style={{ width: 200, height: 200 }}
-                />
-                <Text style={{ color: 'black' }}>{item?.category}</Text>
-                <Text style={{ color: 'black' }}>{item?.product}</Text>
-                <Text style={{ color: 'black', fontWeight: 'bold' }}>
-                  ₦{item?.sellingprice}
-                </Text>
-              </Pressable>
-            )}
-            keyExtractor={(item) => item?.id}
-            initialNumToRender={10}
-          />
-        )}
-      </View>
-      <FloatingNav />
-    </Container>
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+      <Container>
+        <NavigationHeader
+          back
+          title={data && (data[0]?.GroupTitle as string)}
+        />
+        <View style={{ marginBottom: 20 }} />
+        <View
+          style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}
+        >
+          {isPending || isFetching || loading ? (
+            <ActivityIndicator color="black" size={'large'} />
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 30 }}
+              data={products}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => router.push(`/product/${item?.id}`)}
+                  style={{ alignItems: 'center', gap: 5, marginBottom: 20 }}
+                >
+                  <Image
+                    source={`https://247pharmacy.net/Uploads/${item?.id}.jpg`}
+                    style={{ width: 200, height: 200 }}
+                  />
+                  <Text style={{ color: 'black' }}>{item?.category}</Text>
+                  <Text style={{ color: 'black' }}>{item?.product}</Text>
+                  <Text style={{ color: 'black', fontWeight: 'bold' }}>
+                    ₦{item?.sellingprice}
+                  </Text>
+                </Pressable>
+              )}
+              keyExtractor={(item) => item?.id}
+              initialNumToRender={10}
+            />
+          )}
+        </View>
+        <FloatingNav />
+      </Container>
+    </View>
   );
 };
 

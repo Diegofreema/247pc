@@ -19,19 +19,27 @@ import { colors } from '../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import { Searched } from '../lib/types';
 import InputComponent from '../components/InputComponent';
-
+import Animated, {
+  FadeOut,
+  SlideInUp,
+  SlideOutUp,
+} from 'react-native-reanimated';
 const search = () => {
   const { data, isPending, isFetching, isError, isPaused, refetch } =
     useSearch();
   const [showFilter, setShowFilter] = useState(false);
-  const [selectedCat, setSelectedCat] = useState('');
-  const [selectedPharmacy, setSelectedPharmacy] = useState('');
+  const [selectedCat, setSelectedCat] = useState<string[]>([]);
+  const [selectedPharmacy, setSelectedPharmacy] = useState<string[]>([]);
   const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
   const [price, setPrice] = useState({
     from: '2000',
     to: '5500',
   });
-
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   const [products, setProducts] = useState(data);
   const [value, setValue] = useState('');
   useEffect(() => {
@@ -74,33 +82,37 @@ const search = () => {
   };
 
   const applyFilter = () => {
-    if (!products) return;
-    let filteredDataCopy = products.slice();
-    if (selectedCat) {
-      filteredDataCopy = filteredDataCopy.filter(
-        (item) => item.category === selectedCat
+    if (!data) return;
+    let filteredDataCopy = data?.slice();
+    if (selectedCat.length) {
+      filteredDataCopy = filteredDataCopy?.filter((item) =>
+        selectedCat.includes(item.category)
       );
     }
-    if (selectedPharmacy) {
-      filteredDataCopy = filteredDataCopy.filter(
-        (item) => item.Dealer === selectedPharmacy
+    if (selectedPharmacy.length) {
+      filteredDataCopy = filteredDataCopy?.filter((item) =>
+        selectedPharmacy.includes(item.Dealer as string)
       );
     }
     setSelectedPriceFilter('');
     setProducts(filteredDataCopy);
+    console.log(filteredDataCopy, 'filteredDataCopy');
+
     setShowFilter(false);
   };
 
   const filterProductsByPrice = () => {
-    if (!products) return;
+    if (!data) return;
 
-    const filteredDataCopy = products.filter(
+    const filteredDataCopy = data.filter(
       (product) =>
         +product.sellingprice >= +price.from &&
         +product.sellingprice <= +price.to
     );
 
     setProducts(filteredDataCopy);
+    setSelectedPriceFilter('');
+    setShowFilter(false);
   };
   const handlePrice = (val: string, name: string) => {
     setPrice({
@@ -116,7 +128,7 @@ const search = () => {
           <Text>Please check your internet connection</Text>
           <MyButton
             buttonColor={colors.lightGreen}
-            onPress={refetch}
+            onPress={handleRefetch}
             text="Retry"
           />
         </Container>
@@ -131,14 +143,39 @@ const search = () => {
           <Text>Something went wrong</Text>
           <MyButton
             buttonColor={colors.lightGreen}
-            onPress={refetch}
+            onPress={handleRefetch}
             text="Retry"
           />
         </Container>
       </View>
     );
   }
+  const resetFilter = () => {
+    setProducts(data);
+    setSelectedCat(['']);
+    setSelectedPharmacy(['']);
+    setSelectedPriceFilter('');
+    setPrice({
+      from: '2000',
+      to: '5500',
+    });
+    setShowFilter(false);
+  };
+  const handleSelectedCat = (cat: string) => {
+    if (selectedCat.includes(cat)) {
+      setSelectedCat(selectedCat.filter((item) => item !== cat));
+    } else {
+      setSelectedCat([...selectedCat, cat]);
+    }
+  };
 
+  const handleSelectedPhar = (phar: string) => {
+    if (selectedPharmacy.includes(phar)) {
+      setSelectedPharmacy(selectedPharmacy.filter((item) => item !== phar));
+    } else {
+      setSelectedPharmacy([...selectedPharmacy, phar]);
+    }
+  };
   const cat = data?.map(({ category }) => category);
   const pharmacy = data?.map(({ Dealer }) => Dealer);
   const uniquePhar = new Set(pharmacy);
@@ -148,11 +185,16 @@ const search = () => {
   console.log(price);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <SearchHeader value={value} onChangeText={setValue} />
       <Container>
-        <View
-          style={{ marginBottom: 20, backgroundColor: 'red' }}
+        <ScrollView
+          style={{
+            maxHeight: showFilter ? '100%' : 100,
+
+            paddingBottom: 20,
+          }}
+
           // showsVerticalScrollIndicator={false}
         >
           <View
@@ -163,20 +205,33 @@ const search = () => {
               justifyContent: 'center',
             }}
           >
-            <MyButton
-              text="Reset"
-              onPress={() => setProducts(data)}
-              buttonColor="transparent"
-              textColor="black"
-            />
-            <MyButton
-              text="Filter"
+            <Pressable
+              style={{
+                flex: 1,
+                borderWidth: 1,
+                borderColor: 'black',
+                padding: 11,
+                borderRadius: 8,
+                alignItems: 'center',
+              }}
+              onPress={resetFilter}
+            >
+              <Text style={{ color: 'black', fontWeight: 'bold' }}>Reset</Text>
+            </Pressable>
+            <Pressable
               onPress={() => setShowFilter(true)}
-              buttonColor={'transparent'}
-              textColor="black"
-              style={{ width: 100 }}
-            />
-            <View style={{ flexDirection: 'row', gap: 10 }}>
+              style={{
+                flex: 1,
+                borderWidth: 1,
+                borderColor: 'black',
+                padding: 11,
+                borderRadius: 8,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ color: 'black', fontWeight: 'bold' }}>Filter</Text>
+            </Pressable>
+            <View style={{ flexDirection: 'row', gap: 5 }}>
               <Pressable
                 onPress={() => setSelectedPriceFilter('lowToHigh')}
                 style={[
@@ -223,7 +278,7 @@ const search = () => {
           </View>
 
           {showFilter && (
-            <View style={styles.modal}>
+            <Animated.View style={styles.modal}>
               <FontAwesome
                 name="times"
                 size={25}
@@ -248,13 +303,13 @@ const search = () => {
                       return (
                         <Pressable
                           style={[{ paddingBottom: 5 }]}
-                          onPress={() => setSelectedCat(cat)}
+                          onPress={() => handleSelectedCat(cat)}
                           key={cat}
                         >
                           <Text
                             style={[
                               { color: 'black' },
-                              selectedCat === cat && styles.activeItem,
+                              selectedCat.includes(cat) && styles.activeItem,
                             ]}
                           >
                             {cat}
@@ -273,13 +328,14 @@ const search = () => {
                       return (
                         <Pressable
                           style={[{ paddingBottom: 5 }]}
-                          onPress={() => setSelectedPharmacy(cat as string)}
+                          onPress={() => handleSelectedPhar(cat as string)}
                           key={cat}
                         >
                           <Text
                             style={[
                               { color: 'black' },
-                              selectedPharmacy === cat && styles.activeItem,
+                              selectedPharmacy.includes(cat as string) &&
+                                styles.activeItem,
                             ]}
                           >
                             {cat}
@@ -288,6 +344,12 @@ const search = () => {
                       );
                     })}
                   </ScrollView>
+                  <MyButton
+                    text="Apply"
+                    onPress={applyFilter}
+                    buttonColor={colors.lightGreen}
+                    textColor="white"
+                  />
                 </View>
 
                 <View style={[styles.textCon, { marginTop: 'auto' }]}>
@@ -314,19 +376,13 @@ const search = () => {
                 <MyButton
                   text="Apply"
                   onPress={filterProductsByPrice}
-                  buttonColor="lightgreen"
+                  buttonColor={colors.lightGreen}
                   textColor="white"
                 />
               </View>
-              <MyButton
-                text="Apply"
-                onPress={applyFilter}
-                buttonColor={colors.lightGreen}
-                textColor="white"
-              />
-            </View>
+            </Animated.View>
           )}
-        </View>
+        </ScrollView>
 
         {isPending || isFetching ? (
           <ActivityIndicator color="black" size="large" />
@@ -398,6 +454,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'black',
+    width: 100,
+    alignItems: 'center',
   },
   activeItem: {
     fontWeight: 'bold',

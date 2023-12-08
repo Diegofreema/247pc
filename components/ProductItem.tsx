@@ -77,7 +77,6 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
           fontSize: 17,
           marginBottom: 10,
           textAlign: 'center',
-          maxWidth: width * 0.5,
         }}
       >
         {item?.product}
@@ -98,12 +97,15 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
 
 const styles = StyleSheet.create({
   newArrival: {
+    backgroundColor: '#fff',
     height: 300,
-    overflow: 'hidden',
+
     marginBottom: 10,
     borderRadius: 5,
     shadowColor: '#000',
     paddingHorizontal: 5,
+    borderWidth: 1,
+    borderColor: '#eee',
 
     shadowOffset: {
       width: 0,
@@ -112,6 +114,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
 
-    elevation: 3,
+    elevation: 8,
   },
 });

@@ -68,7 +68,7 @@ const Forgot = (props: Props) => {
     <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
       showsVerticalScrollIndicator={false}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: '#ffffff' }}
     >
       <AuthHeader />
 

@@ -112,6 +112,12 @@ function RootLayoutNav() {
           />
           <Stack.Screen name="checkout" options={{ headerShown: false }} />
           <Stack.Screen name="wallet" options={{ headerShown: false }} />
+          <Stack.Screen name="(join)/join" options={{ headerShown: false }} />
+          <Stack.Screen name="(join)/sell" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(join)/practitioner"
+            options={{ headerShown: false }}
+          />
         </Stack>
       </SafeAreaView>
     </ThemeProvider>

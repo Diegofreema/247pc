@@ -51,6 +51,13 @@ const ProductDetail = (props: Props) => {
     isPaused: isProductPaused,
     refetch,
   } = useProduct(productId);
+
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
+
   const {
     data: category,
     isPending: isCategoryPending,
@@ -73,7 +80,7 @@ const ProductDetail = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -95,7 +102,7 @@ const ProductDetail = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>

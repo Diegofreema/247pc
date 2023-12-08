@@ -10,6 +10,7 @@ import { LoggedUserType } from '../lib/types';
 import { useStoreId } from '../lib/zustand/auth';
 import { useUser, useWalletBalance } from '../lib/queries';
 import { MyButton } from './MyButton';
+import { useState } from 'react';
 
 type Props = {
   user?: LoggedUserType;
@@ -42,6 +43,11 @@ const Header = ({}: Props) => {
     isPending ||
     walletBalanceIsPending;
   const router = useRouter();
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   if (isPaused || userIsPaused) {
     return (
       <View
@@ -57,7 +63,7 @@ const Header = ({}: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -78,7 +84,7 @@ const Header = ({}: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>

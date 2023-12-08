@@ -74,7 +74,7 @@ const UpdatePassword = (props: Props) => {
   const router = useRouter();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 50,

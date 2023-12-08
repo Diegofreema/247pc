@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '../components/Container';
 import NavigationHeader from '../components/NavigationHeader';
 import CartItem from '../components/CartItem';
@@ -18,6 +18,11 @@ type Props = {};
 
 const cart = (props: Props) => {
   const router = useRouter();
+  const [reload, setReload] = useState(false);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   const {
     data: order,
     isPaused: isPausedOrder,
@@ -59,7 +64,7 @@ const cart = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -80,7 +85,7 @@ const cart = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>

@@ -21,6 +21,7 @@ import { colors } from '../../constants/Colors';
 
 export default function Categories() {
   const [active, setActive] = useState(0);
+  const [reload, setReload] = useState(false);
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);
   const scrollRef = useRef<ScrollView>(null);
   const { height, width } = useWindowDimensions();
@@ -31,6 +32,7 @@ export default function Categories() {
     isError,
     isPaused,
     refetch,
+    status,
   } = useCat();
   const {
     data: subCat,
@@ -39,7 +41,11 @@ export default function Categories() {
     isError: isErrorSub,
     isPaused: isPausedSub,
   } = useSubCat(allCat?.[active].productgroup as string);
-
+  console.log(status, isPaused);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   if (isPaused || isPausedSub) {
     return (
       <View
@@ -55,7 +61,7 @@ export default function Categories() {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -77,7 +83,7 @@ export default function Categories() {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>

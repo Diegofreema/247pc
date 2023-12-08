@@ -76,7 +76,9 @@ const NavigationHeader = ({ title, back }: Props) => {
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
         {pathname !== '/cart' && (
           <Pressable onPress={() => router.push('/cart')}>
-            <FontAwesome name="shopping-cart" size={25} color={'#000'} />
+            {id && (
+              <FontAwesome name="shopping-cart" size={25} color={'#000'} />
+            )}
             {user && (
               <View
                 style={{

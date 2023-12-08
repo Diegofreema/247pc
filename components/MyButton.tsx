@@ -1,11 +1,12 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { Button } from 'react-native-paper';
+import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 
 type Props = {
   buttonColor?: string;
   textColor?: string;
   onPress: () => void;
-
+  icon?: IconSource;
   text: string;
   loading?: boolean;
   style?: any;
@@ -19,6 +20,7 @@ export const MyButton = ({
   text,
 
   style,
+  icon,
 }: Props): JSX.Element => {
   return (
     <Button
@@ -28,6 +30,7 @@ export const MyButton = ({
       buttonColor={buttonColor}
       onPress={onPress}
       loading={loading}
+      icon={icon}
     >
       {text}
     </Button>

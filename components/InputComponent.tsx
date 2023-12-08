@@ -21,20 +21,23 @@ const InputComponent = ({
   value,
 }: Props) => {
   return (
-    <TextInput
-      placeholder={placeholder}
-      onChangeText={onChangeText}
-      mode="outlined"
-      keyboardType={keyboardType}
-      value={value}
-      secureTextEntry={secureTextEntry}
-      style={{ backgroundColor: 'transparent', color: 'black', flex: 1 }}
-      contentStyle={{ backgroundColor: 'transparent', color: 'black' }}
-      placeholderTextColor={'black'}
-      textColor="black"
-      activeOutlineColor="black"
-      outlineStyle={{ borderColor: 'black', borderWidth: 1 }}
-    />
+    <>
+      <Text style={{ color: 'black', fontWeight: 'bold' }}>{label}</Text>
+      <TextInput
+        placeholder={placeholder}
+        onChangeText={onChangeText}
+        mode="outlined"
+        keyboardType={keyboardType}
+        value={value}
+        secureTextEntry={secureTextEntry}
+        style={{ backgroundColor: 'transparent', color: 'black', flex: 1 }}
+        contentStyle={{ backgroundColor: 'transparent', color: 'black' }}
+        placeholderTextColor={'black'}
+        textColor="black"
+        activeOutlineColor="black"
+        outlineStyle={{ borderColor: 'black', borderWidth: 1 }}
+      />
+    </>
   );
 };
 

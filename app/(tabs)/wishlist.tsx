@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import NavigationHeader from '../../components/NavigationHeader';
 import Container from '../../components/Container';
 import Wishlist from '../../components/Wishlist';
@@ -14,7 +14,7 @@ type Props = {};
 
 const wishlist = (props: Props) => {
   const { id } = useStoreId();
-  console.log(id);
+  const [reload, setReload] = useState(false);
 
   // const [data, setData] = useState<WishlistType[]>([]);
   const {
@@ -26,7 +26,10 @@ const wishlist = (props: Props) => {
     refetch,
     isRefetching,
   } = useWishlist();
-  console.log(data);
+  const handleRefetch = () => {
+    setReload(!reload);
+    refetch();
+  };
   // useFocusEffect(
   //   useCallback(() => {
   //     let isActive = true;
@@ -55,7 +58,7 @@ const wishlist = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
@@ -76,7 +79,7 @@ const wishlist = (props: Props) => {
         </Text>
         <MyButton
           buttonColor={colors.lightGreen}
-          onPress={refetch}
+          onPress={handleRefetch}
           text="Retry"
         />
       </View>
