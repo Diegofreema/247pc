@@ -10,6 +10,7 @@ type Props = {
   text: string;
   loading?: boolean;
   style?: any;
+  disabled?: boolean;
 };
 
 export const MyButton = ({
@@ -18,7 +19,7 @@ export const MyButton = ({
   onPress,
   loading = false,
   text,
-
+  disabled,
   style,
   icon,
 }: Props): JSX.Element => {
@@ -31,6 +32,7 @@ export const MyButton = ({
       onPress={onPress}
       loading={loading}
       icon={icon}
+      disabled={disabled}
     >
       {text}
     </Button>

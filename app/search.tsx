@@ -1,12 +1,11 @@
 import {
-  FlatList,
   StyleSheet,
   Text,
   View,
   Pressable,
   ScrollView,
+  FlatList,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import React, { useEffect, useState } from 'react';
 import { SearchHeader } from '../components/SearchHeader';
 import Container from '../components/Container';
@@ -17,14 +16,12 @@ import { ProductItem } from '../components/ProductItem';
 import { MyButton } from '../components/MyButton';
 import { colors } from '../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
-import { Searched } from '../lib/types';
 import InputComponent from '../components/InputComponent';
-import Animated, {
-  FadeOut,
-  SlideInUp,
-  SlideOutUp,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+
+const itemsPerPage = 6;
 const search = () => {
+  const [page, setPage] = useState(1);
   const { data, isPending, isFetching, isError, isPaused, refetch } =
     useSearch();
   const [showFilter, setShowFilter] = useState(false);
@@ -35,6 +32,7 @@ const search = () => {
     from: '2000',
     to: '5500',
   });
+
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
     setReload(!reload);
@@ -99,6 +97,7 @@ const search = () => {
     console.log(filteredDataCopy, 'filteredDataCopy');
 
     setShowFilter(false);
+    setPage(1);
   };
 
   const filterProductsByPrice = () => {
@@ -113,6 +112,7 @@ const search = () => {
     setProducts(filteredDataCopy);
     setSelectedPriceFilter('');
     setShowFilter(false);
+    setPage(1);
   };
   const handlePrice = (val: string, name: string) => {
     setPrice({
@@ -160,6 +160,7 @@ const search = () => {
       to: '5500',
     });
     setShowFilter(false);
+    setPage(1);
   };
   const handleSelectedCat = (cat: string) => {
     if (selectedCat.includes(cat)) {
@@ -183,7 +184,12 @@ const search = () => {
   const uniquePharmacy = [...uniquePhar];
   const uniqueCat = [...uniqueItem];
   console.log(price);
+  const totalPages = Math.ceil(products?.length! / itemsPerPage);
 
+  // Calculate the start and end index based on the current page
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = products?.slice(startIndex, endIndex);
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <SearchHeader value={value} onChangeText={setValue} />
@@ -388,10 +394,12 @@ const search = () => {
           <ActivityIndicator color="black" size="large" />
         ) : (
           <View style={{ flex: 1, width: '100%' }}>
-            <FlashList
+            <FlatList
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{}}
-              data={products}
+              contentContainerStyle={{
+                paddingBottom: 40,
+              }}
+              data={currentItems}
               renderItem={({ item }) => {
                 return <ProductItem {...item} />;
               }}
@@ -407,7 +415,43 @@ const search = () => {
                   <Text>No products found</Text>
                 </View>
               )}
-              estimatedItemSize={1000}
+              ListFooterComponentStyle={{
+                marginTop: 15,
+                alignItems: 'center',
+              }}
+              ListFooterComponent={() => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 10,
+                    width: '80%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <MyButton
+                    text="Previous"
+                    textColor="white"
+                    buttonColor={colors.lightGreen}
+                    onPress={() => setPage(page - 1)}
+                    disabled={page === 1}
+                  />
+                  <Text
+                    style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}
+                  >
+                    {' '}
+                    {page}
+                  </Text>
+
+                  <MyButton
+                    text="Previous"
+                    textColor="white"
+                    buttonColor={colors.lightGreen}
+                    onPress={() => setPage(page + 1)}
+                    disabled={page === totalPages}
+                  />
+                </View>
+              )}
             />
           </View>
         )}
