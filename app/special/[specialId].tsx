@@ -13,6 +13,7 @@ import { WishlistType } from '../../lib/types';
 import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
 import { FloatingNav } from '../../components/FloatingNav';
+import { ProductItem } from '../../components/ProductItem';
 
 type Props = {};
 
@@ -112,22 +113,7 @@ const Special = (props: Props) => {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 30 }}
               data={products}
-              renderItem={({ item }) => (
-                <Pressable
-                  onPress={() => router.push(`/product/${item?.id}`)}
-                  style={{ alignItems: 'center', gap: 5, marginBottom: 20 }}
-                >
-                  <Image
-                    source={`https://247pharmacy.net/Uploads/${item?.id}.jpg`}
-                    style={{ width: 200, height: 200 }}
-                  />
-                  <Text style={{ color: 'black' }}>{item?.category}</Text>
-                  <Text style={{ color: 'black' }}>{item?.product}</Text>
-                  <Text style={{ color: 'black', fontWeight: 'bold' }}>
-                    ₦{item?.sellingprice}
-                  </Text>
-                </Pressable>
-              )}
+              renderItem={({ item }) => <ProductItem {...item} />}
               keyExtractor={(item) => item?.id}
               initialNumToRender={10}
             />

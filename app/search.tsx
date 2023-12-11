@@ -419,39 +419,47 @@ const search = () => {
                 marginTop: 15,
                 alignItems: 'center',
               }}
-              ListFooterComponent={() => (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    width: '80%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <MyButton
-                    text="Previous"
-                    textColor="white"
-                    buttonColor={colors.lightGreen}
-                    onPress={() => setPage(page - 1)}
-                    disabled={page === 1}
-                  />
-                  <Text
-                    style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}
+              ListFooterComponent={() =>
+                isPending || isFetching ? null : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 10,
+                      width: '80%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
                   >
-                    {' '}
-                    {page}
-                  </Text>
+                    <MyButton
+                      style={{ width: 130 }}
+                      text="Previous"
+                      textColor="white"
+                      buttonColor={colors.lightGreen}
+                      onPress={() => setPage(page - 1)}
+                      disabled={page === 1}
+                    />
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {' '}
+                      {page}
+                    </Text>
 
-                  <MyButton
-                    text="Previous"
-                    textColor="white"
-                    buttonColor={colors.lightGreen}
-                    onPress={() => setPage(page + 1)}
-                    disabled={page === totalPages}
-                  />
-                </View>
-              )}
+                    <MyButton
+                      style={{ width: 130 }}
+                      text="Next"
+                      textColor="white"
+                      buttonColor={colors.lightGreen}
+                      onPress={() => setPage(page + 1)}
+                      disabled={page === totalPages}
+                    />
+                  </View>
+                )
+              }
             />
           </View>
         )}

@@ -118,6 +118,7 @@ function RootLayoutNav() {
             name="(join)/practitioner"
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="terms" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaView>
     </ThemeProvider>

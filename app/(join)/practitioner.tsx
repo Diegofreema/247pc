@@ -1,10 +1,19 @@
-import { Dimensions, StyleSheet, Text, View, ScrollView } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Linking,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Container from '../../components/Container';
 import { Image } from 'expo-image';
 import NavigationHeader from '../../components/NavigationHeader';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import * as yup from 'yup';
+import * as ImagePicker from 'expo-image-picker';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { State } from '../../lib/types';
@@ -12,7 +21,9 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import InputComponent from '../../components/InputComponent';
 import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
-import { Checkbox } from 'react-native-paper';
+import { Checkbox, TextInput } from 'react-native-paper';
+import { useToast } from 'react-native-toast-notifications';
+import { Link, useRouter } from 'expo-router';
 type Props = {};
 const validationSchema = yup.object().shape({
   name: yup.string().required('Full name is required'),
@@ -37,7 +48,8 @@ const validationSchema = yup.object().shape({
     .required('Confirm Password is required'),
   acceptTerm: yup
     .boolean()
-    .oneOf([true], 'Accept the terms of service agreement'),
+    .oneOf([true], 'Accept the terms of service agreement to continue'),
+  image: yup.string().required('Profile picture is required'),
 });
 const { width } = Dimensions.get('window');
 const sell = (props: Props) => {
@@ -45,6 +57,51 @@ const sell = (props: Props) => {
     { statename: 'abuja', label: 'Abuja' },
     { statename: 'imo', label: 'Imo' },
   ]);
+
+  const { show } = useToast();
+  const router = useRouter();
+
+  const [cameraPermissionInformation, requestPermission] =
+    ImagePicker.useCameraPermissions();
+  const verifyPermissions = async () => {
+    if (
+      cameraPermissionInformation?.status ===
+      ImagePicker.PermissionStatus.UNDETERMINED
+    ) {
+      const permissionResponse = await requestPermission();
+      return permissionResponse.granted;
+    }
+    if (
+      cameraPermissionInformation?.status ===
+      ImagePicker.PermissionStatus.DENIED
+    ) {
+      show('Permission to access camera was denied', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const handlePress = async () => {
+    const supported = await Linking.canOpenURL(
+      'https://247pharmacy.net/TERMS_OF_SERVICE_AGREEMENT_BETWEEN_NETPRO_AND_HEALTH_CARE_SERVICE_PROVIDERS_v04.10.23.pdf'
+    );
+
+    if (supported) {
+      await Linking.openURL(
+        'https://247pharmacy.net/TERMS_OF_SERVICE_AGREEMENT_BETWEEN_NETPRO_AND_HEALTH_CARE_SERVICE_PROVIDERS_v04.10.23.pdf'
+      );
+    } else {
+      console.log(
+        `Don't know how to open this URL: ${'https://247pharmacy.net/TERMS_OF_SERVICE_AGREEMENT_BETWEEN_NETPRO_AND_HEALTH_CARE_SERVICE_PROVIDERS_v04.10.23.pdf'}`
+      );
+    }
+  };
+
   const [loadingStates, setLoadingStates] = useState(false);
   const [error, setError] = useState('');
   const {
@@ -69,11 +126,46 @@ const sell = (props: Props) => {
       password: '',
       confirmPassword: '',
       acceptTerm: false,
+      image: '',
     },
     validationSchema,
     onSubmit: async (values) => {},
   });
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.5,
+    });
 
+    if (!result.canceled) {
+      setValues({
+        ...values,
+        image: result.assets[0].uri,
+      });
+    }
+  };
+  const takeImage = async () => {
+    const hasPermission = await verifyPermissions();
+    if (!hasPermission) {
+      return;
+    }
+    const image = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.5,
+      cameraType: ImagePicker.CameraType.front,
+    });
+
+    if (!image.canceled) {
+      setValues({
+        ...values,
+        image: image.assets[0].uri,
+      });
+    }
+  };
   useEffect(() => {
     axios
       .get('https://247api.netpro.software/api.aspx?api=states')
@@ -191,6 +283,121 @@ const sell = (props: Props) => {
               )}
             </>
             <>
+              <Text
+                style={{ color: 'black', fontWeight: 'bold', marginBottom: 5 }}
+              >
+                Brief Bio
+              </Text>
+              <TextInput
+                multiline
+                numberOfLines={5}
+                value={values.bio}
+                onChangeText={handleChange('bio')}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: 'black',
+                  flex: 1,
+                  paddingTop: 15,
+                  paddingLeft: 5,
+                }}
+                contentStyle={{
+                  backgroundColor: 'transparent',
+                  color: 'black',
+                }}
+                placeholderTextColor={'black'}
+                textColor="black"
+                activeOutlineColor="black"
+                outlineStyle={{ borderColor: 'black', borderWidth: 1 }}
+                mode="outlined"
+              />
+            </>
+            <>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+
+                  textAlign: 'left',
+                }}
+              >
+                Profile Picture
+              </Text>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {values.image ? (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 2,
+                      borderRadius: 50,
+                      width: 100,
+                      height: 100,
+                      borderColor: colors.lightGreen,
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Image
+                      source={{ uri: values.image }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      contentFit="cover"
+                    />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 2,
+                      borderRadius: 50,
+                      width: 100,
+                      height: 100,
+                      borderColor: colors.lightGreen,
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Image
+                      source={require('../../assets/images/placeholder.png')}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      contentFit="cover"
+                    />
+                  </View>
+                )}
+                <View style={{ gap: 10, marginTop: 10, flexDirection: 'row' }}>
+                  <MyButton
+                    style={{ flex: 1 }}
+                    text="Pick an image"
+                    buttonColor={colors.lightGreen}
+                    textColor="white"
+                    onPress={pickImage}
+                  />
+                  <MyButton
+                    style={{ flex: 1 }}
+                    text="Take a selfie"
+                    textColor="white"
+                    buttonColor={colors.lightGreen}
+                    onPress={takeImage}
+                  />
+                </View>
+              </View>
+              {touched.image && errors.image && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.image}
+                </Text>
+              )}
+            </>
+            <>
               <InputComponent
                 label="Password"
                 placeholder="Password"
@@ -220,6 +427,7 @@ const sell = (props: Props) => {
                 </Text>
               )}
             </>
+
             {/* <>
               <Text style={{ color: 'black', fontWeight: 'bold' }}>State</Text>
               {loadingStates ? (
@@ -267,11 +475,19 @@ const sell = (props: Props) => {
 
                 <Text style={{ color: 'black', fontWeight: '400' }}>
                   I have read and accept the{' '}
-                  <Text style={{ color: 'blue' }}>
+                  <Text
+                    style={{ color: 'blue' }}
+                    onPress={() => router.push('/terms')}
+                  >
                     terms of service agreement
                   </Text>
                 </Text>
               </View>
+              {touched.acceptTerm && errors.acceptTerm && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.acceptTerm}
+                </Text>
+              )}
             </>
             <MyButton
               loading={isSubmitting}
