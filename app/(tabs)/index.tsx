@@ -28,9 +28,18 @@ import { Toast, useToast } from 'react-native-toast-notifications';
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, user } = useStoreId();
+  const [mounted, setMounted] = useState(false);
   const { show } = useToast();
-
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const router = useRouter();
+  useEffect(() => {
+    if (mounted && id === null) {
+      router.replace('/login');
+    }
+  }, [mounted, id, router]);
+
   const {
     data: recentlyViewed,
     isFetching: isFetchingRecentlyViewed,
@@ -49,6 +58,7 @@ export default function TabOneScreen() {
   } = useSpecial(user?.statename.toLowerCase() as string);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView | null>(null);
+  console.log(typeof id);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffset = event.nativeEvent.contentOffset;
@@ -71,7 +81,7 @@ export default function TabOneScreen() {
           });
           setCurrentIndex(currentIndex + 1);
         }
-      }, 1000);
+      }, 1500);
 
       return () => {
         clearInterval(timer);
@@ -86,13 +96,6 @@ export default function TabOneScreen() {
     error: errorNew,
   } = useNewArrival();
   if (id === null) {
-    show('Unauthorized, please login ', {
-      type: 'danger',
-      placement: 'bottom',
-      duration: 3000,
-      animationType: 'slide-in',
-    });
-
     return <Redirect href="/" />;
   }
   const [reload, setReload] = useState(false);

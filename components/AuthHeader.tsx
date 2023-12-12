@@ -20,7 +20,7 @@ const AuthHeader = (props: Props) => {
   };
   return (
     <View style={styles.container}>
-      <Link href={'/join'} asChild>
+      <Link href={'/sell'} asChild>
         <Text
           style={{
             fontSize: 15,

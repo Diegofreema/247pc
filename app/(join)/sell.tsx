@@ -12,6 +12,7 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import InputComponent from '../../components/InputComponent';
 import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
+import { useJoinUs } from '../../lib/mutation';
 type Props = {};
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name of pharmacy is required'),
@@ -28,9 +29,10 @@ const sell = (props: Props) => {
     { statename: 'abuja', label: 'Abuja' },
     { statename: 'imo', label: 'Imo' },
   ]);
+  const { mutateAsync, isPending } = useJoinUs();
   const [loadingStates, setLoadingStates] = useState(false);
   const [error, setError] = useState('');
-  const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
+  const { values, errors, handleChange, handleSubmit, touched, resetForm } =
     useFormik({
       initialValues: {
         name: '',
@@ -40,7 +42,19 @@ const sell = (props: Props) => {
         state: '',
       },
       validationSchema,
-      onSubmit: async (values) => {},
+      onSubmit: async (values) => {
+        const response = await mutateAsync({
+          email: values.email,
+          pharmacyName: values.name,
+          stateName: values.state,
+          phoneNumber: values.phoneNumber,
+          address: values.address,
+        });
+
+        // if (response === 'saved') {
+        //   resetForm();
+        // }
+      },
     });
 
   useEffect(() => {
@@ -183,7 +197,7 @@ const sell = (props: Props) => {
             </>
 
             <MyButton
-              loading={isSubmitting}
+              loading={isPending}
               text="Register"
               onPress={handleSubmit}
               textColor="white"

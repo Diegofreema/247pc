@@ -4,6 +4,7 @@ import { User } from './types';
 import { useToast } from 'react-native-toast-notifications';
 import { useStoreId } from './zustand/auth';
 import { useModalState } from './zustand/modalState';
+import { colors } from '../constants/Colors';
 const api = process.env.EXPO_PUBLIC_PHP_API_KEY;
 
 // export const useNewUser = () => {
@@ -210,6 +211,65 @@ export const useWallet = () => {
       }
 
       console.log('Mutation', data);
+    },
+
+    onError: async () => {
+      show('Something went wrong removing from cart', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    },
+  });
+};
+export const useJoinUs = () => {
+  const { show } = useToast();
+
+  return useMutation({
+    mutationKey: ['join'],
+    mutationFn: async ({
+      email,
+      pharmacyName,
+      stateName,
+      phoneNumber,
+      address,
+    }: {
+      pharmacyName: string;
+      stateName: string;
+      email: string;
+      phoneNumber: string;
+      address: string;
+    }) => {
+      const response = await axios.post(
+        `https://247api.netpro.software/api.aspx?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
+      );
+      console.log(response.data);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      if (data === 'saved') {
+        return show(
+          'Completed!,You will be contacted by our team shortly to complete your registration process.',
+          {
+            type: 'success',
+            placement: 'top',
+            duration: 4000,
+            animationType: 'slide-in',
+            style: {
+              marginTop: 50,
+              padding: 10,
+            },
+            successColor: colors.lightGreen,
+            textStyle: {
+              color: 'white',
+              textAlign: 'center',
+            },
+            swipeEnabled: true,
+          }
+        );
+      }
+      console.log(data);
     },
 
     onError: async () => {

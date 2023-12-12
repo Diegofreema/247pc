@@ -204,7 +204,7 @@ const SignUp = (props: Props) => {
         </View>
         <Container>
           <Text
-            onPress={() => router.push('/')}
+            onPress={() => router.push('/login')}
             style={{ alignSelf: 'flex-end', color: '#1A91FF', marginTop: 20 }}
           >
             Already have an account?

@@ -58,7 +58,7 @@ const Forgot = (props: Props) => {
           );
         }
 
-        router.push('/');
+        router.push('/login');
       },
     });
 

@@ -1,7 +1,7 @@
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import React from 'react';
-import NavigationHeader from '../components/NavigationHeader';
-import Container from '../components/Container';
+import NavigationHeader from './NavigationHeader';
+import Container from './Container';
 import { Text } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import {
@@ -10,7 +10,7 @@ import {
   NumberedText,
   NumberedTextBold,
   TitleText,
-} from '../components/NormalText';
+} from './NormalText';
 import Pdf from 'react-native-pdf';
 type Props = {};
 

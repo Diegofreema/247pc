@@ -1,6 +1,6 @@
 import { ScrollView, Text, View, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AuthHeader from '../components/AuthHeader';
 
@@ -29,16 +29,7 @@ const validationSchema = yup.object().shape({
 const index = (props: Props) => {
   const { setId, getUser, setUser, id } = useStoreId();
   const router = useRouter();
-  console.log(id);
 
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     if (id !== null) {
-  //       router.replace('/(tabs)/');
-  //     }
-  //   }, 1000);
-  //   return () => clearTimeout(timeout);
-  // }, []);
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
     useFormik({
