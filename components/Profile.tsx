@@ -26,7 +26,7 @@ const Profile = ({ isLoggedIn, email, name, loading }: Props) => {
       duration: 4000,
       animationType: 'slide-in',
     });
-    router.push('/login');
+    router.push('/');
   };
   return (
     <View

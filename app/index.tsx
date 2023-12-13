@@ -27,9 +27,20 @@ const validationSchema = yup.object().shape({
 });
 
 const index = (props: Props) => {
-  const { setId, getUser, setUser, id } = useStoreId();
+  const { setId, getUser, setUser, id, getId } = useStoreId();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    getId();
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && typeof id === 'number') {
+      router.replace('/(tabs)/');
+    }
+  }, [mounted, id, router]);
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
     useFormik({
@@ -110,7 +121,7 @@ const index = (props: Props) => {
       <View style={{ alignItems: 'center', marginTop: 30 }}>
         <Image
           source={require('../assets/images/logo.png')}
-          style={{ width: width * 0.8, height: 150 }}
+          style={{ width: width * 0.6, height: 150 }}
           contentFit="contain"
         />
         <View style={{ marginTop: 20 }}>

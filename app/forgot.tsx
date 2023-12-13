@@ -58,7 +58,7 @@ const Forgot = (props: Props) => {
           );
         }
 
-        router.push('/login');
+        router.push('/');
       },
     });
 
@@ -75,7 +75,7 @@ const Forgot = (props: Props) => {
       <View style={{ alignItems: 'center', marginTop: 30 }}>
         <Image
           source={require('../assets/images/logo.png')}
-          style={{ width: width * 0.8, height: 100 }}
+          style={{ width: width * 0.6, height: 100 }}
           contentFit="cover"
         />
         <View style={{ marginTop: 20 }}>

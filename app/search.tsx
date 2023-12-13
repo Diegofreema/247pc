@@ -6,7 +6,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SearchHeader } from '../components/SearchHeader';
 import Container from '../components/Container';
 import { useSearch } from '../lib/queries';
@@ -28,6 +28,7 @@ const search = () => {
   const [selectedCat, setSelectedCat] = useState<string[]>([]);
   const [selectedPharmacy, setSelectedPharmacy] = useState<string[]>([]);
   const [selectedPriceFilter, setSelectedPriceFilter] = useState('');
+  const flatListRef = useRef<FlatList>(null);
   const [price, setPrice] = useState({
     from: '2000',
     to: '5500',
@@ -78,7 +79,12 @@ const search = () => {
     }
     setProducts(filteredDataCopy);
   };
-
+  const handleNext = () => {
+    setPage(page + 1);
+    if (flatListRef) {
+      flatListRef?.current?.scrollToIndex({ animated: true, index: 0 });
+    }
+  };
   const applyFilter = () => {
     if (!data) return;
     let filteredDataCopy = data?.slice();
@@ -395,6 +401,7 @@ const search = () => {
         ) : (
           <View style={{ flex: 1, width: '100%' }}>
             <FlatList
+              ref={flatListRef}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
                 paddingBottom: 40,
@@ -454,7 +461,7 @@ const search = () => {
                       text="Next"
                       textColor="white"
                       buttonColor={colors.lightGreen}
-                      onPress={() => setPage(page + 1)}
+                      onPress={handleNext}
                       disabled={page === totalPages}
                     />
                   </View>

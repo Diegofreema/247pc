@@ -195,7 +195,7 @@ const SignUp = (props: Props) => {
         <View style={{ alignItems: 'center', marginTop: 30 }}>
           <Image
             source={require('../assets/images/logo.png')}
-            style={{ width: width * 0.8, height: 150 }}
+            style={{ width: width * 0.6, height: 150 }}
             contentFit="contain"
           />
           <View style={{ marginTop: 30 }}>
@@ -204,7 +204,7 @@ const SignUp = (props: Props) => {
         </View>
         <Container>
           <Text
-            onPress={() => router.push('/login')}
+            onPress={() => router.push('/')}
             style={{ alignSelf: 'flex-end', color: '#1A91FF', marginTop: 20 }}
           >
             Already have an account?
