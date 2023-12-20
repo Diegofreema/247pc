@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   useWindowDimensions,
+  Pressable,
 } from 'react-native';
 import Header from '../../components/Header';
 import { ActivityIndicator, Text } from 'react-native-paper';
@@ -18,77 +19,21 @@ import { SubCat } from '../../components/SubCat';
 import { Floating } from '../../components/Floating';
 import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
+import { Cats, subCats } from '../../lib/helpers';
+import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 
 export default function Categories() {
+  const [categories, setCategories] = useState(Cats);
+  const [subCategories, setSubCategories] = useState(subCats);
   const [active, setActive] = useState(0);
   const [reload, setReload] = useState(false);
+  const router = useRouter();
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);
   const scrollRef = useRef<ScrollView>(null);
   const { height, width } = useWindowDimensions();
-  const {
-    data: allCat,
-    isPending,
-    isFetching,
-    isError,
-    isPaused,
-    refetch,
-    status,
-  } = useCat();
-  const {
-    data: subCat,
-    isPending: isPendingSub,
-    isFetching: isFetchingSub,
-    isError: isErrorSub,
-    isPaused: isPausedSub,
-  } = useSubCat(allCat?.[active].productgroup as string);
-  console.log(status, isPaused);
-  const handleRefetch = () => {
-    setReload(!reload);
-    refetch();
-  };
-  if (isPaused || isPausedSub) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Please check your internet connection
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
-  }
-
-  if (isError || isErrorSub) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Something went wrong
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
-  }
+  let items = subCats?.[active];
+  console.log(items, 'item');
 
   const handleClick = (index: number) => {
     const selectedItem = itemRef.current[index];
@@ -110,86 +55,117 @@ export default function Categories() {
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
+  const navigate = (cat: string) => {
+    router.push(`/category/${cat}`);
+  };
   return (
     <View style={{ flex: 1 }}>
       <TopHeader />
-      {isPending || isFetching ? (
-        <View
-          style={{
-            marginTop: 80,
+
+      <>
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            gap: 20,
+            paddingHorizontal: 16,
+
+            marginBottom: 10,
+
+            paddingBottom: 25,
           }}
         >
-          <ActivityIndicator size={'large'} color="black" />
-        </View>
-      ) : (
-        <>
-          <ScrollView
-            ref={scrollRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              gap: 20,
-              paddingHorizontal: 16,
-
-              marginBottom: 10,
-
-              paddingBottom: 25,
-            }}
-          >
-            {allCat?.map((cat, index) => (
-              <TouchableOpacity
-                onPress={() => handleClick(index)}
-                key={index}
-                ref={(el) => (itemRef.current[index] = el)}
+          {categories?.map((cat, index) => (
+            <TouchableOpacity
+              onPress={() => handleClick(index)}
+              key={index}
+              ref={(el) => (itemRef.current[index] = el)}
+              style={[
+                active === index ? styles.active : styles.normal,
+                { zIndex: 1 },
+              ]}
+            >
+              <Text
                 style={[
-                  active === index ? styles.active : styles.normal,
+                  active === index ? styles.activeText : styles.text,
                   { zIndex: 1 },
                 ]}
               >
-                <Text
-                  style={[
-                    active === index ? styles.activeText : styles.text,
-                    { zIndex: 1 },
-                  ]}
-                >
-                  {cat.productgroup}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-          {isPendingSub || isFetchingSub ? null : (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={subCat}
-              renderItem={({ item, index }) => (
-                <SubCat category={item?.category} index={index} />
-              )}
-              keyExtractor={(item) => item?.category}
-              contentContainerStyle={{
-                gap: 10,
-                paddingBottom: 30,
-                paddingHorizontal: 16,
-              }}
-              ListEmptyComponent={() => (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text
-                    style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}
-                  >
-                    No Products
-                  </Text>
-                </View>
-              )}
-              numColumns={2}
-            />
+                {cat.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={items}
+          renderItem={({ item, index }) => (
+            <Pressable
+              onPress={() => navigate(item?.category)}
+              style={({ pressed }) => [
+                pressed && { opacity: 0.8 },
+                {
+                  width: width * 0.45,
+
+                  marginRight: index % 2 !== 0 ? 0 : 10,
+
+                  height: 270,
+                  backgroundColor: 'white',
+                },
+                styles.container,
+              ]}
+            >
+              <Image
+                style={{
+                  width: '100%',
+                  height: '80%',
+                  borderRadius: 6,
+                }}
+                source={item?.img}
+                contentFit="cover"
+              />
+
+              {/* <Text>{index}</Text> */}
+
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: 'black',
+                  fontSize: 17,
+                  textAlign: 'center',
+                  marginTop: 4,
+                }}
+              >
+                {item.category}
+              </Text>
+            </Pressable>
           )}
-        </>
-      )}
+          keyExtractor={(item) => item?.category}
+          contentContainerStyle={{
+            gap: 10,
+            paddingBottom: 30,
+            paddingHorizontal: 16,
+          }}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}
+              >
+                No Products
+              </Text>
+            </View>
+          )}
+          numColumns={2}
+        />
+      </>
 
       <Floating />
     </View>
@@ -219,5 +195,22 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 18,
     color: '#000',
+  },
+  container: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+
+    alignItems: 'center',
+
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 6,
   },
 });

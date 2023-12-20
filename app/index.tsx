@@ -16,6 +16,7 @@ import { useStoreId } from '../lib/zustand/auth';
 import { MyButton } from '../components/MyButton';
 import { getProfile } from '../lib/helpers';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type Props = {};
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
@@ -27,17 +28,27 @@ const validationSchema = yup.object().shape({
 });
 
 const index = (props: Props) => {
-  const { setId, getUser, setUser, id, getId } = useStoreId();
+  const { setId, getUser, setUser, id, getId, user } = useStoreId();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const startLogoutTimer = async () => {
+    const logoutTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
+    // Store the logout time in AsyncStorage
+    const logoutTimestamp = new Date().getTime() + logoutTime;
+    await AsyncStorage.setItem('logoutTimestamp', logoutTimestamp.toString());
+  };
   useEffect(() => {
     getId();
+    getUser();
     setMounted(true);
   }, []);
+  console.log(id?.length > 0, user);
 
   useEffect(() => {
-    if (mounted && typeof id === 'number') {
+    if (!mounted) return;
+
+    if (id?.length > 0) {
       router.replace('/(tabs)/');
     }
   }, [mounted, id, router]);
@@ -86,6 +97,7 @@ const index = (props: Props) => {
             return;
           }
           setId(response.data);
+          startLogoutTimer();
           const user = await getProfile(response.data);
           setUser(user);
           getUser();

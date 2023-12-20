@@ -7,49 +7,69 @@ import {
 } from 'react-native';
 import { SubProps } from '../lib/types';
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
+import { useEffect, useState } from 'react';
 type Props = {
   chief?: boolean;
   index: number;
+  img: string;
 };
 export const SubCat = ({
   category,
   chief,
   index,
+  img,
 }: SubProps & Props): JSX.Element => {
   const { width } = useWindowDimensions();
   const router = useRouter();
+  // const Image = require(`${img}`);
   const navigate = () => {
     if (chief) {
       router.push(`/chief/${category}`);
-    } else {
-      router.push(`/category/${category}`);
     }
   };
+
   return (
     <Pressable
       onPress={navigate}
       style={({ pressed }) => [
         pressed && { opacity: 0.8 },
         {
-          width: chief ? width * 0.42 : width * 0.45,
-          aspectRatio: 1,
+          width: chief ? width * 0.45 : width * 0.45,
+
           marginRight: index % 2 !== 0 ? 0 : 10,
-          position: 'relative',
-          height: Math.floor(Math.random() * (200 - 100 + 1)) + 100,
+
+          height: 200,
+          backgroundColor: chief ? 'gray' : 'white',
         },
         styles.container,
       ]}
     >
-      <Text
-        style={{
-          fontWeight: 'bold',
-          color: 'white',
-          fontSize: 20,
-          textAlign: 'center',
-        }}
-      >
-        {category}
-      </Text>
+      {chief ? null : (
+        <Image
+          style={{
+            width: '100%',
+            height: '80%',
+            borderRadius: 6,
+          }}
+          source={{ uri: img }}
+          contentFit="cover"
+        />
+      )}
+
+      {chief && (
+        <Text
+          style={{
+            fontWeight: 'bold',
+            color: chief ? 'white' : 'black',
+            fontSize: chief ? 20 : 17,
+            textAlign: 'center',
+            marginTop: chief ? 0 : 4,
+          }}
+        >
+          {category}
+        </Text>
+      )}
     </Pressable>
   );
 };
@@ -68,10 +88,9 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'gray',
-    overflow: 'hidden',
-    padding: 10,
-
-    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 6,
+    paddingHorizontal: 5,
   },
 });

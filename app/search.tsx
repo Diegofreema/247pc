@@ -10,7 +10,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SearchHeader } from '../components/SearchHeader';
 import Container from '../components/Container';
 import { useSearch } from '../lib/queries';
-import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator } from 'react-native-paper';
 import { ProductItem } from '../components/ProductItem';
 import { MyButton } from '../components/MyButton';
@@ -19,7 +18,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import InputComponent from '../components/InputComponent';
 import Animated from 'react-native-reanimated';
 
-const itemsPerPage = 6;
+const itemsPerPage = 10;
 const search = () => {
   const [page, setPage] = useState(1);
   const { data, isPending, isFetching, isError, isPaused, refetch } =
@@ -130,14 +129,12 @@ const search = () => {
   if (isPaused) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Container>
-          <Text>Please check your internet connection</Text>
-          <MyButton
-            buttonColor={colors.lightGreen}
-            onPress={handleRefetch}
-            text="Retry"
-          />
-        </Container>
+        <Text>Please check your internet connection</Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={handleRefetch}
+          text="Retry"
+        />
       </View>
     );
   }
@@ -145,14 +142,12 @@ const search = () => {
   if (isError) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Container>
-          <Text>Something went wrong</Text>
-          <MyButton
-            buttonColor={colors.lightGreen}
-            onPress={handleRefetch}
-            text="Retry"
-          />
-        </Container>
+        <Text>Something went wrong</Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={handleRefetch}
+          text="Retry"
+        />
       </View>
     );
   }

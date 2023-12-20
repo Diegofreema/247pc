@@ -83,14 +83,12 @@ const Wallet = (props: Props) => {
   if (isPaused || walletBalanceIsPaused) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Container>
-          <Text>Please check your internet connection</Text>
-          <MyButton
-            buttonColor={colors.lightGreen}
-            onPress={handleRefetch}
-            text="Retry"
-          />
-        </Container>
+        <Text>Please check your internet connection</Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={handleRefetch}
+          text="Retry"
+        />
       </View>
     );
   }
@@ -98,14 +96,12 @@ const Wallet = (props: Props) => {
   if (isError || walletBalanceIsError) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Container>
-          <Text>Something went wrong</Text>
-          <MyButton
-            buttonColor={colors.lightGreen}
-            onPress={handleRefetch}
-            text="Retry"
-          />
-        </Container>
+        <Text>Something went wrong</Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={handleRefetch}
+          text="Retry"
+        />
       </View>
     );
   }

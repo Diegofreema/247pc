@@ -28,6 +28,8 @@ import { Toast, useToast } from 'react-native-toast-notifications';
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, user } = useStoreId();
+  console.log(typeof id, id);
+
   const { show } = useToast();
   const router = useRouter();
   const {

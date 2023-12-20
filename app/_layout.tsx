@@ -2,11 +2,21 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, usePathname } from 'expo-router';
-import { useEffect } from 'react';
+import { SplashScreen, Stack, usePathname, useRouter } from 'expo-router';
+import { useEffect, useRef } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
-import { Platform, SafeAreaView, StatusBar } from 'react-native';
+import moment from 'moment';
+import {
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  AppState,
+  AppStateStatic,
+} from 'react-native';
 import { PaperProvider } from 'react-native-paper';
+import * as Updates from 'expo-updates';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useStoreId } from '../lib/zustand/auth';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -26,12 +36,53 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
+  const { removeUser, removeId } = useStoreId();
+  const appState = useRef(AppState.currentState);
+  const router = useRouter();
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
+  const handleLogout = async () => {
+    console.log('handleLogout');
+    removeUser();
+    removeId();
+
+    await AsyncStorage.removeItem('logoutTimestamp');
+
+    router.replace('/');
+  };
+
+  useEffect(() => {
+    const getLogoutTime = async () => {
+      const logoutTimestamp = await AsyncStorage.getItem('logoutTimestamp');
+      if (!logoutTimestamp) return;
+
+      const remainingTime = parseInt(logoutTimestamp) - new Date().getTime();
+      if (remainingTime <= 0) {
+        handleLogout();
+      }
+    };
+    getLogoutTime();
+  }, [AsyncStorage, handleLogout]);
+  // useEffect(() => {
+  //   async function onFetchUpdateAsync() {
+  //     try {
+  //       const update = await Updates.checkForUpdateAsync();
+
+  //       if (update.isAvailable) {
+  //         await Updates.fetchUpdateAsync();
+  //         await Updates.reloadAsync();
+  //       }
+  //     } catch (error) {
+  //       // You can also add an alert() to see the error message in case of an error when fetching updates.
+  //       console.log(error);
+  //     }
+  //   }
+  //   onFetchUpdateAsync();
+  // }, []);
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();

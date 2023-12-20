@@ -2,7 +2,7 @@
   "expo": {
     "name": "247pharmacy",
     "slug": "247pharmacy",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pharmacy",
@@ -21,7 +21,14 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "hgdg_hds66_hhshd_74747jjjjf.r"
+      "package": "hgdg_hds66_hhshd_74747jjjjf.r",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +44,12 @@
         {
           "photosPermission": "Allow 247pharmacy to access your photos"
         }
+      ],
+      [
+        "expo-updates",
+        {
+          "username": "diegodark"
+        }
       ]
     ],
     "experiments": {
@@ -49,6 +62,12 @@
       "eas": {
         "projectId": "89f0929c-9b1a-46ef-8aae-b747a57de2f6"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/89f0929c-9b1a-46ef-8aae-b747a57de2f6"
     }
   }
 }
