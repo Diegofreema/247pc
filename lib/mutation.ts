@@ -5,7 +5,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { useStoreId } from './zustand/auth';
 import { useModalState } from './zustand/modalState';
 import { colors } from '../constants/Colors';
-const api = process.env.EXPO_PUBLIC_PHP_API_KEY;
+const api = process.env.EXPO_PUBLIC_API_URL;
 
 // export const useNewUser = () => {
 //   return useMutation({
@@ -26,7 +26,7 @@ export const useAddToWishlist = () => {
     mutationFn: async (productId?: string) => {
       console.log(productId, id);
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `${api}?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
 
       return response.data;
@@ -65,7 +65,7 @@ export const useAddToCart = () => {
       qty: number;
     }) => {
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
+        `${api}?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
       );
 
       console.log(qty, user?.statename, productId, id);
@@ -102,7 +102,7 @@ export const useRemoveFromCart = () => {
     mutationKey: ['removeFromCart'],
     mutationFn: async ({ salesId }: { salesId: string }) => {
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=removefromcart&saleid=${salesId}`
+        `${api}?api=removefromcart&saleid=${salesId}`
       );
 
       return response.data;
@@ -149,7 +149,7 @@ export const usePayStack = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
+        `${api}?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
       );
 
       return response.data as PaystackType;
@@ -191,7 +191,7 @@ export const useWallet = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
+        `${api}?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
       );
 
       return response.data;
@@ -242,7 +242,7 @@ export const useJoinUs = () => {
       address: string;
     }) => {
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
+        `${api}?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
       );
       console.log(response.data);
       return response.data;

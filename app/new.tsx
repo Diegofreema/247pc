@@ -84,13 +84,13 @@ const newCat = (props: Props) => {
                 gap: 10,
                 paddingBottom: 40,
               }}
-              ListEmptyComponent={() => (
+              ListEmptyComponent={
                 <Text
                   style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}
                 >
                   No Products
                 </Text>
-              )}
+              }
               numColumns={2}
             />
           )}

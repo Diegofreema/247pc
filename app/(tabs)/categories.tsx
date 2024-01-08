@@ -33,7 +33,6 @@ export default function Categories() {
   const scrollRef = useRef<ScrollView>(null);
   const { height, width } = useWindowDimensions();
   let items = subCats?.[active];
-  console.log(items, 'item');
 
   const handleClick = (index: number) => {
     const selectedItem = itemRef.current[index];
@@ -121,7 +120,8 @@ export default function Categories() {
                 style={{
                   width: '100%',
                   height: '80%',
-                  borderRadius: 6,
+                  borderTopLeftRadius: 6,
+                  borderTopRightRadius: 6,
                 }}
                 source={item?.img}
                 contentFit="cover"
@@ -148,7 +148,7 @@ export default function Categories() {
             paddingBottom: 30,
             paddingHorizontal: 16,
           }}
-          ListEmptyComponent={() => (
+          ListEmptyComponent={
             <View
               style={{
                 flex: 1,
@@ -162,7 +162,7 @@ export default function Categories() {
                 No Products
               </Text>
             </View>
-          )}
+          }
           numColumns={2}
         />
       </>

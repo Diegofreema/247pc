@@ -187,7 +187,7 @@ const cart = (props: Props) => {
               ListFooterComponentStyle={{
                 marginBottom: 50,
               }}
-              ListEmptyComponent={() => (
+              ListEmptyComponent={
                 <View
                   style={{
                     flex: 1,
@@ -228,7 +228,7 @@ const cart = (props: Props) => {
                     </Text>
                   </Pressable>
                 </View>
-              )}
+              }
             />
           </View>
         )}

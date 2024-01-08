@@ -100,20 +100,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 300,
 
-    marginBottom: 10,
+    marginBottom: 18,
     borderRadius: 5,
-    shadowColor: '#000',
+
     paddingHorizontal: 5,
     borderWidth: 1,
     borderColor: '#eee',
-
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 8,
   },
 });

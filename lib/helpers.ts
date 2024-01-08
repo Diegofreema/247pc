@@ -184,7 +184,7 @@ export const subCats = [
     },
     {
       category: 'Hair Removal',
-      img: require('../assets/images/placeholder.png'),
+      img: require('../assets/images/hair.jpg'),
     },
     {
       category: 'Handsoap & Sanitiser',
@@ -222,7 +222,7 @@ export const subCats = [
     },
     {
       category: 'Eye & Ear',
-      img: require('../assets/images/placeholder.png'),
+      img: require('../assets/images/ear.jpg'),
     },
     {
       category: 'Health Foods',
@@ -238,7 +238,7 @@ export const subCats = [
     },
     {
       category: "Men's Wellbeing",
-      img: require('../assets/images/placeholder.png'),
+      img: require('../assets/images/men.png'),
     },
     {
       category: 'Muscles, Joint & Bone',
@@ -268,7 +268,7 @@ export const subCats = [
   [
     {
       category: 'Brows & Lashes',
-      img: require('../assets/images/placeholder.png'),
+      img: require('../assets/images/brows.png'),
     },
     {
       category: 'Brushes & Brushes',

@@ -13,9 +13,11 @@ import { FloatingNav } from '../../components/FloatingNav';
 type Props = {};
 
 const Cat = (props: Props) => {
-  const { category } = useLocalSearchParams();
+  const params = useLocalSearchParams();
+
+  console.log(params?.category);
   const { data, isPending, isFetching, isError, isPaused, refetch } =
-    useProductCat(category as string);
+    useProductCat(params?.category as string);
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
     setReload(!reload);
@@ -63,11 +65,10 @@ const Cat = (props: Props) => {
       </View>
     );
   }
-  console.log(data && data[0].product);
 
   return (
     <Container>
-      <NavigationHeader back title={category as string} />
+      <NavigationHeader back title={params?.category as string} />
       <View style={{ marginTop: 20 }} />
       <View
         style={{
@@ -81,7 +82,12 @@ const Cat = (props: Props) => {
         ) : (
           <FlatList
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 50 }}
+            contentContainerStyle={{
+              paddingBottom: 50,
+              gap: 10,
+
+              paddingHorizontal: 20,
+            }}
             data={data}
             renderItem={({ item }) => (
               <ProductItem
@@ -91,7 +97,7 @@ const Cat = (props: Props) => {
                 sellingprice={item?.sellingprice}
               />
             )}
-            ListEmptyComponent={() => (
+            ListEmptyComponent={
               <View
                 style={{
                   flex: 1,
@@ -105,7 +111,7 @@ const Cat = (props: Props) => {
                   No Products
                 </Text>
               </View>
-            )}
+            }
           />
         )}
       </View>

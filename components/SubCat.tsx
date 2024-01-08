@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 type Props = {
   chief?: boolean;
   index: number;
-  img: string;
+  img?: string;
 };
 export const SubCat = ({
   category,

@@ -406,7 +406,7 @@ const search = () => {
                 return <ProductItem {...item} />;
               }}
               keyExtractor={(item) => item.id}
-              ListEmptyComponent={() => (
+              ListEmptyComponent={
                 <View
                   style={{
                     flex: 1,
@@ -416,7 +416,7 @@ const search = () => {
                 >
                   <Text>No products found</Text>
                 </View>
-              )}
+              }
               ListFooterComponentStyle={{
                 marginTop: 15,
                 alignItems: 'center',

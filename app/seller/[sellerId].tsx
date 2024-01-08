@@ -58,13 +58,13 @@ const Seller = (props: Props) => {
                 appropriate products
               </Text>
             )}
-            ListEmptyComponent={() => (
+            ListEmptyComponent={
               <Text
                 style={{ color: 'black', marginBottom: 20, fontWeight: 'bold' }}
               >
                 Nothing more from this dealer
               </Text>
-            )}
+            }
             contentContainerStyle={{ paddingTop: 30, paddingBottom: 50 }}
             data={data}
             showsVerticalScrollIndicator={false}

@@ -3,7 +3,7 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, usePathname, useRouter } from 'expo-router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
 import moment from 'moment';
 import {
@@ -32,6 +32,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const queryClient = new QueryClient();
+  const [mounted, setMounted] = useState(false);
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
@@ -39,14 +40,15 @@ export default function RootLayout() {
   const { removeUser, removeId } = useStoreId();
   const appState = useRef(AppState.currentState);
   const router = useRouter();
-
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   const handleLogout = async () => {
-    console.log('handleLogout');
     removeUser();
     removeId();
 
@@ -56,33 +58,35 @@ export default function RootLayout() {
   };
 
   useEffect(() => {
-    const getLogoutTime = async () => {
-      const logoutTimestamp = await AsyncStorage.getItem('logoutTimestamp');
-      if (!logoutTimestamp) return;
+    if (mounted) {
+      const getLogoutTime = async () => {
+        const logoutTimestamp = await AsyncStorage.getItem('logoutTimestamp');
+        if (!logoutTimestamp) return;
 
-      const remainingTime = parseInt(logoutTimestamp) - new Date().getTime();
-      if (remainingTime <= 0) {
-        handleLogout();
+        const remainingTime = parseInt(logoutTimestamp) - new Date().getTime();
+        if (remainingTime <= 0) {
+          handleLogout();
+        }
+      };
+      getLogoutTime();
+    }
+  }, [AsyncStorage, handleLogout, mounted]);
+  useEffect(() => {
+    async function onFetchUpdateAsync() {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch (error) {
+        // You can also add an alert() to see the error message in case of an error when fetching updates.
+        console.log(error);
       }
-    };
-    getLogoutTime();
-  }, [AsyncStorage, handleLogout]);
-  // useEffect(() => {
-  //   async function onFetchUpdateAsync() {
-  //     try {
-  //       const update = await Updates.checkForUpdateAsync();
-
-  //       if (update.isAvailable) {
-  //         await Updates.fetchUpdateAsync();
-  //         await Updates.reloadAsync();
-  //       }
-  //     } catch (error) {
-  //       // You can also add an alert() to see the error message in case of an error when fetching updates.
-  //       console.log(error);
-  //     }
-  //   }
-  //   onFetchUpdateAsync();
-  // }, []);
+    }
+    onFetchUpdateAsync();
+  }, []);
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();

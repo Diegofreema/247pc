@@ -52,7 +52,7 @@ const Chief = (props: Props) => {
             keyExtractor={(item) => item.id}
             initialNumToRender={10}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={() => (
+            ListEmptyComponent={
               <View
                 style={{
                   flex: 1,
@@ -66,7 +66,7 @@ const Chief = (props: Props) => {
                   No products found
                 </Text>
               </View>
-            )}
+            }
           />
         )}
       </View>

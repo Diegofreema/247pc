@@ -28,6 +28,7 @@ const validationSchema = yup.object().shape({
 });
 
 const index = (props: Props) => {
+  const api = process.env.EXPO_PUBLIC_API_URL;
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -63,7 +64,7 @@ const index = (props: Props) => {
       onSubmit: async (values) => {
         try {
           const response = await axios.post(
-            `https://247api.netpro.software/api.aspx?api=userlogin&emailaddress=${values.email}&pasword=${values.password}`
+            `${api}?api=userlogin&emailaddress=${values.email}&pasword=${values.password}`
           );
 
           if (response.data === 'incorrect email or password') {

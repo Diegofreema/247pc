@@ -262,7 +262,7 @@ const Wallet = (props: Props) => {
           )}
           refreshing={isRefetching}
           onRefresh={refetch}
-          ListEmptyComponent={() => (
+          ListEmptyComponent={
             <View
               style={{
                 flex: 1,
@@ -281,7 +281,7 @@ const Wallet = (props: Props) => {
                 No Transactions
               </Text>
             </View>
-          )}
+          }
         />
       </Container>
     </View>

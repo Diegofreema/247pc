@@ -11,10 +11,14 @@
     "preview": {
       "distribution": "internal",
       "node": "18.18.0",
+
       "android": {
         "buildType": "apk"
       },
-      "channel": "preview"
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://247api.netpro.software/api.aspx"
+      }
     }
   },
   "submit": {

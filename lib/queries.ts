@@ -19,14 +19,14 @@ import {
 } from './types';
 import { useStoreId } from './zustand/auth';
 
-// const api = process.env.EXPO_PUBLIC_PHP_API_KEY;
+const api = process.env.EXPO_PUBLIC_API_URL;
 export const useCart = () => {
   const { id, user } = useStoreId();
   return useQuery({
     queryKey: ['cart'],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+        `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
       );
 
       return response.data;
@@ -38,9 +38,7 @@ export const useGetCart = () => {
   return useQuery({
     queryKey: ['cartList'],
     queryFn: async () => {
-      const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=cartlist&myuserid=${id}`
-      );
+      const response = await axios.get(`${api}?api=cartlist&myuserid=${id}`);
 
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -65,7 +63,7 @@ export const useSpecial = (state: string) => {
     queryKey: ['id', state],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=specialoffers&statename=${state} `
+        `${api}?api=specialoffers&statename=${state} `
       );
 
       return response.data as Id[];
@@ -77,7 +75,7 @@ export const useNewProducts = (state?: string, categories?: string) => {
     queryKey: ['newProducts'],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=newproducts&statename=imo&category=Fragrance%26Gift `
+        `${api}?api=newproducts&statename=imo&category=Fragrance%26Gift `
       );
 
       return response.data;
@@ -89,7 +87,7 @@ export const useProduct = (id: any) => {
     queryKey: ['product', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=productinfo&productid=${id}`
+        `${api}?api=productinfo&productid=${id}`
       );
       return response.data as Product;
     },
@@ -100,7 +98,7 @@ export const useCommunities = (state = 'abuja') => {
     queryKey: ['communities', state],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=communities&statename=${state}`
+        `${api}?api=communities&statename=${state}`
       );
       return response.data as Community[];
     },
@@ -110,9 +108,7 @@ export const useStates = () => {
   return useQuery({
     queryKey: ['state'],
     queryFn: async () => {
-      const response = await axios.get(
-        'https://247api.netpro.software/api.aspx?api=states'
-      );
+      const response = await axios.get(`${api}?api=states`);
       return response.data as State[];
     },
   });
@@ -122,9 +118,7 @@ export const useUser = (id: any) => {
   return useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
-      );
+      const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
 
       return data as LoggedUserType;
     },
@@ -135,7 +129,7 @@ export const useSpecialInfo = (state?: string, id?: string) => {
     queryKey: ['specialInfo', state, id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=specialofferinfo&statename=${state}&specialId=${id}`
+        `${api}?api=specialofferinfo&statename=${state}&specialId=${id}`
       );
 
       let data = [];
@@ -156,7 +150,7 @@ export const useSpecialOfferProducts = (productId?: string) => {
     queryKey: ['specialOfferProducts', productId],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=specialofferproducts&productlist=${productId}`
+        `${api}?api=specialofferproducts&productlist=${productId}`
       );
 
       let data = [];
@@ -178,7 +172,7 @@ export const useWishlist = () => {
     queryKey: ['wishlist', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
+        `${api}?api=wishlist&statename=imo&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -200,7 +194,7 @@ export const useNewArrival = () => {
     queryKey: ['newArrival', user?.statename],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=newarrivals&statename=${user?.statename}`
+        `${api}?api=newarrivals&statename=${user?.statename}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -219,9 +213,7 @@ export const useCat = () => {
   return useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=maincategories`
-      );
+      const { data } = await axios.get(`${api}?api=maincategories`);
 
       return data as Cat[];
     },
@@ -235,7 +227,7 @@ export const useNewCat = (cat: string) => {
     queryKey: ['newCat'],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=newproducts&statename=${user?.statename}&category=${replacedPhrase}`
+        `${api}?api=newproducts&statename=${user?.statename}&category=${replacedPhrase}`
       );
 
       return data as WishlistType[];
@@ -264,7 +256,7 @@ export const useProductCat = (cat: string) => {
     queryKey: ['productCat', cat],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=productbycategory&statename=${user?.statename}&category=${replacedPhrase}`
+        `${api}?api=productbycategory&statename=${user?.statename}&category=${replacedPhrase}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -284,7 +276,7 @@ export const useSeller = (id: string) => {
     queryKey: ['seller', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=dealercategories&dealerid=${id} `
+        `${api}?api=dealercategories&dealerid=${id} `
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -305,7 +297,7 @@ export const useSellerCat = (cat: string, id: string) => {
     queryKey: ['sellerCat', cat, id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=dealercategoryproducts&dealerid=${id}&category=${replacedPhrase} `
+        `${api}?api=dealercategoryproducts&dealerid=${id}&category=${replacedPhrase} `
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -326,7 +318,7 @@ export const useGetOrder = () => {
     queryKey: ['order', id],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=ordersummary&myuserid=${id} `
+        `${api}?api=ordersummary&myuserid=${id} `
       );
 
       return data as OrderType;
@@ -339,7 +331,7 @@ export const useSearch = () => {
     queryKey: ['search', user?.statename],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=allproduct&statename=${user?.statename}`
+        `${api}?api=allproduct&statename=${user?.statename}`
       );
 
       return data as Searched[];
@@ -352,7 +344,7 @@ export const useGetRecentlyViewed = () => {
     queryKey: ['recentlyViewed', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=recentlyviewed&statename=imo&myuserid=${id}`
+        `${api}?api=recentlyviewed&statename=imo&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -372,9 +364,7 @@ export const useWallet = () => {
   return useQuery({
     queryKey: ['wallet', id],
     queryFn: async () => {
-      const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=walletinfo&myuserid=${id}`
-      );
+      const response = await axios.get(`${api}?api=walletinfo&myuserid=${id}`);
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
         data.push(response.data);
@@ -394,7 +384,7 @@ export const useWalletBalance = () => {
     queryKey: ['walletBalance', id],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=walletbalance&myuserid=${id}`
+        `${api}?api=walletbalance&myuserid=${id}`
       );
 
       return data;
