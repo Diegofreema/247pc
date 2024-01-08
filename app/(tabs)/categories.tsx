@@ -133,7 +133,7 @@ export default function Categories() {
                 style={{
                   fontWeight: 'bold',
                   color: 'black',
-                  fontSize: 17,
+                  fontSize: 14,
                   textAlign: 'center',
                   marginTop: 4,
                 }}
