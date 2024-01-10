@@ -189,7 +189,7 @@ export const useWishlist = () => {
 };
 export const useNewArrival = () => {
   const { user } = useStoreId();
-  console.log('useNewArrival', user?.statename);
+
   return useQuery({
     queryKey: ['newArrival', user?.statename],
     queryFn: async () => {
