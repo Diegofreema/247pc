@@ -32,13 +32,7 @@ const index = (props: Props) => {
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const startLogoutTimer = async () => {
-    const logoutTime = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-    // Store the logout time in AsyncStorage
-    const logoutTimestamp = new Date().getTime() + logoutTime;
-    await AsyncStorage.setItem('logoutTimestamp', logoutTimestamp.toString());
-  };
   useEffect(() => {
     getId();
     getUser();
@@ -98,7 +92,7 @@ const index = (props: Props) => {
             return;
           }
           setId(response.data);
-          startLogoutTimer();
+
           const user = await getProfile(response.data);
           setUser(user);
           getUser();

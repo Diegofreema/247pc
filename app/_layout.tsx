@@ -2,21 +2,12 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, usePathname, useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { SplashScreen, Stack } from 'expo-router';
+import { useEffect } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
-import moment from 'moment';
-import {
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  AppState,
-  AppStateStatic,
-} from 'react-native';
+import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import * as Updates from 'expo-updates';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useStoreId } from '../lib/zustand/auth';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -32,45 +23,17 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const queryClient = new QueryClient();
-  const [mounted, setMounted] = useState(false);
+
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
-  const { removeUser, removeId } = useStoreId();
-  const appState = useRef(AppState.currentState);
-  const router = useRouter();
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
-  const handleLogout = async () => {
-    removeUser();
-    removeId();
-
-    await AsyncStorage.removeItem('logoutTimestamp');
-
-    router.replace('/');
-  };
-
-  useEffect(() => {
-    if (mounted) {
-      const getLogoutTime = async () => {
-        const logoutTimestamp = await AsyncStorage.getItem('logoutTimestamp');
-        if (!logoutTimestamp) return;
-
-        const remainingTime = parseInt(logoutTimestamp) - new Date().getTime();
-        if (remainingTime <= 0) {
-          handleLogout();
-        }
-      };
-      getLogoutTime();
-    }
-  }, [AsyncStorage, handleLogout, mounted]);
   useEffect(() => {
     async function onFetchUpdateAsync() {
       try {
@@ -113,8 +76,6 @@ const MyTheme = {
 };
 
 function RootLayoutNav() {
-  const pathname = usePathname();
-
   return (
     <ThemeProvider value={MyTheme}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
