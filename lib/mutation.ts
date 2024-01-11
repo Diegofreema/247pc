@@ -282,3 +282,56 @@ export const useJoinUs = () => {
     },
   });
 };
+export const useComment = () => {
+  const { show } = useToast();
+  const { user, id } = useStoreId();
+  return useMutation({
+    mutationKey: ['comment'],
+    mutationFn: async ({
+      productId,
+      rating,
+      comment,
+    }: {
+      productId: string;
+      rating: number;
+
+      comment: string;
+    }) => {
+      const response = await axios.post(
+        `${api}?api=ratedeliveredprod&myuserid=${id}&productid=${productId}&fullname=${user?.customername}&ratestar=${rating}&rateinfo=${comment}`
+      );
+      console.log(response.data);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      if (data === 'saved') {
+        return show('Thanks for rating this product!!', {
+          type: 'success',
+          placement: 'top',
+          duration: 4000,
+          animationType: 'slide-in',
+          style: {
+            marginTop: 50,
+            padding: 10,
+          },
+          successColor: colors.lightGreen,
+          textStyle: {
+            color: 'white',
+            textAlign: 'center',
+          },
+          swipeEnabled: true,
+        });
+      }
+      console.log(data);
+    },
+
+    onError: async () => {
+      show('Something went wrong, please try again later', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    },
+  });
+};

@@ -52,8 +52,8 @@ const Header = ({}: Props) => {
     return (
       <View
         style={{
-          flex: 1,
-          justifyContent: 'center',
+          flexDirection: 'row',
+
           alignItems: 'center',
           gap: 8,
         }}
@@ -73,8 +73,7 @@ const Header = ({}: Props) => {
     return (
       <View
         style={{
-          flex: 1,
-          justifyContent: 'center',
+          flexDirection: 'row',
           alignItems: 'center',
           gap: 8,
         }}

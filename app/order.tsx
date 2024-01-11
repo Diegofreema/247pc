@@ -5,8 +5,7 @@ import NavigationHeader from '../components/NavigationHeader';
 import { useGetFullOrder } from '../lib/queries';
 import { MyButton } from '../components/MyButton';
 import { colors } from '../constants/Colors';
-import { ActivityIndicator, TextInput } from 'react-native-paper';
-import { AirbnbRating } from 'react-native-ratings';
+import { ActivityIndicator } from 'react-native-paper';
 import { FlatList } from 'react-native';
 import { Order } from '../lib/types';
 import { OrderCard } from '../components/OrderCard';
@@ -14,8 +13,6 @@ type Props = {};
 
 const order = (props: Props) => {
   const { data, isPending, isPaused, isError, refetch } = useGetFullOrder();
-  const [comment, setComment] = useState('');
-  console.log('🚀 ~ order ~ comment:', comment);
 
   console.log('🚀 ~ order ~ data:', data);
   const [reload, setReload] = useState(false);
@@ -81,9 +78,6 @@ const order = (props: Props) => {
     );
   }
 
-  const ratingCompleted = (rating: number) => {
-    console.log('🚀 ~ ratingCompleted ~ rating:', rating);
-  };
   const renderItem = ({ item }: { item: Order }) => {
     return <OrderCard {...item} />;
   };
@@ -91,7 +85,7 @@ const order = (props: Props) => {
   return (
     <Container>
       <NavigationHeader back title="My Order" />
-
+      <View style={{ marginBottom: 20 }} />
       <FlatList
         data={data}
         renderItem={renderItem}
