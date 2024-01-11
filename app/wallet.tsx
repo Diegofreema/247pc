@@ -28,6 +28,7 @@ const Wallet = (props: Props) => {
     isRefetching,
     isPending,
   } = useWallet();
+  console.log('🚀 ~ Wal ~ data:', data);
   const {
     data: walletBalance,
     isFetching: walletBalanceIsFetching,
@@ -241,10 +242,17 @@ const Wallet = (props: Props) => {
               alignItems: 'center',
               gap: 10,
               marginTop: 20,
+              marginBottom: 15,
             }}
           >
             <FontAwesome name="calendar" size={24} color="black" />
-            <Text style={{ fontSize: 15, fontWeight: '500', color: 'black' }}>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: '500',
+                color: 'black',
+              }}
+            >
               Transaction History
             </Text>
           </View>

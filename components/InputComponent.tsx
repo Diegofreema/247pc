@@ -10,6 +10,8 @@ type Props = {
   keyboardType?: 'email-address' | 'numeric' | 'default';
   secureTextEntry?: boolean;
   value: string;
+  multiline?: boolean;
+  numberOfLines?: number;
 };
 
 const InputComponent = ({
@@ -19,6 +21,8 @@ const InputComponent = ({
   keyboardType,
   secureTextEntry = false,
   value,
+  multiline,
+  numberOfLines,
 }: Props) => {
   return (
     <>
@@ -36,6 +40,8 @@ const InputComponent = ({
         textColor="black"
         activeOutlineColor="black"
         outlineStyle={{ borderColor: 'black', borderWidth: 1 }}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
       />
     </>
   );

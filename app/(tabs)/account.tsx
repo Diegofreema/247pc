@@ -6,7 +6,7 @@ import { useStoreId } from '../../lib/zustand/auth';
 import axios from 'axios';
 import { LoggedUserType } from '../../lib/types';
 import Container from '../../components/Container';
-import { Entypo, Foundation } from '@expo/vector-icons';
+import { Entypo, Foundation, MaterialIcons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useWalletBalance } from '../../lib/queries';
 type Props = {};
@@ -26,6 +26,11 @@ const pages = [
     name: 'Wallet',
     link: '/wallet',
     icon: <Entypo name="wallet" size={30} color="black" />,
+  },
+  {
+    name: 'Order',
+    link: '/order',
+    icon: <MaterialIcons name="inventory" size={30} color="black" />,
   },
 ];
 const Account = (props: Props) => {

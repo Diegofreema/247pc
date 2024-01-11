@@ -1,3 +1,4 @@
+import { useGetFullOrder } from './queries';
 export type User = {
   name: string;
   email: string;
@@ -84,4 +85,14 @@ export type OrderType = {
 export type Special = {
   GroupTitle: string;
   productlist: string;
+};
+export type Order = {
+  id: string;
+  price: string;
+  product: string;
+  productid: string;
+  qty: string;
+  rateSet: null | string;
+  seller: string;
+  statuz: string;
 };

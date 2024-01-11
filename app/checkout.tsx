@@ -31,7 +31,7 @@ const CheckOut = (props: Props) => {
   const { id, user } = useStoreId();
   const { show } = useToast();
   const queryClient = useQueryClient();
-  const { mutateAsync: walletPay, isPending: walletLoading } = useWallet();
+  const { mutateAsync: onWalletPay, isPending: walletLoading } = useWallet();
   const { mutateAsync, isPending: loading, data: paystackData } = usePayStack();
   const {
     handleChange,
@@ -310,7 +310,7 @@ const CheckOut = (props: Props) => {
             <Button
               disabled={walletLoading}
               onPress={() =>
-                walletPay({
+                onWalletPay({
                   productInCart: data?.items,
                   couponCode: values?.coupon,
                 })
