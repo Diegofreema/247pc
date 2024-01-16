@@ -26,6 +26,8 @@ type Props = {};
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
 });
+
+const paystackKey = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
 const CheckOut = (props: Props) => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const { id, user } = useStoreId();
@@ -179,7 +181,7 @@ const CheckOut = (props: Props) => {
           }}
         >
           <Paystack
-            paystackKey="pk_live_616edbbc0c4a079dd0d866045da2a1f765386f43"
+            paystackKey={paystackKey}
             billingEmail={user?.email as string}
             amount={amount}
             channels={['card']}
