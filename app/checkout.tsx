@@ -92,6 +92,7 @@ const CheckOut = (props: Props) => {
     isLoading: loadingOrder,
     refetch,
   } = useGetOrder();
+  console.log('🚀 ~ CheckOut ~ data:', data);
   if (isPaused) {
     return (
       <View

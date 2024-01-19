@@ -38,7 +38,6 @@ export const useStoreId = create<AuthStore>((set) => ({
   getId: async () => {
     try {
       const id = await AsyncStorage.getItem('id');
-
       set({ id: id });
     } catch (error) {
       console.error('Error getting ID from local storage:', error);
@@ -55,9 +54,9 @@ export const useStoreId = create<AuthStore>((set) => ({
     }
   },
   removeUser: async () => {
+    set({ user: undefined });
     try {
       await AsyncStorage.removeItem('user');
-      set({ user: undefined });
     } catch (error) {
       console.error('Error removing User from local storage:', error);
     }
