@@ -1,10 +1,7 @@
-import { categories } from './../constants/index';
 import { useQuery } from '@tanstack/react-query';
 
 import axios from 'axios';
-import { ProductProps } from '../components/ProductCard';
 import {
-  CartType,
   Cat,
   Community,
   LoggedUserType,
@@ -242,7 +239,7 @@ export const useSubCat = (cat: string) => {
     queryKey: ['subCat', cat],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=menusubcategories&category=${replacedPhrase} `
+        `${api}?api=menusubcategories&category=${replacedPhrase} `
       );
 
       return data as SubProps[];

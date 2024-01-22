@@ -155,7 +155,7 @@ const CheckOut = (props: Props) => {
           disabled={isSubmitting}
           value={values.coupon}
           onChangeText={handleChange('coupon')}
-          label="Apply coupon"
+          placeholder="Enter coupon code"
           right={
             <TextInput.Icon
               icon="arrow-right"

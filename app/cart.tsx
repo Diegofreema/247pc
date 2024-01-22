@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '../components/Container';
 import NavigationHeader from '../components/NavigationHeader';
 import CartItem from '../components/CartItem';
@@ -14,15 +14,35 @@ import { useRouter } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
 import { MyButton } from '../components/MyButton';
 import { FloatingNav } from '../components/FloatingNav';
+import axios from 'axios';
+import { useStoreId } from '../lib/zustand/auth';
 type Props = {};
+const api = process.env.EXPO_PUBLIC_API_URL;
 
 const cart = (props: Props) => {
   const router = useRouter();
   const [reload, setReload] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { user, id } = useStoreId();
   const handleRefetch = () => {
     setReload(!reload);
     refetch();
   };
+  useEffect(() => {
+    const loadData = () => {
+      setLoading(true);
+
+      axios
+        .post(
+          `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+        )
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
+    };
+
+    loadData();
+  }, []);
+
   const {
     data: order,
     isPaused: isPausedOrder,
@@ -103,7 +123,8 @@ const cart = (props: Props) => {
           justifyContent: 'center',
         }}
       >
-        {isLoadingOrder ||
+        {loading ||
+        isLoadingOrder ||
         isLoadingCart ||
         isPendingWishlist ||
         isFetchingWishlist ? (
