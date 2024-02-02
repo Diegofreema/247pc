@@ -31,22 +31,7 @@ const index = (props: Props) => {
   const api = process.env.EXPO_PUBLIC_API_URL;
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    getId();
-    getUser();
-    setMounted(true);
-  }, []);
-  console.log(id?.length > 0, user);
-
-  useEffect(() => {
-    if (!mounted) return;
-
-    if (id?.length > 0) {
-      router.replace('/(tabs)/');
-    }
-  }, [mounted, id, router]);
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
     useFormik({
@@ -92,18 +77,16 @@ const index = (props: Props) => {
             return;
           }
           setId(response.data);
-
           const user = await getProfile(response.data);
           setUser(user);
           getUser();
+          router.replace('/(tabs)/');
           toast.show('login successful', {
             type: 'success',
             placement: 'bottom',
             duration: 4000,
             animationType: 'slide-in',
           });
-
-          router.replace('/(tabs)');
         } catch (error) {
           toast.show('Something went wrong', {
             type: 'error',

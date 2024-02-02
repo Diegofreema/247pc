@@ -148,7 +148,8 @@ const cart = (props: Props) => {
               <Text
                 style={{
                   color: 'skyblue',
-                  fontWeight: 'bold',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 12,
                   alignSelf: 'flex-end',
                 }}
               >
@@ -168,10 +169,10 @@ const cart = (props: Props) => {
                       flex: 1,
                     }}
                   >
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                    <Text style={{ fontFamily: 'PoppinsBold', fontSize: 12 }}>
                       {order?.items} item(s)
                     </Text>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                    <Text style={{ fontFamily: 'PoppinsBold', fontSize: 12 }}>
                       ₦{order?.total}
                     </Text>
                   </View>
@@ -200,6 +201,7 @@ const cart = (props: Props) => {
                     onPress={() => router.push('/checkout')}
                     buttonColor={colors.lightGreen}
                     textColor="#fff"
+                    labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
                   >
                     Checkout
                   </Button>

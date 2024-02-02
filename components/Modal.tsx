@@ -31,11 +31,23 @@ export const ModalComponent = ({}: Props): JSX.Element => {
         />
         <Text
           variant="titleLarge"
-          style={{ fontWeight: 'bold', color: 'black' }}
+          style={{
+            color: 'black',
+            fontSize: 14,
+            fontFamily: 'PoppinsBold',
+          }}
         >
           Balance insufficient
         </Text>
-        <Text style={{ textAlign: 'center', marginBottom: 7, color: 'black' }}>
+        <Text
+          style={{
+            textAlign: 'center',
+            marginBottom: 7,
+            color: 'black',
+            fontSize: 13,
+            fontFamily: 'PoppinsMedium',
+          }}
+        >
           There is not enough balance in your wallet to place this order!!
         </Text>
         <Button
@@ -43,6 +55,7 @@ export const ModalComponent = ({}: Props): JSX.Element => {
           buttonColor={colors.lightGreen}
           textColor="white"
           style={{ borderRadius: 6 }}
+          labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
         >
           Deposit
         </Button>

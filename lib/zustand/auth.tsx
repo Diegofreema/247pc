@@ -16,21 +16,18 @@ interface AuthStore {
 export const useStoreId = create<AuthStore>((set) => ({
   id: '',
   setId: async (newId) => {
-    const logoutTime = 24 * 60 * 60 * 1000;
+    set({ id: newId });
     try {
-      const logoutTimestamp = new Date().getTime() + logoutTime;
-      await AsyncStorage.setItem('logoutTimestamp', logoutTimestamp.toString());
       await AsyncStorage.setItem('id', newId.toString());
-      set({ id: newId });
     } catch (error) {
       console.error('Error storing ID in local storage:', error);
     }
   },
   removeId: async () => {
+    set({ id: '', user: undefined });
     try {
       await AsyncStorage.removeItem('id');
       await AsyncStorage.removeItem('user');
-      set({ id: '', user: undefined });
     } catch (error) {
       console.error('Error removing ID from local storage:', error);
     }

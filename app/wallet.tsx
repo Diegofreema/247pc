@@ -18,6 +18,8 @@ type Props = {};
 const validationSchema = yup.object().shape({
   amount: yup.string().required('Amount is required'),
 });
+
+const api = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
 const Wallet = (props: Props) => {
   const {
     data,
@@ -35,9 +37,11 @@ const Wallet = (props: Props) => {
     isPaused: walletBalanceIsPaused,
     isPending: walletBalanceIsPending,
     isError: walletBalanceIsError,
+    refetch: walletBalanceRefetch,
   } = useWalletBalance();
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const [reference, setReference] = useState('');
+  const [loading, setLoading] = useState(false);
   const { id, user } = useStoreId();
   const { show } = useToast();
   const {
@@ -47,6 +51,7 @@ const Wallet = (props: Props) => {
     handleSubmit,
     touched,
     isSubmitting,
+
     resetForm,
   } = useFormik({
     initialValues: {
@@ -54,6 +59,7 @@ const Wallet = (props: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
+      setLoading(true);
       axios
         .post(
           `https://247api.netpro.software/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
@@ -73,6 +79,9 @@ const Wallet = (props: Props) => {
         })
         .then(() => {
           paystackWebViewRef.current?.startTransaction();
+        })
+        .finally(() => {
+          setLoading(false);
         });
     },
   });
@@ -108,7 +117,7 @@ const Wallet = (props: Props) => {
   }
   const { amount } = values;
 
-  const finalAmount = parseInt(amount.replace(',', '')) * 100;
+  const finalAmount = parseInt(amount.replace(',', ''));
   const isLoading =
     isPending ||
     walletBalanceIsPending ||
@@ -124,7 +133,7 @@ const Wallet = (props: Props) => {
         <NavigationHeader title="Wallet" back />
         <View style={{ marginTop: 20 }} />
         <Paystack
-          paystackKey="pk_live_616edbbc0c4a079dd0d866045da2a1f765386f43"
+          paystackKey={api}
           billingEmail={user?.email as string}
           amount={finalAmount}
           channels={['card']}
@@ -149,6 +158,7 @@ const Wallet = (props: Props) => {
             });
             setReference('');
             resetForm({ values: { amount: '' } });
+            walletBalanceRefetch();
           }}
           refNumber={reference}
           // @ts-ignore
@@ -235,16 +245,10 @@ const Wallet = (props: Props) => {
                   value={amount}
                 />
               </View>
-
-              {touched.amount && errors.amount && (
-                <Text style={{ color: 'red', marginTop: 10 }}>
-                  {errors.amount}
-                </Text>
-              )}
             </View>
             <Button
               onPress={() => handleSubmit()}
-              loading={isSubmitting}
+              loading={loading}
               style={{
                 margin: 20,
                 borderRadius: 5,

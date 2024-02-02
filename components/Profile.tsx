@@ -27,7 +27,7 @@ const Profile = ({ isLoggedIn, email, name, loading }: Props) => {
       animationType: 'slide-in',
     });
 
-    router.replace('/(auth)');
+    router.replace('/login');
   };
   return (
     <View

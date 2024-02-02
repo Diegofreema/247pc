@@ -22,11 +22,6 @@ export const TopHeader = ({}: Props): JSX.Element => {
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 10,
-
-        top: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'white',
       }}
     >
       <Pressable

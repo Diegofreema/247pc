@@ -81,7 +81,7 @@ const MyTheme = {
 
 function RootLayoutNav() {
   const { id } = useStoreId();
-  console.log('🚀 ~ RootLayoutNav ~ id:', id?.length);
+  console.log('🚀 ~ RootLayoutNav ~ id:', id?.length, typeof id);
 
   return (
     <ThemeProvider value={MyTheme}>
@@ -93,64 +93,51 @@ function RootLayoutNav() {
         }}
       >
         <Stack screenOptions={{ headerShown: false }}>
-          {id?.length ? (
-            <>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="search" options={{ headerShown: false }} />
-              <Stack.Screen name="cart" options={{ headerShown: false }} />
-              <Stack.Screen name="forgot" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="updateProfile"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="updatePassword"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="product/[productId]"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="special/[specialId]"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="category/[category]"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="new" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="chief/[category]"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="seller/[sellerId]"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="sellerCat/[category]"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="checkout" options={{ headerShown: false }} />
-              <Stack.Screen name="wallet" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="(join)/join"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="(join)/sell"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="(join)/practitioner"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="order" options={{ headerShown: false }} />
-            </>
-          ) : (
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          )}
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="search" options={{ headerShown: false }} />
+          <Stack.Screen name="cart" options={{ headerShown: false }} />
+          <Stack.Screen name="forgot" options={{ headerShown: false }} />
+          <Stack.Screen name="updateProfile" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="updatePassword"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="product/[productId]"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="special/[specialId]"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="category/[category]"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="new" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="chief/[category]"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="seller/[sellerId]"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="sellerCat/[category]"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="checkout" options={{ headerShown: false }} />
+          <Stack.Screen name="wallet" options={{ headerShown: false }} />
+          <Stack.Screen name="(join)/join" options={{ headerShown: false }} />
+          <Stack.Screen name="(join)/sell" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(join)/practitioner"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="order" options={{ headerShown: false }} />
+
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaView>
     </ThemeProvider>

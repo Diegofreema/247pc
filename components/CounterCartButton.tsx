@@ -46,7 +46,7 @@ const CounterCartButton = ({
             alignItems: pathname === '/cart' ? 'flex-start' : 'center',
           }}
         >
-          <Text>Quantity:</Text>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 12 }}>Quantity:</Text>
           <View
             style={{
               flexDirection: 'row',
@@ -87,7 +87,7 @@ const CounterCartButton = ({
           buttonColor={colors.lightGreen}
           textColor={'white'}
           onPress={onAddToCart}
-          labelStyle={{ fontSize: 20, fontWeight: 'bold' }}
+          labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
         >
           Add to cart
         </Button>

@@ -68,13 +68,17 @@ const CartItem = ({
         <View style={{ gap: 5, flex: 1 }}>
           <Text
             variant="titleMedium"
-            style={{ fontWeight: 'bold', color: '#000' }}
+            style={{
+              fontFamily: 'PoppinsMedium',
+              fontSize: 12,
+              color: '#000',
+            }}
           >
             {product}
           </Text>
           <Text
             variant="titleSmall"
-            style={{ fontWeight: '400', color: '#000' }}
+            style={{ fontFamily: 'Poppins', fontSize: 10, color: '#000' }}
           >
             Sold by {seller}
           </Text>
@@ -90,13 +94,14 @@ const CartItem = ({
           flex: 1,
         }}
       >
-        <Text style={{ fontWeight: 'bold', color: '#000' }}>
+        <Text style={{ fontSize: 14, fontFamily: 'Poppins', color: '#000' }}>
           Quantity: {qty}
         </Text>
         <Text
           variant="titleLarge"
           style={{
-            fontWeight: 'bold',
+            fontSize: 14,
+            fontFamily: 'Poppins',
             color: '#000',
           }}
         >
@@ -126,6 +131,7 @@ const CartItem = ({
             style={{
               width: '90%',
             }}
+            labelStyle={{ fontSize: 12, fontFamily: 'Poppins' }}
           >
             Save to wishlist
           </Button>
@@ -144,6 +150,7 @@ const CartItem = ({
           style={{
             width: '90%',
           }}
+          labelStyle={{ fontSize: 12, fontFamily: 'Poppins' }}
         >
           Remove from cart
         </Button>

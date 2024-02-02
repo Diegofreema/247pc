@@ -237,10 +237,24 @@ const CheckOut = (props: Props) => {
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text variant="titleLarge" style={{ color: 'black' }}>
+              <Text
+                variant="titleLarge"
+                style={{
+                  color: 'black',
+                  fontSize: 14,
+                  fontFamily: 'PoppinsBold',
+                }}
+              >
                 Order Summary
               </Text>
-              <Text variant="titleMedium" style={{ color: 'black' }}>
+              <Text
+                variant="titleMedium"
+                style={{
+                  color: 'black',
+                  fontSize: 12,
+                  fontFamily: 'PoppinsMedium',
+                }}
+              >
                 {data?.items} item(s)
               </Text>
             </View>
@@ -256,12 +270,23 @@ const CheckOut = (props: Props) => {
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text variant="titleSmall" style={{ color: 'black' }}>
+              <Text
+                variant="titleSmall"
+                style={{
+                  color: 'black',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 12,
+                }}
+              >
                 Subtotal
               </Text>
               <Text
                 variant="titleMedium"
-                style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}
+                style={{
+                  color: 'black',
+                  fontSize: 15,
+                  fontFamily: 'PoppinsMedium',
+                }}
               >
                 {data?.subtotal}
               </Text>
@@ -277,12 +302,23 @@ const CheckOut = (props: Props) => {
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text variant="titleSmall" style={{ color: 'black' }}>
+              <Text
+                variant="titleSmall"
+                style={{
+                  color: 'black',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 12,
+                }}
+              >
                 Delivery charge
               </Text>
               <Text
                 variant="titleMedium"
-                style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}
+                style={{
+                  color: 'black',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 15,
+                }}
               >
                 {data?.delivery}
               </Text>
@@ -300,13 +336,21 @@ const CheckOut = (props: Props) => {
             >
               <Text
                 variant="titleLarge"
-                style={{ color: 'black', fontWeight: 'bold', fontSize: 24 }}
+                style={{
+                  color: 'black',
+                  fontFamily: 'PoppinsBold',
+                  fontSize: 16,
+                }}
               >
                 Total
               </Text>
               <Text
                 variant="titleMedium"
-                style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}
+                style={{
+                  color: 'black',
+                  fontFamily: 'PoppinsBold',
+                  fontSize: 16,
+                }}
               >
                 {data?.total}
               </Text>
@@ -328,6 +372,7 @@ const CheckOut = (props: Props) => {
               buttonColor={colors.lightGreen}
               textColor="white"
               style={{ width: '100%', borderRadius: 5 }}
+              labelStyle={{ fontSize: 12, fontFamily: 'PoppinsMedium' }}
             >
               Pay with Card
             </Button>
@@ -343,6 +388,7 @@ const CheckOut = (props: Props) => {
               textColor="white"
               buttonColor={colors.black}
               style={{ width: '100%', borderRadius: 5 }}
+              labelStyle={{ fontSize: 12, fontFamily: 'PoppinsMedium' }}
             >
               Pay with Wallet
             </Button>

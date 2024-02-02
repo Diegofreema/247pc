@@ -161,7 +161,7 @@ const ProductDetail = (props: Props) => {
           style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: 20,
+            paddingBottom: 40,
           }}
         >
           <Card
@@ -319,10 +319,10 @@ const ProductDetail = (props: Props) => {
             <View>
               <Text
                 style={{
-                  fontWeight: 'bold',
                   color: 'black',
                   marginBottom: 10,
-                  fontSize: 18,
+                  fontFamily: 'PoppinsBold',
+                  fontSize: 15,
                 }}
               >
                 You might also like

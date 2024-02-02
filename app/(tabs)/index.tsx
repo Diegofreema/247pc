@@ -5,6 +5,8 @@ import {
   Pressable,
   View,
   NativeScrollEvent,
+  Animated,
+  StatusBar,
 } from 'react-native';
 
 import { ActivityIndicator } from 'react-native-paper';
@@ -25,13 +27,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 import axios from 'axios';
 import { Toast, useToast } from 'react-native-toast-notifications';
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
-} from 'react-native-reanimated';
+
 import { AddToCartButton } from '../../components/AddToCartButton';
+import { Platform } from 'react-native';
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -39,21 +37,19 @@ export const checkTextLength = (text: string) => {
 
   return text;
 };
+const NAVBAR_HEIGHT = 70;
+const STATUS_BAR_HEIGHT = Platform.select({ ios: 20, android: 24 });
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
-  const { id, user } = useStoreId();
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
-
-  const headerStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(scrollOffset.value, [0, 0, 70], [0, 0, 70]),
-        },
-      ],
-    };
+  const { id, user, getUser, getId } = useStoreId();
+  console.log('🚀 ~ TabOneScreen ~ id:', id, typeof id);
+  const scrollY = new Animated.Value(0);
+  const diffClamp = Animated.diffClamp(scrollY, 0, NAVBAR_HEIGHT);
+  const translateY = diffClamp.interpolate({
+    inputRange: [0, NAVBAR_HEIGHT],
+    outputRange: [0, -NAVBAR_HEIGHT],
   });
+
   const router = useRouter();
   const {
     data: recentlyViewed,
@@ -62,6 +58,10 @@ export default function TabOneScreen() {
     isPaused: isPausedRecentlyViewed,
     error: errorRecentlyViewed,
   } = useGetRecentlyViewed();
+  useEffect(() => {
+    getUser();
+    getId();
+  }, []);
 
   const {
     data: special,
@@ -73,6 +73,12 @@ export default function TabOneScreen() {
   } = useSpecial(user?.statename.toLowerCase() as string);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView | null>(null);
+  useEffect(() => {
+    console.log('🚀 ~ TabOneScreen ~ user:', user);
+    if (!id.length) {
+      <Redirect href="/login" />;
+    }
+  }, []);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffset = event.nativeEvent.contentOffset;
@@ -109,9 +115,9 @@ export default function TabOneScreen() {
     isPaused: isPausedNew,
     error: errorNew,
   } = useNewArrival();
-  console.log('🚀 ~ TabOneScreen ~ newArrival:', newArrival);
 
   const [reload, setReload] = useState(false);
+
   const handleRefetch = () => {
     setReload(!reload);
     refetch();
@@ -163,15 +169,24 @@ export default function TabOneScreen() {
 
   return (
     <View>
-      <Animated.View style={{}}>
+      <Animated.View
+        style={[
+          styles.header,
+          {
+            transform: [{ translateY: translateY }],
+          },
+        ]}
+      >
         <TopHeader />
       </Animated.View>
 
       <Animated.ScrollView
         scrollEventThrottle={16}
-        ref={scrollRef}
+        onScroll={(e) => {
+          scrollY.setValue(e.nativeEvent.contentOffset.y);
+        }}
         showsVerticalScrollIndicator={false}
-        style={{ paddingBottom: 40 }}
+        style={{ paddingBottom: 20 }}
       >
         <View style={{ flex: 1 }}>
           {isFetchingSpecial || isPendingSpecial ? (
@@ -185,7 +200,7 @@ export default function TabOneScreen() {
               <ActivityIndicator animating color="#000" size="large" />
             </View>
           ) : (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, marginTop: 60 }}>
               <Text
                 style={{
                   fontSize: 18,
@@ -525,5 +540,16 @@ const styles = StyleSheet.create({
   },
   pager: {
     flex: 1,
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 70, // Adjust this based on your header's height
+    elevation: 4,
+    zIndex: 1000,
+    backgroundColor: 'white',
+    paddingVertical: 10,
   },
 });
