@@ -8,6 +8,7 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import * as Updates from 'expo-updates';
+import { useStoreId } from '../lib/zustand/auth';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -15,7 +16,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: 'index',
+  initialRouteName: '(tabs)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -26,6 +27,9 @@ export default function RootLayout() {
 
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Poppins: require('../assets/fonts/Poppins-Regular.ttf'),
+    PoppinsMedium: require('../assets/fonts/Poppins-Medium.ttf'),
+    PoppinsBold: require('../assets/fonts/Poppins-Bold.ttf'),
     ...FontAwesome.font,
   });
 
@@ -76,6 +80,9 @@ const MyTheme = {
 };
 
 function RootLayoutNav() {
+  const { id } = useStoreId();
+  console.log('🚀 ~ RootLayoutNav ~ id:', id?.length);
+
   return (
     <ThemeProvider value={MyTheme}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -85,57 +92,65 @@ function RootLayoutNav() {
           paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         }}
       >
-        <Stack initialRouteName="index">
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="search" options={{ headerShown: false }} />
-
-          <Stack.Screen
-            name="signup"
-            options={{ headerShown: false, presentation: 'modal' }}
-          />
-          <Stack.Screen name="cart" options={{ headerShown: false }} />
-          <Stack.Screen name="forgot" options={{ headerShown: false }} />
-          <Stack.Screen name="updateProfile" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="updatePassword"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="product/[productId]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="special/[specialId]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="category/[category]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="new" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="chief/[category]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="seller/[sellerId]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="sellerCat/[category]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="checkout" options={{ headerShown: false }} />
-          <Stack.Screen name="wallet" options={{ headerShown: false }} />
-          <Stack.Screen name="(join)/join" options={{ headerShown: false }} />
-          <Stack.Screen name="(join)/sell" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(join)/practitioner"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="order" options={{ headerShown: false }} />
-          {/* <Stack.Screen name="terms" options={{ headerShown: false }} /> */}
+        <Stack screenOptions={{ headerShown: false }}>
+          {id?.length ? (
+            <>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="search" options={{ headerShown: false }} />
+              <Stack.Screen name="cart" options={{ headerShown: false }} />
+              <Stack.Screen name="forgot" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="updateProfile"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="updatePassword"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="product/[productId]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="special/[specialId]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="category/[category]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="new" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="chief/[category]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="seller/[sellerId]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="sellerCat/[category]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="checkout" options={{ headerShown: false }} />
+              <Stack.Screen name="wallet" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(join)/join"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(join)/sell"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(join)/practitioner"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="order" options={{ headerShown: false }} />
+            </>
+          ) : (
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          )}
         </Stack>
       </SafeAreaView>
     </ThemeProvider>

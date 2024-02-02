@@ -124,7 +124,21 @@ const ProductDetail = (props: Props) => {
     mutateAsync(productId as string, id);
   };
   const source: HTMLSource = {
-    html: `${data?.description}`,
+    html: `<p style="font-size: 2rem;">
+    ${data?.description}
+    </p>`,
+  };
+
+  const tagStyle = {
+    body: {
+      whiteSpace: 'normal',
+      color: 'black',
+      fontSize: 16,
+    },
+
+    p: {
+      fontFamily: 'SpaceMono',
+    },
   };
   const arrow = '\u2192';
   return (
@@ -168,7 +182,7 @@ const ProductDetail = (props: Props) => {
                 source={{
                   uri: `https://247pharmacy.net/Uploads/${productId}.jpg`,
                 }}
-                style={{ width: 250, height: 150 }}
+                style={{ width: 250, height: 250 }}
                 contentFit="contain"
               />
             </View>
@@ -219,7 +233,13 @@ const ProductDetail = (props: Props) => {
                 >
                   Description
                 </Text>
-                <RenderHtml source={source} contentWidth={width} />
+                <RenderHtml
+                  source={source}
+                  contentWidth={width}
+                  /* @ts-ignore */
+                  tagsStyles={tagStyle}
+                  enableExperimentalMarginCollapsing={true}
+                />
               </View>
               <View
                 style={{

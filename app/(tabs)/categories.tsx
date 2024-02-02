@@ -22,6 +22,7 @@ import { colors } from '../../constants/Colors';
 import { Cats, subCats } from '../../lib/helpers';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
+import { Animated } from 'react-native';
 
 export default function Categories() {
   const [categories, setCategories] = useState(Cats);
@@ -29,6 +30,7 @@ export default function Categories() {
   const [active, setActive] = useState(0);
   const [reload, setReload] = useState(false);
   const router = useRouter();
+  let scrollOffsetY = useRef(new Animated.Value(0)).current;
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);
   const scrollRef = useRef<ScrollView>(null);
   const { height, width } = useWindowDimensions();
@@ -59,7 +61,7 @@ export default function Categories() {
   };
   return (
     <View style={{ flex: 1 }}>
-      <TopHeader />
+      <TopHeader animatedValue={scrollOffsetY} />
 
       <>
         <ScrollView
@@ -98,6 +100,10 @@ export default function Categories() {
         </ScrollView>
 
         <FlatList
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollOffsetY } } }],
+            { useNativeDriver: false }
+          )}
           showsVerticalScrollIndicator={false}
           data={items}
           renderItem={({ item, index }) => (

@@ -39,6 +39,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
+          headerShown: false,
           tabBarIcon: ({ size, focused }) => (
             <FontAwesome
               name="home"
@@ -63,6 +64,7 @@ export default function TabLayout() {
         name="categories"
         options={{
           title: 'Categories',
+          headerShown: false,
           tabBarIcon: ({ size, focused }) => (
             <MaterialIcons
               name="category"
@@ -87,6 +89,7 @@ export default function TabLayout() {
         name="wishlist"
         options={{
           title: 'Wishlist',
+          headerShown: false,
           tabBarIcon: ({ size, focused }) => (
             <FontAwesome
               name="heart"
@@ -111,6 +114,7 @@ export default function TabLayout() {
         name="account"
         options={{
           title: 'Account',
+          headerShown: false,
           tabBarIcon: ({ size, focused }) => (
             <FontAwesome
               name="user"

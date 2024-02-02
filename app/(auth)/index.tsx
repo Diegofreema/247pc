@@ -2,19 +2,19 @@ import { ScrollView, Text, View, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 
-import AuthHeader from '../components/AuthHeader';
+import AuthHeader from '../../components/AuthHeader';
 
-import Container from '../components/Container';
-import InputComponent from '../components/InputComponent';
-import { colors } from '../constants/Colors';
+import Container from '../../components/Container';
+import InputComponent from '../../components/InputComponent';
+import { colors } from '../../constants/Colors';
 import { Redirect, useRouter } from 'expo-router';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useToast } from 'react-native-toast-notifications';
-import { useStoreId } from '../lib/zustand/auth';
-import { MyButton } from '../components/MyButton';
-import { getProfile } from '../lib/helpers';
+import { useStoreId } from '../../lib/zustand/auth';
+import { MyButton } from '../../components/MyButton';
+import { getProfile } from '../../lib/helpers';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 type Props = {};
@@ -127,7 +127,7 @@ const index = (props: Props) => {
 
       <View style={{ alignItems: 'center', marginTop: 30 }}>
         <Image
-          source={require('../assets/images/logo.png')}
+          source={require('../../assets/images/logo.png')}
           style={{ width: width * 0.6, height: 150 }}
           contentFit="contain"
         />

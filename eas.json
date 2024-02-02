@@ -18,7 +18,7 @@
       "channel": "preview",
       "env": {
         "EXPO_PUBLIC_API_URL": "https://247api.netpro.software/api.aspx",
-        "EXPO_PUBLIC_PAYSTACK_KEY": "pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe"
+        "EXPO_PUBLIC_PAYSTACK_KEY": "pk_test_ed76c81770ed30bfd8734bd6086aa6e2e2057088"
       }
     }
   },

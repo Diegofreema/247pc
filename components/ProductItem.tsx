@@ -5,11 +5,30 @@ import { Image } from 'expo-image';
 import { Searched, WishlistType } from '../lib/types';
 import axios from 'axios';
 import { useStoreId } from '../lib/zustand/auth';
+import CounterCartButton from './CounterCartButton';
+import { useProduct, useWishlist } from '../lib/queries';
+import { useAddToCart, useAddToWishlist } from '../lib/mutation';
+import { useState } from 'react';
+import { AddToCartButton } from './AddToCartButton';
 
 const { width } = Dimensions.get('window');
 export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
   const router = useRouter();
   const { id } = useStoreId();
+
+  const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
+
+  const [qty, setQty] = useState(1);
+  const {
+    data,
+    isFetching,
+    isPending,
+    error,
+    isPaused: isProductPaused,
+    refetch,
+  } = useProduct(item?.id);
+  console.log('🚀 ~ ProductItem ~ data:', data);
+
   const handlePress = () => {
     axios
       .post(
@@ -35,21 +54,20 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
           marginBottom: 10,
           paddingBottom: 20,
           paddingHorizontal: 10,
-          flex: 1,
         },
       ]}
       key={item.id}
     >
       <Image
         source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
-        style={{ width: 250, height: 100, marginBottom: 5 }}
+        style={{ width: 250, height: 150, marginBottom: 5 }}
         contentFit="contain"
       />
       {item.Dealer && (
         <Text
           style={{
             color: 'black',
-            fontWeight: 'bold',
+            fontFamily: 'PoppinsBold',
             fontSize: 15,
             marginBottom: 5,
             textAlign: 'center',
@@ -61,7 +79,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
       <Text
         style={{
           color: 'black',
-          fontWeight: '400',
+          fontFamily: 'Poppins',
           fontSize: 15,
           marginBottom: 5,
           textAlign: 'center',
@@ -73,7 +91,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
       <Text
         style={{
           color: 'black',
-          fontWeight: '600',
+          fontFamily: 'PoppinsMedium',
           fontSize: 17,
           marginBottom: 10,
           textAlign: 'center',
@@ -87,6 +105,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
           fontWeight: 'bold',
           fontSize: 20,
           textAlign: 'center',
+          fontFamily: 'PoppinsBold',
         }}
       >
         ₦{item?.sellingprice}
@@ -98,7 +117,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
 const styles = StyleSheet.create({
   newArrival: {
     backgroundColor: '#fff',
-    height: 300,
+    height: 350,
 
     marginBottom: 18,
     borderRadius: 5,

@@ -177,7 +177,7 @@ const cart = (props: Props) => {
                   </View>
                 ) : null
               }
-              contentContainerStyle={{ paddingBottom: 30 }}
+              contentContainerStyle={{ paddingBottom: 50 }}
               showsVerticalScrollIndicator={false}
               data={data}
               keyExtractor={(item, index) => item.productid + index}

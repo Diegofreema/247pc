@@ -25,11 +25,35 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 import axios from 'axios';
 import { Toast, useToast } from 'react-native-toast-notifications';
+import Animated, {
+  interpolate,
+  useAnimatedRef,
+  useAnimatedStyle,
+  useScrollViewOffset,
+} from 'react-native-reanimated';
+import { AddToCartButton } from '../../components/AddToCartButton';
+export const checkTextLength = (text: string) => {
+  if (text.length > 30) {
+    return text.substring(0, 30) + '...';
+  }
+
+  return text;
+};
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, user } = useStoreId();
-  console.log('🚀 ~ TabOneScreen ~ id:', id);
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollOffset = useScrollViewOffset(scrollRef);
 
+  const headerStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: interpolate(scrollOffset.value, [0, 0, 70], [0, 0, 70]),
+        },
+      ],
+    };
+  });
   const router = useRouter();
   const {
     data: recentlyViewed,
@@ -85,6 +109,7 @@ export default function TabOneScreen() {
     isPaused: isPausedNew,
     error: errorNew,
   } = useNewArrival();
+  console.log('🚀 ~ TabOneScreen ~ newArrival:', newArrival);
 
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
@@ -137,306 +162,324 @@ export default function TabOneScreen() {
   }
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{ paddingBottom: 40 }}
-    >
-      <TopHeader />
-      <View style={{ flex: 1 }}>
-        {isFetchingSpecial || isPendingSpecial ? (
-          <View
-            style={{
-              minHeight: 300,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <ActivityIndicator animating color="#000" size="large" />
-          </View>
-        ) : (
-          <View style={{ flex: 1 }}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                textAlign: 'center',
+    <View>
+      <Animated.View style={{}}>
+        <TopHeader />
+      </Animated.View>
 
-                marginTop: 20,
-                color: '#000',
-                marginBottom: -30,
+      <Animated.ScrollView
+        scrollEventThrottle={16}
+        ref={scrollRef}
+        showsVerticalScrollIndicator={false}
+        style={{ paddingBottom: 40 }}
+      >
+        <View style={{ flex: 1 }}>
+          {isFetchingSpecial || isPendingSpecial ? (
+            <View
+              style={{
+                minHeight: 300,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
-              Special offers
-            </Text>
+              <ActivityIndicator animating color="#000" size="large" />
+            </View>
+          ) : (
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: 'PoppinsBold',
+                  textAlign: 'center',
 
-            {Array.isArray(special) && special?.length > 0 ? (
-              <View style={{ flex: 1 }}>
-                <ScrollView
-                  ref={scrollViewRef}
-                  horizontal
-                  pagingEnabled
-                  showsHorizontalScrollIndicator={false}
-                  onScroll={handleScroll}
+                  marginTop: 20,
+                  color: '#000',
+                  marginBottom: -30,
+                }}
+              >
+                Special offers
+              </Text>
+
+              {Array.isArray(special) && special?.length > 0 ? (
+                <View style={{ flex: 1 }}>
+                  <ScrollView
+                    ref={scrollViewRef}
+                    horizontal
+                    pagingEnabled
+                    showsHorizontalScrollIndicator={false}
+                    onScroll={handleScroll}
+                  >
+                    {special?.map((item, index) => {
+                      return (
+                        <Pressable
+                          onPress={() => router.push(`/special/${item?.id}`)}
+                          style={styles.imageContainer}
+                          key={item?.id}
+                        >
+                          <Image
+                            source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
+                            style={styles.image}
+                            contentFit="contain"
+                          />
+                        </Pressable>
+                      );
+                    })}
+                  </ScrollView>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: 300,
+                  }}
                 >
-                  {special?.map((item, index) => {
+                  <Text
+                    variant="titleLarge"
+                    style={{ color: '#000', fontWeight: 'bold' }}
+                  >
+                    No Special Offers Yet
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+        </View>
+        {!isFetchingSpecial && !isPendingSpecial && (
+          <View
+            style={{
+              marginBottom: 10,
+              width: '100%',
+              borderColor: 'gray',
+              borderWidth: StyleSheet.hairlineWidth,
+            }}
+          />
+        )}
+        <View style={{ marginBottom: 20, flex: 1 }}>
+          {isFetchingNewArrival || isPending ? null : (
+            <View style={styles.container}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: 'PoppinsBold',
+                  textAlign: 'center',
+                  marginBottom: 10,
+                  marginTop: 20,
+                  color: '#000',
+                }}
+              >
+                New Arrivals
+              </Text>
+              {Array.isArray(newArrival) && newArrival.length > 0 ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 10,
+                  }}
+                >
+                  {newArrival?.map((item) => {
+                    const handlePress = () => {
+                      axios
+                        .post(
+                          `https://247api.netpro.software/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+                        )
+                        .then((res) => {
+                          console.log(res.data);
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                      router.push(`/product/${item?.id}`);
+                    };
+                    return (
+                      <View key={item.id}>
+                        <Pressable
+                          onPress={handlePress}
+                          style={[
+                            styles.newArrival,
+                            {
+                              alignItems: 'center',
+                              justifyContent: 'center',
+
+                              marginBottom: 10,
+                            },
+                          ]}
+                          key={item.id}
+                        >
+                          <Image
+                            source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
+                            style={{ width: 250, height: 150, marginBottom: 5 }}
+                            contentFit="contain"
+                          />
+                          <Text
+                            style={{
+                              color: 'black',
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              marginBottom: 5,
+                              textAlign: 'center',
+                            }}
+                          >
+                            {item?.category}
+                          </Text>
+                          <Text
+                            style={{
+                              color: 'black',
+                              fontFamily: 'PoppinsMedium',
+                              fontSize: 13,
+                              marginBottom: 5,
+                              textAlign: 'center',
+                            }}
+                          >
+                            {checkTextLength(item?.product)}
+                          </Text>
+                          <Text
+                            style={{
+                              color: 'black',
+                              fontFamily: 'PoppinsBold',
+                              fontSize: 18,
+                              textAlign: 'center',
+                            }}
+                          >
+                            ₦{item?.sellingprice}
+                          </Text>
+                        </Pressable>
+                      </View>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: 300,
+                  }}
+                >
+                  <Text
+                    variant="titleLarge"
+                    style={{
+                      color: '#000',
+                      fontWeight: 'bold',
+                      fontFamily: 'PoppinsBold',
+                      fontSize: 18,
+                    }}
+                  >
+                    No new arrivals yet.
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+        </View>
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          {isFetchingRecentlyViewed || isPendingRecentlyViewed ? null : (
+            <View style={styles.container}>
+              <View
+                style={{
+                  marginVertical: 20,
+                  width: '100%',
+                  borderColor: 'gray',
+                  borderWidth: StyleSheet.hairlineWidth,
+                }}
+              />
+
+              {recentlyViewed && recentlyViewed?.length > 0 && (
+                <Text
+                  style={{
+                    fontFamily: 'PoppinsBold',
+                    fontSize: 18,
+                    color: '#000',
+                    marginBottom: 20,
+                  }}
+                >
+                  Recently Viewed
+                </Text>
+              )}
+              {Array.isArray(recentlyViewed) && recentlyViewed.length > 0 ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 10,
+                    marginBottom: 20,
+                    paddingBottom: 50,
+                  }}
+                >
+                  {recentlyViewed?.map((item) => {
+                    const handlePress = () => {
+                      router.push(`/product/${item?.id}`);
+                    };
+
                     return (
                       <Pressable
-                        onPress={() => router.push(`/special/${item?.id}`)}
-                        style={styles.imageContainer}
-                        key={item?.id}
+                        onPress={handlePress}
+                        style={[
+                          styles.newArrival,
+                          {
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            alignSelf: 'flex-start',
+                            marginBottom: 10,
+                          },
+                        ]}
+                        key={item.id}
                       >
                         <Image
-                          source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
-                          style={styles.image}
+                          source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
+                          style={{ width: 200, height: 150, marginBottom: 5 }}
                           contentFit="contain"
                         />
+                        <Text
+                          style={{
+                            color: 'black',
+                            fontFamily: 'Poppins',
+
+                            fontSize: 15,
+                            marginBottom: 5,
+                            textAlign: 'center',
+                          }}
+                        >
+                          {item?.category}
+                        </Text>
+                        <Text
+                          style={{
+                            color: 'black',
+                            fontFamily: 'PoppinsMedium',
+                            fontSize: 13,
+                            marginBottom: 5,
+                            textAlign: 'center',
+                          }}
+                        >
+                          {checkTextLength(item?.product)}
+                        </Text>
+                        <Text
+                          style={{
+                            color: 'black',
+                            fontFamily: 'PoppinsBold',
+                            fontSize: 18,
+                            textAlign: 'center',
+                          }}
+                        >
+                          ₦{item?.sellingprice}
+                        </Text>
                       </Pressable>
                     );
                   })}
-                </ScrollView>
-              </View>
-            ) : (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  minHeight: 300,
-                }}
-              >
-                <Text
-                  variant="titleLarge"
-                  style={{ color: '#000', fontWeight: 'bold' }}
-                >
-                  No Special Offers Yet
-                </Text>
-              </View>
-            )}
-          </View>
-        )}
-      </View>
-      {!isFetchingSpecial && !isPendingSpecial && (
-        <View
-          style={{
-            marginBottom: 10,
-            width: '100%',
-            borderColor: 'gray',
-            borderWidth: StyleSheet.hairlineWidth,
-          }}
-        />
-      )}
-      <View style={{ marginBottom: 20, flex: 1 }}>
-        {isFetchingNewArrival || isPending ? null : (
-          <View style={styles.container}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                marginBottom: 10,
-                marginTop: 20,
-                color: '#000',
-              }}
-            >
-              New Arrivals
-            </Text>
-            {Array.isArray(newArrival) && newArrival.length > 0 ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 10,
-                }}
-              >
-                {newArrival?.map((item) => {
-                  const handlePress = () => {
-                    axios
-                      .post(
-                        `https://247api.netpro.software/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
-                      )
-                      .then((res) => {
-                        console.log(res.data);
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                    router.push(`/product/${item?.id}`);
-                  };
-                  return (
-                    <Pressable
-                      onPress={handlePress}
-                      style={[
-                        styles.newArrival,
-                        {
-                          alignItems: 'center',
-                          justifyContent: 'center',
-
-                          marginBottom: 10,
-                        },
-                      ]}
-                      key={item.id}
-                    >
-                      <Image
-                        source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
-                        style={{ width: 250, height: 100, marginBottom: 5 }}
-                        contentFit="contain"
-                      />
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontWeight: '400',
-                          fontSize: 15,
-                          marginBottom: 5,
-                          textAlign: 'center',
-                        }}
-                      >
-                        {item?.category}
-                      </Text>
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontWeight: '600',
-                          fontSize: 17,
-                          marginBottom: 5,
-                          textAlign: 'center',
-                        }}
-                      >
-                        {item?.product}
-                      </Text>
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontWeight: 'bold',
-                          fontSize: 20,
-                          textAlign: 'center',
-                        }}
-                      >
-                        ₦{item?.sellingprice}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </View>
-            ) : (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  minHeight: 300,
-                }}
-              >
-                <Text
-                  variant="titleLarge"
-                  style={{ color: '#000', fontWeight: 'bold' }}
-                >
-                  No new arrivals yet.
-                </Text>
-              </View>
-            )}
-          </View>
-        )}
-      </View>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {isFetchingRecentlyViewed || isPendingRecentlyViewed ? null : (
-          <View style={styles.container}>
-            <View
-              style={{
-                marginVertical: 20,
-                width: '100%',
-                borderColor: 'gray',
-                borderWidth: StyleSheet.hairlineWidth,
-              }}
-            />
-
-            {recentlyViewed && recentlyViewed?.length > 0 && (
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                  color: '#000',
-                  marginBottom: 20,
-                }}
-              >
-                Recently Viewed
-              </Text>
-            )}
-            {Array.isArray(recentlyViewed) && recentlyViewed.length > 0 ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 10,
-                  marginBottom: 20,
-                }}
-              >
-                {recentlyViewed?.map((item) => {
-                  const handlePress = () => {
-                    router.push(`/product/${item?.id}`);
-                  };
-
-                  return (
-                    <Pressable
-                      onPress={handlePress}
-                      style={[
-                        styles.newArrival,
-                        {
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          alignSelf: 'flex-start',
-                          marginBottom: 10,
-                        },
-                      ]}
-                      key={item.id}
-                    >
-                      <Image
-                        source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
-                        style={{ width: 200, height: 100, marginBottom: 5 }}
-                        contentFit="contain"
-                      />
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontWeight: '400',
-                          fontSize: 15,
-                          marginBottom: 5,
-                          textAlign: 'center',
-                        }}
-                      >
-                        {item?.category}
-                      </Text>
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontWeight: '600',
-                          fontSize: 17,
-                          marginBottom: 5,
-                          textAlign: 'center',
-                        }}
-                      >
-                        {item?.product}
-                      </Text>
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontWeight: 'bold',
-                          fontSize: 20,
-                          textAlign: 'center',
-                        }}
-                      >
-                        ₦{item?.sellingprice}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </View>
-            ) : null}
-          </View>
-        )}
-      </View>
-    </ScrollView>
+                </View>
+              ) : null}
+            </View>
+          )}
+        </View>
+      </Animated.ScrollView>
+    </View>
   );
 }
 

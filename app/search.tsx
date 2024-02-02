@@ -201,16 +201,15 @@ const search = () => {
 
             paddingBottom: 20,
           }}
-
-          // showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
         >
-          <View
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
               gap: 5,
-              justifyContent: 'center',
             }}
+            contentContainerStyle={{ gap: 10 }}
           >
             <Pressable
               style={{
@@ -223,7 +222,15 @@ const search = () => {
               }}
               onPress={resetFilter}
             >
-              <Text style={{ color: 'black', fontWeight: 'bold' }}>Reset</Text>
+              <Text
+                style={{
+                  color: 'black',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 9,
+                }}
+              >
+                Reset
+              </Text>
             </Pressable>
             <Pressable
               onPress={() => setShowFilter(true)}
@@ -236,7 +243,15 @@ const search = () => {
                 alignItems: 'center',
               }}
             >
-              <Text style={{ color: 'black', fontWeight: 'bold' }}>Filter</Text>
+              <Text
+                style={{
+                  color: 'black',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 9,
+                }}
+              >
+                Filter
+              </Text>
             </Pressable>
             <View style={{ flexDirection: 'row', gap: 5 }}>
               <Pressable
@@ -255,6 +270,8 @@ const search = () => {
                   style={{
                     color:
                       selectedPriceFilter === 'lowToHigh' ? 'white' : 'black',
+                    fontFamily: 'PoppinsMedium',
+                    fontSize: 9,
                   }}
                 >
                   Low to High
@@ -276,119 +293,168 @@ const search = () => {
                   style={{
                     color:
                       selectedPriceFilter === 'highToLow' ? 'white' : 'black',
+                    fontFamily: 'PoppinsMedium',
+                    fontSize: 9,
                   }}
                 >
                   High to Low
                 </Text>
               </Pressable>
             </View>
-          </View>
+          </ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {showFilter && (
+              <View style={styles.modal}>
+                <FontAwesome
+                  name="times"
+                  size={25}
+                  style={{ position: 'absolute', top: 2, right: 9 }}
+                  onPress={() => setShowFilter(false)}
+                />
+                <Text
+                  style={{
+                    color: 'black',
+                    fontFamily: 'PoppinsBold',
+                    fontSize: 15,
+                  }}
+                >
+                  Filter by
+                </Text>
+                <View>
+                  <View style={styles.textCon}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 13,
+                        fontFamily: 'PoppinsMedium',
+                      }}
+                    >
+                      Category
+                    </Text>
+                  </View>
+                  <View style={{ height: 100 }}>
+                    <ScrollView
+                      style={{ height: 100 }}
+                      contentContainerStyle={styles.filterTextCon}
+                    >
+                      {uniqueCat?.map((cat) => {
+                        return (
+                          <Pressable
+                            style={[{ paddingBottom: 5 }]}
+                            onPress={() => handleSelectedCat(cat)}
+                            key={cat}
+                          >
+                            <Text
+                              style={[
+                                {
+                                  color: 'black',
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                },
+                                selectedCat.includes(cat) && styles.activeItem,
+                              ]}
+                            >
+                              {cat}
+                            </Text>
+                          </Pressable>
+                        );
+                      })}
+                    </ScrollView>
+                  </View>
+                  <View style={styles.textCon}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 14,
+                        fontFamily: 'PoppinsBold',
+                      }}
+                    >
+                      Pharmacy
+                    </Text>
+                  </View>
+                  <View style={{ height: 100 }}>
+                    <ScrollView contentContainerStyle={styles.filterTextCon}>
+                      {uniquePharmacy?.map((cat) => {
+                        return (
+                          <Pressable
+                            style={[{ paddingBottom: 5 }]}
+                            onPress={() => handleSelectedPhar(cat as string)}
+                            key={cat}
+                          >
+                            <Text
+                              style={[
+                                {
+                                  color: 'black',
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12,
+                                },
+                                selectedPharmacy.includes(cat as string) &&
+                                  styles.activeItem,
+                              ]}
+                            >
+                              {cat}
+                            </Text>
+                          </Pressable>
+                        );
+                      })}
+                    </ScrollView>
 
-          {showFilter && (
-            <Animated.View style={styles.modal}>
-              <FontAwesome
-                name="times"
-                size={25}
-                style={{ position: 'absolute', top: 2, right: 9 }}
-                onPress={() => setShowFilter(false)}
-              />
-              <Text
-                style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}
-              >
-                Filter by
-              </Text>
-              <View>
-                <View style={styles.textCon}>
-                  <Text style={{ color: 'black', fontSize: 16 }}>Category</Text>
-                </View>
-                <View style={{ height: 100 }}>
-                  <ScrollView
-                    style={{ height: 100 }}
-                    contentContainerStyle={styles.filterTextCon}
+                    <MyButton
+                      style={{ marginVertical: 20 }}
+                      text="Apply"
+                      onPress={applyFilter}
+                      buttonColor={colors.lightGreen}
+                      textColor="white"
+                    />
+                  </View>
+
+                  <View style={[styles.textCon, { marginTop: 'auto' }]}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 14,
+                        fontFamily: 'PoppinsBold',
+                      }}
+                    >
+                      Price(₦)
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 10,
+                      alignItems: 'center',
+                      marginBottom: 10,
+                    }}
                   >
-                    {uniqueCat?.map((cat) => {
-                      return (
-                        <Pressable
-                          style={[{ paddingBottom: 5 }]}
-                          onPress={() => handleSelectedCat(cat)}
-                          key={cat}
-                        >
-                          <Text
-                            style={[
-                              { color: 'black' },
-                              selectedCat.includes(cat) && styles.activeItem,
-                            ]}
-                          >
-                            {cat}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
-                  </ScrollView>
-                </View>
-                <View style={styles.textCon}>
-                  <Text style={{ color: 'black', fontSize: 16 }}>Pharmacy</Text>
-                </View>
-                <View style={{ height: 100 }}>
-                  <ScrollView contentContainerStyle={styles.filterTextCon}>
-                    {uniquePharmacy?.map((cat) => {
-                      return (
-                        <Pressable
-                          style={[{ paddingBottom: 5 }]}
-                          onPress={() => handleSelectedPhar(cat as string)}
-                          key={cat}
-                        >
-                          <Text
-                            style={[
-                              { color: 'black' },
-                              selectedPharmacy.includes(cat as string) &&
-                                styles.activeItem,
-                            ]}
-                          >
-                            {cat}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
-                  </ScrollView>
+                    <InputComponent
+                      value={price.from}
+                      onChangeText={(val) => handlePrice(val, 'from')}
+                    />
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                      }}
+                    >
+                      To
+                    </Text>
+                    <InputComponent
+                      value={price.to}
+                      onChangeText={(val) => handlePrice(val, 'to')}
+                    />
+                  </View>
                   <MyButton
                     text="Apply"
-                    onPress={applyFilter}
+                    onPress={filterProductsByPrice}
                     buttonColor={colors.lightGreen}
                     textColor="white"
                   />
                 </View>
-
-                <View style={[styles.textCon, { marginTop: 'auto' }]}>
-                  <Text style={{ color: 'black', fontSize: 16 }}>Price(₦)</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 10,
-                    alignItems: 'center',
-                    marginBottom: 10,
-                  }}
-                >
-                  <InputComponent
-                    value={price.from}
-                    onChangeText={(val) => handlePrice(val, 'from')}
-                  />
-                  <Text style={{ color: 'black' }}>To</Text>
-                  <InputComponent
-                    value={price.to}
-                    onChangeText={(val) => handlePrice(val, 'to')}
-                  />
-                </View>
-                <MyButton
-                  text="Apply"
-                  onPress={filterProductsByPrice}
-                  buttonColor={colors.lightGreen}
-                  textColor="white"
-                />
               </View>
-            </Animated.View>
-          )}
+            )}
+          </ScrollView>
         </ScrollView>
 
         {isPending || isFetching ? (
@@ -422,7 +488,7 @@ const search = () => {
                 alignItems: 'center',
               }}
               ListFooterComponent={() =>
-                isPending || isFetching ? null : (
+                data?.length && (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -477,7 +543,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 30,
     paddingHorizontal: 10,
-    overflow: 'hidden',
+
     marginTop: 30,
     shadowColor: '#000',
 

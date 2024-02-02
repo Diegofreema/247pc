@@ -5,6 +5,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { useStoreId } from './zustand/auth';
 import { useModalState } from './zustand/modalState';
 import { colors } from '../constants/Colors';
+import { router } from 'expo-router';
 const api = process.env.EXPO_PUBLIC_API_URL;
 
 // export const useNewUser = () => {
@@ -198,6 +199,7 @@ export const useWallet = () => {
     },
     onSuccess: async (data) => {
       if (data === 'saved') {
+        router.push('/order');
         return show('Purchased successful', {
           type: 'success',
           placement: 'bottom',

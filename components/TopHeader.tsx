@@ -1,12 +1,14 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Animated } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { useStoreId } from '../lib/zustand/auth';
 import { useUser } from '../lib/queries';
 
 type Props = {};
-
+const Max_Header_Height = 70;
+const Min_Header_Height = 0;
+const Scroll_Distance = Max_Header_Height - Min_Header_Height;
 export const TopHeader = ({}: Props): JSX.Element => {
   const { id } = useStoreId();
 
@@ -14,13 +16,17 @@ export const TopHeader = ({}: Props): JSX.Element => {
   const loading = isLoading || isFetching || isPending;
   const router = useRouter();
   return (
-    <View
+    <Animated.View
       style={{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginHorizontal: 10,
-        marginVertical: 10,
+        paddingHorizontal: 10,
+
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'white',
       }}
     >
       <Pressable
@@ -69,7 +75,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
           </View>
         )}
       </Pressable>
-    </View>
+    </Animated.View>
   );
 };
 

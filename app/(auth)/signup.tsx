@@ -2,22 +2,22 @@ import { Text, View, Dimensions, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 
-import AuthHeader from '../components/AuthHeader';
+import AuthHeader from '../../components/AuthHeader';
 
-import Container from '../components/Container';
-import InputComponent from '../components/InputComponent';
+import Container from '../../components/Container';
+import InputComponent from '../../components/InputComponent';
 import { Button } from 'react-native-paper';
-import { colors } from '../constants/Colors';
+import { colors } from '../../constants/Colors';
 import { useRouter } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { useStoreId } from '../lib/zustand/auth';
+import { useStoreId } from '../../lib/zustand/auth';
 import { useToast } from 'react-native-toast-notifications';
-import { getProfile } from '../lib/helpers';
-import { Community, State } from '../lib/types';
+import { getProfile } from '../../lib/helpers';
+import { Community, State } from '../../lib/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {};
@@ -194,7 +194,7 @@ const SignUp = (props: Props) => {
 
         <View style={{ alignItems: 'center', marginTop: 30 }}>
           <Image
-            source={require('../assets/images/logo.png')}
+            source={require('../../assets/images/logo.png')}
             style={{ width: width * 0.6, height: 150 }}
             contentFit="contain"
           />

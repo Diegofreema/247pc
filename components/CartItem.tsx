@@ -65,7 +65,7 @@ const CartItem = ({
           }}
           contentFit="contain"
         />
-        <View style={{ gap: 5 }}>
+        <View style={{ gap: 5, flex: 1 }}>
           <Text
             variant="titleMedium"
             style={{ fontWeight: 'bold', color: '#000' }}

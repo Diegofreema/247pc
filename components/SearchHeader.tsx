@@ -30,7 +30,9 @@ export const SearchHeader = ({ value, onChangeText }: Props): JSX.Element => {
           borderWidth: 1,
           borderColor: 'black',
           borderRadius: 8,
+          fontFamily: 'PoppinsBold',
         }}
+        inputStyle={{ fontFamily: 'PoppinsMedium', fontSize: 14 }}
       />
     </View>
   );

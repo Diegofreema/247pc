@@ -22,6 +22,7 @@ import { usePayStack, useWallet } from '../lib/mutation';
 import { ModalComponent } from '../components/Modal';
 import { useModalState } from '../lib/zustand/modalState';
 import { MyButton } from '../components/MyButton';
+import { router } from 'expo-router';
 type Props = {};
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
@@ -207,6 +208,7 @@ const CheckOut = (props: Props) => {
                 duration: 4000,
                 animationType: 'slide-in',
               });
+              router.push('/order');
             }}
             refNumber={paystackData?.salesref}
             // @ts-ignore
