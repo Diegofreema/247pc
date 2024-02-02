@@ -47,12 +47,17 @@ const Profile = ({ isLoggedIn, email, name, loading }: Props) => {
             ) : (
               <>
                 <Text
-                  style={{ fontSize: 19, fontWeight: 'bold', color: '#fff' }}
+                  style={{
+                    fontSize: 13,
+                    fontFamily: 'PoppinsMedium',
+
+                    color: '#fff',
+                  }}
                 >
                   Welcome {name}!
                 </Text>
                 <Text
-                  style={{ fontSize: 15, fontWeight: '400', color: '#fff' }}
+                  style={{ fontFamily: 'Poppins', fontSize: 9, color: '#fff' }}
                 >
                   {email}
                 </Text>
@@ -67,6 +72,7 @@ const Profile = ({ isLoggedIn, email, name, loading }: Props) => {
         textColor="#000"
         icon={'logout'}
         style={{ backgroundColor: '#fff', borderRadius: 5 }}
+        labelStyle={{ fontSize: 12, fontFamily: 'PoppinsMedium' }}
       >
         Logout
       </Button>

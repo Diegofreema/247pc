@@ -22,22 +22,57 @@ export const OrderedProductCard = ({
           source={`https://247pharmacy.net/Uploads/${productid}.jpg`}
           contentFit="contain"
         />
-        <Text style={{ fontWeight: '600', color: 'black', fontSize: 16 }}>
+        <Text
+          style={{
+            fontWeight: '600',
+            color: 'black',
+            fontSize: 16,
+            fontFamily: 'Poppins',
+          }}
+        >
           {product}
         </Text>
-        <Text style={{ fontWeight: '500', color: 'black', fontSize: 13 }}>
+        <Text
+          style={{
+            fontWeight: '500',
+            color: 'black',
+            fontSize: 13,
+            fontFamily: 'Poppins',
+          }}
+        >
           Sold by {seller}
         </Text>
         <View style={styles.row}>
-          <Text style={{ fontWeight: '500', color: 'black', fontSize: 13 }}>
+          <Text
+            style={{
+              fontWeight: '500',
+              color: 'black',
+              fontSize: 13,
+              fontFamily: 'Poppins',
+            }}
+          >
             ₦{price}
           </Text>
-          <Text style={{ fontWeight: '500', color: 'black', fontSize: 13 }}>
+          <Text
+            style={{
+              fontWeight: '500',
+              color: 'black',
+              fontSize: 13,
+              fontFamily: 'Poppins',
+            }}
+          >
             Quantity: {qty}
           </Text>
         </View>
         <View style={styles.subCatsContainer}>
-          <Text style={{ fontWeight: '500', color: 'white', fontSize: 13 }}>
+          <Text
+            style={{
+              fontWeight: '500',
+              color: 'white',
+              fontSize: 13,
+              fontFamily: 'Poppins',
+            }}
+          >
             {statuz}
           </Text>
         </View>

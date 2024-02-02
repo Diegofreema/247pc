@@ -33,7 +33,7 @@ export const MyButton = ({
       loading={loading}
       icon={icon}
       disabled={disabled}
-      labelStyle={{ fontSize: 14, fontFamily: 'PoppinsMedium' }}
+      labelStyle={{ fontSize: 12, fontFamily: 'PoppinsMedium' }}
     >
       {text}
     </Button>

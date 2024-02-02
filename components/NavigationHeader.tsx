@@ -69,7 +69,7 @@ const NavigationHeader = ({ title, back }: Props) => {
           <AntDesign name="arrowleft" size={24} color="black" />
         </Pressable>
       )}
-      <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#000' }}>
+      <Text style={{ fontSize: 20, fontFamily: 'PoppinsBold', color: '#000' }}>
         {title}
       </Text>
 

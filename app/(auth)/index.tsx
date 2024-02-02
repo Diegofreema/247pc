@@ -132,13 +132,21 @@ const index = (props: Props) => {
           contentFit="contain"
         />
         <View style={{ marginTop: 20 }}>
-          <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Sign in</Text>
+          <Text style={{ fontFamily: 'PoppinsBold', fontSize: 20 }}>
+            Sign in
+          </Text>
         </View>
       </View>
       <Container>
         <Text
           onPress={() => router.push('/signup')}
-          style={{ alignSelf: 'flex-end', color: '#1A91FF', marginTop: 20 }}
+          style={{
+            alignSelf: 'flex-end',
+            color: '#1A91FF',
+            marginTop: 20,
+            fontFamily: 'Poppins',
+            fontSize: 10,
+          }}
         >
           Create an account
         </Text>

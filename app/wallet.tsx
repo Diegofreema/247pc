@@ -164,7 +164,13 @@ const Wallet = (props: Props) => {
             }}
           >
             <FontAwesome5 name="wallet" color="black" size={30} />
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>
+            <Text
+              style={{
+                fontFamily: 'PoppinsMedium',
+                fontSize: 15,
+                color: 'black',
+              }}
+            >
               My Wallet
             </Text>
           </View>
@@ -178,7 +184,13 @@ const Wallet = (props: Props) => {
             }}
           >
             <FontAwesome name="money" size={25} color="#000" />
-            <Text style={{ color: 'black' }}>
+            <Text
+              style={{
+                color: 'black',
+                fontFamily: 'Poppins',
+                fontSize: 12,
+              }}
+            >
               Your Balance: ₦{walletBalance}
             </Text>
           </View>
@@ -198,15 +210,26 @@ const Wallet = (props: Props) => {
                 marginBottom: 10,
               }}
             >
-              <Text style={{ fontSize: 15, fontWeight: '500', color: 'white' }}>
+              <Text
+                style={{
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 14,
+                  color: 'white',
+                }}
+              >
                 Fund Wallet
               </Text>
             </View>
             <View style={{ marginVertical: 15, paddingHorizontal: 20 }}>
-              <View style={{ marginBottom: 30, gap: 10 }}>
+              <View
+                style={{
+                  marginBottom: 30,
+                  gap: 10,
+                }}
+              >
                 <InputComponent
                   label="Amount"
-                  placeholder="Enter Amount"
+                  placeholder="Enter Amount..."
                   keyboardType="numeric"
                   onChangeText={handleChange('amount')}
                   value={amount}
@@ -232,6 +255,7 @@ const Wallet = (props: Props) => {
               icon={'card'}
               buttonColor={colors.lightGreen}
               textColor="white"
+              labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
             >
               Pay with Card
             </Button>
@@ -248,8 +272,8 @@ const Wallet = (props: Props) => {
             <FontAwesome name="calendar" size={24} color="black" />
             <Text
               style={{
-                fontSize: 15,
-                fontWeight: '500',
+                fontFamily: 'PoppinsMedium',
+                fontSize: 14,
                 color: 'black',
               }}
             >
@@ -263,7 +287,12 @@ const Wallet = (props: Props) => {
           data={data}
           renderItem={({ item }) => (
             <Text
-              style={{ color: 'black', fontWeight: '500', marginBottom: 10 }}
+              style={{
+                color: 'black',
+                fontFamily: 'Poppins',
+                fontSize: 12,
+                marginBottom: 10,
+              }}
             >
               {item?.info}
             </Text>

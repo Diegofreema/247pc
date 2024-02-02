@@ -60,9 +60,9 @@ export const SubCat = ({
       {chief && (
         <Text
           style={{
-            fontWeight: 'bold',
+            fontFamily: 'PoppinsBold',
             color: chief ? 'white' : 'black',
-            fontSize: chief ? 20 : 17,
+            fontSize: chief ? 15 : 11,
             textAlign: 'center',
             marginTop: chief ? 0 : 4,
           }}

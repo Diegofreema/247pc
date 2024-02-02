@@ -175,7 +175,11 @@ const ProductDetail = (props: Props) => {
           >
             <Card.Title
               title={data?.product}
-              titleStyle={{ fontWeight: 'bold', color: 'black' }}
+              titleStyle={{
+                color: 'black',
+                fontFamily: 'PoppinsBold',
+                fontSize: 15,
+              }}
             />
             <View style={{ alignItems: 'center' }}>
               <Image
@@ -192,7 +196,14 @@ const ProductDetail = (props: Props) => {
                   gap: 5,
                 }}
               >
-                <Text variant="titleSmall" style={{ color: 'black' }}>
+                <Text
+                  variant="titleSmall"
+                  style={{
+                    color: 'black',
+                    fontFamily: 'Poppins',
+                    fontSize: 13,
+                  }}
+                >
                   Sold by: {data?.seller}
                 </Text>
                 <Pressable
@@ -204,7 +215,13 @@ const ProductDetail = (props: Props) => {
                     })
                   }
                 >
-                  <Text style={{ color: 'skyblue', fontWeight: 'bold' }}>
+                  <Text
+                    style={{
+                      color: 'skyblue',
+                      fontFamily: 'PoppinsBold',
+                      fontSize: 11,
+                    }}
+                  >
                     {'Check out more products from this seller'}
                     <Text
                       style={{
@@ -218,7 +235,10 @@ const ProductDetail = (props: Props) => {
                   </Text>
                 </Pressable>
               </View>
-              <Text variant="titleSmall" style={{ color: 'black' }}>
+              <Text
+                variant="titleSmall"
+                style={{ color: 'black', fontFamily: 'Poppins', fontSize: 12 }}
+              >
                 Category: {data?.category}
               </Text>
 
@@ -226,8 +246,8 @@ const ProductDetail = (props: Props) => {
                 <Text
                   style={{
                     color: 'black',
-                    fontWeight: 'bold',
-                    fontSize: 18,
+                    fontFamily: 'PoppinsMedium',
+                    fontSize: 15,
                     // marginBottom: -0,
                   }}
                 >
@@ -248,12 +268,19 @@ const ProductDetail = (props: Props) => {
                   marginVertical: 20,
                 }}
               />
-              <Text variant="labelMedium" style={{ color: 'black' }}>
+              <Text
+                variant="labelMedium"
+                style={{ color: 'black', fontFamily: 'Poppins', fontSize: 15 }}
+              >
                 Available: {data?.available}
               </Text>
               <Text
                 variant="displaySmall"
-                style={{ fontWeight: 'bold', color: 'black' }}
+                style={{
+                  fontFamily: 'PoppinsBold',
+                  fontSize: 15,
+                  color: 'black',
+                }}
               >
                 ₦{data?.sellingprice}
               </Text>

@@ -102,8 +102,8 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
       <Text
         style={{
           color: 'black',
-          fontWeight: 'bold',
-          fontSize: 20,
+
+          fontSize: 15,
           textAlign: 'center',
           fontFamily: 'PoppinsBold',
         }}

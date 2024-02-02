@@ -67,12 +67,19 @@ export const RatingForm = ({ productId }: Props): JSX.Element => {
 };
 
 const styles = StyleSheet.create({
-  label: { color: 'black', fontWeight: 'bold', fontSize: 16, marginBottom: 10 },
+  label: {
+    color: 'black',
+    fontFamily: 'PoppinsMedium',
+    fontSize: 13,
+    marginBottom: 10,
+  },
   message: {
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 6,
     color: 'black',
     backgroundColor: 'white',
+    fontFamily: 'Poppins',
+    fontSize: 13,
   },
 });

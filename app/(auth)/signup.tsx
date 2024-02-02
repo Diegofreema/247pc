@@ -199,13 +199,21 @@ const SignUp = (props: Props) => {
             contentFit="contain"
           />
           <View style={{ marginTop: 30 }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Sign up</Text>
+            <Text style={{ fontFamily: 'PoppinsBold', fontSize: 20 }}>
+              Sign up
+            </Text>
           </View>
         </View>
         <Container>
           <Text
             onPress={() => router.push('/')}
-            style={{ alignSelf: 'flex-end', color: '#1A91FF', marginTop: 20 }}
+            style={{
+              alignSelf: 'flex-end',
+              color: '#1A91FF',
+              marginTop: 20,
+              fontFamily: 'Poppins',
+              fontSize: 10,
+            }}
           >
             Already have an account?
           </Text>
@@ -288,6 +296,7 @@ const SignUp = (props: Props) => {
                     backgroundColor: 'white',
                   }}
                   inputStyles={{ textAlign: 'left' }}
+                  fontFamily="Poppins"
                   setSelected={handleChange('state')}
                   data={states}
                   save="key"
@@ -311,11 +320,12 @@ const SignUp = (props: Props) => {
                       marginBottom: 15,
                     }}
                   >
-                    <Text>Loading...</Text>
+                    <Text style={{ fontFamily: 'Poppins' }}>Loading...</Text>
                   </View>
                 </View>
               ) : (
                 <SelectList
+                  fontFamily="Poppins"
                   placeholder="Select your community"
                   boxStyles={{
                     ...styles2.border,
@@ -385,6 +395,7 @@ const SignUp = (props: Props) => {
               buttonColor={colors.lightGreen}
               onPress={() => handleSubmit()}
               textColor={'white'}
+              labelStyle={{ fontFamily: 'Poppins' }}
             >
               Sign up
             </Button>

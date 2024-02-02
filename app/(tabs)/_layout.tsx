@@ -51,8 +51,8 @@ export default function TabLayout() {
             <Text
               style={{
                 color: focused ? '#34d399' : '#000',
-                fontWeight: 'bold',
-                fontSize: 14,
+                fontFamily: 'PoppinsBold',
+                fontSize: 9,
               }}
             >
               Home
@@ -76,8 +76,8 @@ export default function TabLayout() {
             <Text
               style={{
                 color: focused ? '#34d399' : '#000',
-                fontWeight: 'bold',
-                fontSize: 14,
+                fontFamily: 'PoppinsBold',
+                fontSize: 9,
               }}
             >
               Categories
@@ -101,8 +101,8 @@ export default function TabLayout() {
             <Text
               style={{
                 color: focused ? '#34d399' : '#000',
-                fontWeight: 'bold',
-                fontSize: 14,
+                fontFamily: 'PoppinsBold',
+                fontSize: 9,
               }}
             >
               Wishlist
@@ -126,8 +126,8 @@ export default function TabLayout() {
             <Text
               style={{
                 color: focused ? '#34d399' : '#000',
-                fontWeight: 'bold',
-                fontSize: 14,
+                fontFamily: 'PoppinsBold',
+                fontSize: 9,
               }}
             >
               Account

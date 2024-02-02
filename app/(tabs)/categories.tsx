@@ -72,7 +72,7 @@ export default function Categories() {
             gap: 20,
             paddingHorizontal: 16,
 
-            marginBottom: 10,
+            marginVertical: 10,
 
             paddingBottom: 25,
           }}
@@ -84,7 +84,7 @@ export default function Categories() {
               ref={(el) => (itemRef.current[index] = el)}
               style={[
                 active === index ? styles.active : styles.normal,
-                { zIndex: 1 },
+                { zIndex: 1, paddingBottom: 4 },
               ]}
             >
               <Text
@@ -135,17 +135,20 @@ export default function Categories() {
 
               {/* <Text>{index}</Text> */}
 
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  color: 'black',
-                  fontSize: 14,
-                  textAlign: 'center',
-                  marginTop: 4,
-                }}
-              >
-                {item.category}
-              </Text>
+              <View style={{ paddingHorizontal: 8 }}>
+                <Text
+                  style={{
+                    fontFamily: 'PoppinsBold',
+                    fontSize: 12,
+                    color: 'black',
+
+                    textAlign: 'center',
+                    marginTop: 4,
+                  }}
+                >
+                  {item.category}
+                </Text>
+              </View>
             </Pressable>
           )}
           keyExtractor={(item) => item?.category}
@@ -193,13 +196,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   activeText: {
-    fontWeight: 'bold',
-    fontSize: 18,
+    fontFamily: 'Poppins',
+    fontSize: 15,
     color: '#000',
   },
   text: {
-    fontWeight: '500',
-    fontSize: 18,
+    fontFamily: 'Poppins',
+    fontSize: 15,
     color: '#000',
   },
   container: {

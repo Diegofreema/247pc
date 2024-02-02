@@ -58,7 +58,9 @@ const Header = ({}: Props) => {
           gap: 8,
         }}
       >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+        <Text
+          style={{ fontFamily: 'PoppinsMedium', fontSize: 20, color: 'black' }}
+        >
           Please check your internet connection
         </Text>
         <MyButton
@@ -78,7 +80,9 @@ const Header = ({}: Props) => {
           gap: 8,
         }}
       >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+        <Text
+          style={{ fontFamily: 'PoppinsMedium', fontSize: 20, color: 'black' }}
+        >
           Something went wrong
         </Text>
         <MyButton
@@ -112,8 +116,8 @@ const Header = ({}: Props) => {
           style={{
             flex: 1,
             color: '#fff',
-            fontSize: 20,
-            fontWeight: 'bold',
+            fontFamily: 'PoppinsMedium',
+            fontSize: 15,
           }}
         >
           Account
@@ -140,7 +144,7 @@ const Header = ({}: Props) => {
               }}
             >
               {loading ? (
-                <Text>0</Text>
+                <Text style={{ color: '#fff' }}>0</Text>
               ) : (
                 <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
               )}
@@ -166,7 +170,15 @@ const Header = ({}: Props) => {
           }}
         >
           <FontAwesome name="money" size={25} color="#fff" />
-          <Text style={{ color: 'white' }}>Your Balance: ₦{walletBalance}</Text>
+          <Text
+            style={{
+              color: 'white',
+              fontFamily: 'PoppinsMedium',
+              fontSize: 13,
+            }}
+          >
+            Your Balance: ₦{walletBalance}
+          </Text>
         </View>
       )}
     </View>

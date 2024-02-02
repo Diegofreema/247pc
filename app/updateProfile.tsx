@@ -200,7 +200,7 @@ const Update = (props: Props) => {
             contentFit="contain"
           />
           <View style={{ marginVertical: 30 }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>
+            <Text style={{ fontFamily: 'PoppinsBold', fontSize: 20 }}>
               Profile Update
             </Text>
           </View>
@@ -263,11 +263,12 @@ const Update = (props: Props) => {
                         marginBottom: 10,
                       }}
                     >
-                      <Text>Loading...</Text>
+                      <Text style={{ fontFamily: 'Poppins' }}>Loading...</Text>
                     </View>
                   </View>
                 ) : (
                   <SelectList
+                    fontFamily="Poppins"
                     boxStyles={{
                       ...styles2.border,
                       justifyContent: 'flex-start',
@@ -306,6 +307,7 @@ const Update = (props: Props) => {
                   </View>
                 ) : (
                   <SelectList
+                    fontFamily="Poppins"
                     placeholder="Select your community"
                     boxStyles={{
                       ...styles2.border,

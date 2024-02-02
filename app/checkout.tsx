@@ -22,7 +22,7 @@ import { usePayStack, useWallet } from '../lib/mutation';
 import { ModalComponent } from '../components/Modal';
 import { useModalState } from '../lib/zustand/modalState';
 import { MyButton } from '../components/MyButton';
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 type Props = {};
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
@@ -148,7 +148,12 @@ const CheckOut = (props: Props) => {
         <TextInput
           mode="outlined"
           style={{ backgroundColor: 'transparent', color: 'black' }}
-          contentStyle={{ backgroundColor: 'transparent', color: 'black' }}
+          contentStyle={{
+            backgroundColor: 'transparent',
+            color: 'black',
+            fontFamily: 'Poppins',
+            fontSize: 13,
+          }}
           placeholderTextColor={'black'}
           textColor="black"
           activeOutlineColor="black"
@@ -170,6 +175,20 @@ const CheckOut = (props: Props) => {
           <Text style={{ color: 'red' }}>{errors.coupon}</Text>
         )}
       </View>
+
+      <Link
+        href="/updateProfile"
+        style={{
+          fontFamily: 'Poppins',
+          fontSize: 12,
+          color: 'skyblue',
+          textDecorationStyle: 'solid',
+          alignItems: 'center',
+          textDecorationLine: 'underline',
+        }}
+      >
+        Change delivery address
+      </Link>
       <View style={{ marginBottom: 40 }} />
       {isFetching || isPending ? (
         <ActivityIndicator color="black" size={'large'} />

@@ -68,7 +68,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
             }}
           >
             {loading ? (
-              <Text>0</Text>
+              <Text style={{ color: '#fff' }}>0</Text>
             ) : (
               <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
             )}

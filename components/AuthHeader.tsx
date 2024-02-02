@@ -23,8 +23,8 @@ const AuthHeader = (props: Props) => {
       <Link href={'/sell'} asChild>
         <Text
           style={{
-            fontSize: 15,
-            fontWeight: 'bold',
+            fontFamily: 'PoppinsMedium',
+            fontSize: 10,
             color: '#000',
             textDecorationStyle: 'solid',
             textDecorationLine: 'underline',
@@ -35,7 +35,9 @@ const AuthHeader = (props: Props) => {
       </Link>
       <Pressable style={styles.subContainer} onPress={openDialScreen}>
         <FontAwesome name="phone" size={15} color="#000" />
-        <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#000' }}>
+        <Text
+          style={{ fontFamily: 'PoppinsMedium', fontSize: 10, color: '#000' }}
+        >
           Call Us: 08052255000
         </Text>
       </Pressable>

@@ -48,10 +48,12 @@ const ProductCard = ({
           style={{ marginBottom: 20, resizeMode: 'contain' }}
         />
         <Card.Content>
-          <Text style={{ fontSize: 15, fontWeight: '500' }}>
+          <Text style={{ fontSize: 12, fontFamily: 'Poppins' }}>
             {trimTitle(title as string)}
           </Text>
-          <Text style={{ fontSize: 18, fontWeight: '700' }}>₦{price}</Text>
+          <Text style={{ fontSize: 15, fontFamily: 'PoppinsMedium' }}>
+            ₦{price}
+          </Text>
         </Card.Content>
       </Card>
     </Link>

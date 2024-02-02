@@ -68,7 +68,7 @@ const Account = (props: Props) => {
                 }}
               >
                 {page.icon}
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                <Text style={{ fontFamily: 'PoppinsMedium', fontSize: 15 }}>
                   {page.name}
                 </Text>
               </View>

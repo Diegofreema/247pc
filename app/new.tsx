@@ -86,7 +86,11 @@ const newCat = (props: Props) => {
               }}
               ListEmptyComponent={
                 <Text
-                  style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}
+                  style={{
+                    fontFamily: 'PoppinsMedium',
+                    fontSize: 20,
+                    color: 'black',
+                  }}
                 >
                   No Products
                 </Text>

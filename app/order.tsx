@@ -93,7 +93,11 @@ const order = (props: Props) => {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <Text
-            style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}
+            style={{
+              textAlign: 'center',
+              fontFamily: 'PoppinsBold',
+              fontSize: 20,
+            }}
           >
             You have no orders yet
           </Text>

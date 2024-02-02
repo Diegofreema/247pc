@@ -26,7 +26,11 @@ const InputComponent = ({
 }: Props) => {
   return (
     <>
-      <Text style={{ color: 'black', fontWeight: 'bold' }}>{label}</Text>
+      <Text
+        style={{ color: 'black', fontFamily: 'PoppinsMedium', fontSize: 15 }}
+      >
+        {label}
+      </Text>
       <TextInput
         placeholder={placeholder}
         onChangeText={onChangeText}
@@ -35,7 +39,12 @@ const InputComponent = ({
         value={value}
         secureTextEntry={secureTextEntry}
         style={{ backgroundColor: 'transparent', color: 'black', flex: 1 }}
-        contentStyle={{ backgroundColor: 'transparent', color: 'black' }}
+        contentStyle={{
+          backgroundColor: 'transparent',
+          color: 'black',
+          fontFamily: 'Poppins',
+          fontSize: 13,
+        }}
         placeholderTextColor={'black'}
         textColor="black"
         activeOutlineColor="black"

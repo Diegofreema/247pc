@@ -89,7 +89,7 @@ const UpdatePassword = (props: Props) => {
             contentFit="contain"
           />
           <View style={{ marginTop: 20, marginBottom: 10 }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>
+            <Text style={{ fontSize: 20, fontFamily: 'PoppinsBold' }}>
               Change password
             </Text>
           </View>
@@ -133,6 +133,7 @@ const UpdatePassword = (props: Props) => {
               buttonColor={colors.lightGreen}
               onPress={() => handleSubmit()}
               textColor={'white'}
+              labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
             >
               Update
             </Button>
