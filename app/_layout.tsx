@@ -2,13 +2,12 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { Slot, SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import * as Updates from 'expo-updates';
-import { useStoreId } from '../lib/zustand/auth';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -80,9 +79,6 @@ const MyTheme = {
 };
 
 function RootLayoutNav() {
-  const { id } = useStoreId();
-  console.log('🚀 ~ RootLayoutNav ~ id:', id?.length, typeof id);
-
   return (
     <ThemeProvider value={MyTheme}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -92,53 +88,7 @@ function RootLayoutNav() {
           paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         }}
       >
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="search" options={{ headerShown: false }} />
-          <Stack.Screen name="cart" options={{ headerShown: false }} />
-          <Stack.Screen name="forgot" options={{ headerShown: false }} />
-          <Stack.Screen name="updateProfile" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="updatePassword"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="product/[productId]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="special/[specialId]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="category/[category]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="new" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="chief/[category]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="seller/[sellerId]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="sellerCat/[category]"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="checkout" options={{ headerShown: false }} />
-          <Stack.Screen name="wallet" options={{ headerShown: false }} />
-          <Stack.Screen name="(join)/join" options={{ headerShown: false }} />
-          <Stack.Screen name="(join)/sell" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(join)/practitioner"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="order" options={{ headerShown: false }} />
-
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack>
+        <Stack screenOptions={{ headerShown: false }} />
       </SafeAreaView>
     </ThemeProvider>
   );

@@ -51,7 +51,7 @@ const NavigationHeader = ({ title, back }: Props) => {
   const menuRef = useRef<View>(null);
 
   const { data: user, isLoading, isFetching, isPending } = useUser(id);
-  const loading = isLoading || isFetching || isPending;
+  const loading = isPending;
   return (
     <View
       style={{
@@ -69,7 +69,7 @@ const NavigationHeader = ({ title, back }: Props) => {
           <AntDesign name="arrowleft" size={24} color="black" />
         </Pressable>
       )}
-      <Text style={{ fontSize: 20, fontFamily: 'PoppinsBold', color: '#000' }}>
+      <Text style={{ fontSize: 15, fontFamily: 'PoppinsBold', color: '#000' }}>
         {title}
       </Text>
 
@@ -79,7 +79,7 @@ const NavigationHeader = ({ title, back }: Props) => {
             {id && (
               <FontAwesome name="shopping-cart" size={25} color={'#000'} />
             )}
-            {user && (
+            {id && (
               <View
                 style={{
                   position: 'absolute',

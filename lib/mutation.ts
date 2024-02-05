@@ -156,15 +156,7 @@ export const usePayStack = () => {
       return response.data as PaystackType;
     },
     onSuccess: async (data) => {
-      // queryClient.invalidateQueries({ queryKey: ['cartList'] });
-      // queryClient.invalidateQueries({ queryKey: ['user'] });
-      // show('Removed from cart', {
-      //   type: 'success',
-      //   placement: 'bottom',
-      //   duration: 4000,
-      //   animationType: 'slide-in',
-      // });
-      console.log('Mutation', data);
+      console.log('🚀 ~ onSuccess: ~ data:', data);
     },
 
     onError: async () => {

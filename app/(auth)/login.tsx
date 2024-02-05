@@ -31,6 +31,7 @@ const index = (props: Props) => {
   const api = process.env.EXPO_PUBLIC_API_URL;
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
   const router = useRouter();
+  console.log(id.length, 'id', id, typeof id, 'dsdgsdgsd');
 
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
@@ -80,7 +81,7 @@ const index = (props: Props) => {
           const user = await getProfile(response.data);
           setUser(user);
           getUser();
-          router.replace('/(tabs)/');
+          router.replace('/(app)/(tabs)/');
           toast.show('login successful', {
             type: 'success',
             placement: 'bottom',

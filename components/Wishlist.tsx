@@ -31,9 +31,17 @@ const Wishlist = ({ id, category, price, title }: Props) => {
             flexDirection: 'row',
             gap: 25,
             alignItems: 'center',
+            paddingVertical: 10,
           }}
         >
-          <View style={{ flex: 0.4, alignItems: 'center', gap: 10 }}>
+          <View
+            style={{
+              flex: 0.4,
+              alignItems: 'center',
+              gap: 10,
+              paddingLeft: 10,
+            }}
+          >
             <Image
               source={`https://247pharmacy.net/Uploads/${id}.jpg`}
               style={{

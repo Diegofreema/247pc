@@ -3,8 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LoggedUserType } from '../types';
 
 interface AuthStore {
-  id: any;
-  setId: (id: any) => void;
+  id: string;
+  setId: (id: string) => void;
   removeId: () => void;
   getId: () => void;
   user: LoggedUserType | undefined;
@@ -19,6 +19,7 @@ export const useStoreId = create<AuthStore>((set) => ({
     set({ id: newId });
     try {
       await AsyncStorage.setItem('id', newId.toString());
+      console.log('ID stored in local storage:', newId);
     } catch (error) {
       console.error('Error storing ID in local storage:', error);
     }
@@ -34,7 +35,7 @@ export const useStoreId = create<AuthStore>((set) => ({
   },
   getId: async () => {
     try {
-      const id = await AsyncStorage.getItem('id');
+      const id = (await AsyncStorage.getItem('id')) || '';
       set({ id: id });
     } catch (error) {
       console.error('Error getting ID from local storage:', error);

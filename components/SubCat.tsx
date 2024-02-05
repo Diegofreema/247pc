@@ -9,6 +9,7 @@ import { SubProps } from '../lib/types';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import { useEffect, useState } from 'react';
+import { colors } from '../constants/Colors';
 type Props = {
   chief?: boolean;
   index: number;
@@ -35,12 +36,13 @@ export const SubCat = ({
       style={({ pressed }) => [
         pressed && { opacity: 0.8 },
         {
-          width: chief ? width * 0.45 : width * 0.45,
+          width: width * 0.4,
 
           marginRight: index % 2 !== 0 ? 0 : 10,
 
           height: 200,
-          backgroundColor: chief ? 'gray' : 'white',
+          backgroundColor: 'white',
+          padding: 5,
         },
         styles.container,
       ]}
@@ -61,10 +63,11 @@ export const SubCat = ({
         <Text
           style={{
             fontFamily: 'PoppinsBold',
-            color: chief ? 'white' : 'black',
+            color: chief ? colors.lightGreen : 'black',
             fontSize: chief ? 15 : 11,
             textAlign: 'center',
             marginTop: chief ? 0 : 4,
+            paddingHorizontal: 5,
           }}
         >
           {category}

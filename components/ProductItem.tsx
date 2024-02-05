@@ -12,7 +12,12 @@ import { useState } from 'react';
 import { AddToCartButton } from './AddToCartButton';
 
 const { width } = Dimensions.get('window');
-export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
+type Prop = {
+  scroll?: () => void;
+};
+export const ProductItem = (
+  item: WishlistType & Searched & Prop
+): JSX.Element => {
   const router = useRouter();
   const { id } = useStoreId();
 
@@ -27,8 +32,7 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
     isPaused: isProductPaused,
     refetch,
   } = useProduct(item?.id);
-  console.log('🚀 ~ ProductItem ~ data:', data);
-
+  const { scroll } = item;
   const handlePress = () => {
     axios
       .post(
@@ -40,7 +44,11 @@ export const ProductItem = (item: WishlistType & Searched): JSX.Element => {
       .catch((err) => {
         console.log(err);
       });
+
     router.push(`/product/${item?.id}`);
+    if (scroll) {
+      scroll();
+    }
   };
   return (
     <Pressable
