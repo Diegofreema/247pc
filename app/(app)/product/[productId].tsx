@@ -147,7 +147,7 @@ const ProductDetail = (props: Props) => {
       fontFamily: 'PoppinsMedium',
     },
   };
-  const arrow = '\u2192';
+
   return (
     <Container>
       <NavigationHeader back title="Details" />

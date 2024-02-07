@@ -2,10 +2,11 @@
   "expo": {
     "name": "247pharmacy",
     "slug": "247pharmacy",
-    "version": "1.0.1",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pharmacy",
+
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -14,7 +15,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.diegodark.247pharmacy"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +30,9 @@
         "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
         "android.permission.ACCESS_NETWORK_STATE",
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "versionCode": 22,
+      "runtimeVersion": "1.0.4"
     },
     "web": {
       "bundler": "metro",
@@ -50,8 +54,20 @@
         {
           "username": "diegodark"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;}",
+            "allowBackup": false,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
       ]
     ],
+
     "experiments": {
       "typedRoutes": true
     },

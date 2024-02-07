@@ -1,12 +1,23 @@
 import { Redirect, Stack } from 'expo-router';
 import { useStoreId } from '../../lib/zustand/auth';
 import { useEffect } from 'react';
+import { getProfile } from '../../lib/helpers';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function AppLayoutNav() {
-  const { id, getId } = useStoreId();
+  const { id, getId, setUser } = useStoreId();
   console.log('🚀 ~ AppLayoutNav ~ id:', id);
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['user'] });
+  }, []);
   useEffect(() => {
     getId();
+    const getData = async () => {
+      const user = await getProfile(id);
+      setUser(user);
+    };
+    getData();
   }, []);
 
   if (id === '') {

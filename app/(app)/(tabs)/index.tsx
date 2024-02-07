@@ -27,7 +27,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 import axios from 'axios';
 import { Toast, useToast } from 'react-native-toast-notifications';
-
+import Carousel from 'react-native-reanimated-carousel';
 import { AddToCartButton } from '../../../components/AddToCartButton';
 import { Platform } from 'react-native';
 export const checkTextLength = (text: string) => {
@@ -49,10 +49,6 @@ export default function TabOneScreen() {
   }, []);
   const scrollY = new Animated.Value(0);
   const diffClamp = Animated.diffClamp(scrollY, 0, NAVBAR_HEIGHT);
-  const translateY = diffClamp.interpolate({
-    inputRange: [0, NAVBAR_HEIGHT],
-    outputRange: [0, -NAVBAR_HEIGHT],
-  });
 
   const router = useRouter();
 
@@ -71,7 +67,7 @@ export default function TabOneScreen() {
     isPending: isPendingSpecial,
     refetch,
     error,
-  } = useSpecial(user?.statename.toLowerCase() as string);
+  } = useSpecial(user?.statename?.toLowerCase() as string);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView | null>(null);
 
@@ -164,21 +160,11 @@ export default function TabOneScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Animated.View
-        style={[
-          styles.header,
-          {
-            transform: [{ translateY: translateY }],
-          },
-        ]}
-      >
+      <View style={{ marginTop: 10 }}>
         <TopHeader />
-      </Animated.View>
-      <Animated.ScrollView
-        scrollEventThrottle={16}
-        onScroll={(e) => {
-          scrollY.setValue(e.nativeEvent.contentOffset.y);
-        }}
+      </View>
+
+      <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ paddingBottom: 20, backgroundColor: 'white' }}
       >
@@ -194,14 +180,19 @@ export default function TabOneScreen() {
               <ActivityIndicator animating color="#000" size="large" />
             </View>
           ) : (
-            <View style={{ flex: 1, marginTop: 60 }}>
+            <View
+              style={{
+                flex: 1,
+                marginTop: 5,
+                marginBottom: -20,
+              }}
+            >
               <Text
                 style={{
                   fontSize: 18,
                   fontFamily: 'PoppinsBold',
                   textAlign: 'center',
-
-                  marginTop: 20,
+                  marginTop: 10,
                   color: '#000',
                   marginBottom: -30,
                 }}
@@ -210,30 +201,57 @@ export default function TabOneScreen() {
               </Text>
 
               {Array.isArray(special) && special?.length > 0 ? (
+                // <View style={{ flex: 1 }}>
+                //   <ScrollView
+                //     ref={scrollViewRef}
+                //     horizontal
+                //     pagingEnabled
+                //     showsHorizontalScrollIndicator={false}
+                //     onScroll={handleScroll}
+                //   >
+                //     {special?.map((item, index) => {
+                //       return (
+                //         <Pressable
+                //           onPress={() => router.push(`/special/${item?.id}`)}
+                //           style={styles.imageContainer}
+                //           key={item?.id}
+                //         >
+                //           <Image
+                //             source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
+                //             style={styles.image}
+                //             contentFit="contain"
+                //           />
+                //         </Pressable>
+                //       );
+                //     })}
+                //   </ScrollView>
+                // </View>
                 <View style={{ flex: 1 }}>
-                  <ScrollView
-                    ref={scrollViewRef}
-                    horizontal
-                    pagingEnabled
-                    showsHorizontalScrollIndicator={false}
-                    onScroll={handleScroll}
-                  >
-                    {special?.map((item, index) => {
-                      return (
-                        <Pressable
-                          onPress={() => router.push(`/special/${item?.id}`)}
-                          style={styles.imageContainer}
-                          key={item?.id}
-                        >
-                          <Image
-                            source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
-                            style={styles.image}
-                            contentFit="contain"
-                          />
-                        </Pressable>
-                      );
-                    })}
-                  </ScrollView>
+                  <Carousel
+                    style={{ height: 300 }}
+                    loop
+                    width={width}
+                    height={width}
+                    autoPlay={true}
+                    data={special}
+                    scrollAnimationDuration={500}
+                    onSnapToItem={(index) =>
+                      console.log('current index:', index)
+                    }
+                    renderItem={({ item, index }) => (
+                      <Pressable
+                        onPress={() => router.push(`/special/${item?.id}`)}
+                        style={styles.imageContainer}
+                        key={item?.id}
+                      >
+                        <Image
+                          source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
+                          style={styles.image}
+                          contentFit="contain"
+                        />
+                      </Pressable>
+                    )}
+                  />
                 </View>
               ) : (
                 <View
@@ -273,7 +291,7 @@ export default function TabOneScreen() {
                   fontFamily: 'PoppinsBold',
                   textAlign: 'center',
                   marginBottom: 10,
-                  marginTop: 20,
+
                   color: '#000',
                 }}
               >
@@ -487,7 +505,7 @@ export default function TabOneScreen() {
             </View>
           )}
         </View>
-      </Animated.ScrollView>
+      </ScrollView>
     </View>
   );
 }

@@ -25,6 +25,7 @@ type Props = {};
 const api = process.env.EXPO_PUBLIC_API_URL;
 
 const cart = (props: Props) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,24 @@ const cart = (props: Props) => {
     setReload(!reload);
     refetch();
   };
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const loadData = async () => {
+  //     try {
+  //       const res = await axios.post(
+  //         `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+  //       );
+  //       console.log(res.data);
+  //       queryClient.invalidateQueries({ queryKey: ['order'] });
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   loadData();
+  // }, []);
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
@@ -42,7 +61,7 @@ const cart = (props: Props) => {
             `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
           );
           console.log(res.data);
-          console.log('reloading');
+          queryClient.invalidateQueries({ queryKey: ['order'] });
         } catch (error) {
           console.log(error);
         } finally {
@@ -128,7 +147,7 @@ const cart = (props: Props) => {
       <NavigationHeader back title="Cart" />
       <View
         style={{
-          marginTop: 30,
+          marginTop: 20,
           flex: 1,
 
           justifyContent: 'center',
@@ -231,8 +250,8 @@ const cart = (props: Props) => {
                 >
                   <Text
                     style={{
-                      fontSize: 18,
-                      fontWeight: 'bold',
+                      fontSize: 15,
+                      fontFamily: 'PoppinsMedium',
                       color: 'black',
                     }}
                   >
@@ -253,8 +272,8 @@ const cart = (props: Props) => {
                     <FontAwesome name="arrow-left" size={20} color="skyblue" />
                     <Text
                       style={{
-                        fontSize: 20,
-                        fontWeight: 'bold',
+                        fontSize: 15,
+                        fontFamily: 'PoppinsMedium',
                         color: 'skyblue',
                       }}
                     >

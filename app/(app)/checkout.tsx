@@ -23,6 +23,7 @@ import { ModalComponent } from '../../components/Modal';
 import { useModalState } from '../../lib/zustand/modalState';
 import { MyButton } from '../../components/MyButton';
 import { Link, router } from 'expo-router';
+import { getProfile } from '../../lib/helpers';
 type Props = {};
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
@@ -32,14 +33,17 @@ const paystackKey = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
 const api = process.env.EXPO_PUBLIC_API_URL;
 const CheckOut = (props: Props) => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
-  const { id, user } = useStoreId();
+  const { id, user, setUser } = useStoreId();
   const { show } = useToast();
   const queryClient = useQueryClient();
   const { mutateAsync: onWalletPay, isPending: walletLoading } = useWallet();
   const { mutateAsync, isPending: loading, data: paystackData } = usePayStack();
+
   const [paying, setIsPaying] = useState(false);
   const [salesRef, setSalesRef] = useState('');
+
   console.log('🚀 ~ CheckOut ~ paystackData:', paystackData);
+
   const {
     handleChange,
     handleSubmit,
@@ -242,10 +246,9 @@ const CheckOut = (props: Props) => {
                 animationType: 'slide-in',
               });
             }}
-            onSuccess={(res) => {
+            onSuccess={async (res) => {
               console.log('trf', res.transactionRef);
               console.log('status', res.status);
-              // console.log('data', res.data);
 
               axios
                 .post(`https://247pharmacy.net/checkout.aspx?zxc=${salesRef}`)
@@ -257,6 +260,9 @@ const CheckOut = (props: Props) => {
                 duration: 4000,
                 animationType: 'slide-in',
               });
+              const user = await getProfile(id);
+              setUser(user);
+              queryClient.invalidateQueries({ queryKey: ['user'] });
               router.push('/order');
             }}
             // @ts-ignore

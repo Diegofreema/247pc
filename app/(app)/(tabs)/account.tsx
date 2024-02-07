@@ -6,17 +6,22 @@ import { useStoreId } from '../../../lib/zustand/auth';
 import axios from 'axios';
 import { LoggedUserType } from '../../../lib/types';
 import Container from '../../../components/Container';
-import { Entypo, Foundation, MaterialIcons } from '@expo/vector-icons';
+import {
+  AntDesign,
+  Entypo,
+  Foundation,
+  MaterialIcons,
+} from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useWalletBalance } from '../../../lib/queries';
 type Props = {};
 
 const pages = [
-  {
-    name: 'Update Profile',
-    link: '/updateProfile',
-    icon: <Entypo name="user" size={30} color="black" />,
-  },
+  // {
+  //   name: 'Update Profile',
+  //   link: '/updateProfile',
+  //   icon: <Entypo name="user" size={30} color="black" />,
+  // },
   {
     name: 'Update Password',
     link: '/updatePassword',
@@ -30,7 +35,7 @@ const pages = [
   {
     name: 'Order',
     link: '/order',
-    icon: <MaterialIcons name="inventory" size={30} color="black" />,
+    icon: <AntDesign name="book" size={30} color="black" />,
   },
 ];
 const Account = (props: Props) => {

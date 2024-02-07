@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import { Pressable, useColorScheme } from 'react-native';
 
 import Colors from '../../../constants/Colors';
@@ -69,10 +69,10 @@ export default function TabLayout() {
           title: 'Categories',
           headerShown: false,
           tabBarIcon: ({ size, focused }) => (
-            <MaterialIcons
-              name="category"
-              color={focused ? '#34d399' : '#000'}
+            <Entypo
+              name="notification"
               size={size}
+              color={focused ? '#34d399' : '#000'}
             />
           ),
           tabBarLabel: ({ focused }) => (

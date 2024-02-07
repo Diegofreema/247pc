@@ -1,5 +1,5 @@
 import { View, Pressable, Linking } from 'react-native';
-import { usePathname, useRouter } from 'expo-router';
+import { useFocusEffect, usePathname, useRouter } from 'expo-router';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Text } from 'react-native-paper';
@@ -50,8 +50,11 @@ const NavigationHeader = ({ title, back }: Props) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<View>(null);
 
-  const { data: user, isLoading, isFetching, isPending } = useUser(id);
-  const loading = isPending;
+  const { data: user, isLoading, isFetching, isPending, refetch } = useUser(id);
+  // const loading = isPending;
+  // useEffect(() => {
+  //   refetch();
+  // }, []);
   return (
     <View
       style={{
@@ -92,11 +95,7 @@ const NavigationHeader = ({ title, back }: Props) => {
                   alignItems: 'center',
                 }}
               >
-                {loading ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
-                )}
+                <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
               </View>
             )}
           </Pressable>

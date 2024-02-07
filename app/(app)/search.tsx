@@ -186,6 +186,8 @@ const search = () => {
   const uniqueCat = [...uniqueItem];
   console.log(price);
   const totalPages = Math.ceil(products?.length! / itemsPerPage);
+  console.log(uniquePharmacy?.length);
+  console.log(uniqueCat?.length);
 
   // Calculate the start and end index based on the current page
   const startIndex = (page - 1) * itemsPerPage;
@@ -332,22 +334,32 @@ const search = () => {
                       Category
                     </Text>
                   </View>
-                  <View style={{ height: 100 }}>
+                  <View>
                     <ScrollView
-                      style={{ height: 100 }}
+                      horizontal
                       contentContainerStyle={styles.filterTextCon}
                     >
                       {uniqueCat?.map((cat) => {
                         return (
                           <Pressable
-                            style={[{ paddingBottom: 5 }]}
+                            style={[
+                              {
+                                padding: 5,
+                                marginRight: 5,
+                                backgroundColor: colors.lightGreen,
+                                borderRadius: 5,
+                              },
+                              selectedCat.includes(cat) && {
+                                backgroundColor: 'black',
+                              },
+                            ]}
                             onPress={() => handleSelectedCat(cat)}
                             key={cat}
                           >
                             <Text
                               style={[
                                 {
-                                  color: 'black',
+                                  color: 'white',
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
                                 },
@@ -365,26 +377,39 @@ const search = () => {
                     <Text
                       style={{
                         color: 'black',
-                        fontSize: 14,
-                        fontFamily: 'PoppinsBold',
+                        fontSize: 13,
+                        fontFamily: 'PoppinsMedium',
                       }}
                     >
                       Pharmacy
                     </Text>
                   </View>
-                  <View style={{ height: 100 }}>
-                    <ScrollView contentContainerStyle={styles.filterTextCon}>
+                  <View>
+                    <ScrollView
+                      contentContainerStyle={styles.filterTextCon}
+                      horizontal
+                    >
                       {uniquePharmacy?.map((cat) => {
                         return (
                           <Pressable
-                            style={[{ paddingBottom: 5 }]}
+                            style={[
+                              {
+                                padding: 5,
+                                marginRight: 5,
+                                backgroundColor: colors.lightGreen,
+                                borderRadius: 5,
+                              },
+                              selectedPharmacy.includes(cat as string) && {
+                                backgroundColor: 'black',
+                              },
+                            ]}
                             onPress={() => handleSelectedPhar(cat as string)}
                             key={cat}
                           >
                             <Text
                               style={[
                                 {
-                                  color: 'black',
+                                  color: 'white',
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
                                 },

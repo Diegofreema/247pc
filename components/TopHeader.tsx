@@ -13,7 +13,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
   const { id } = useStoreId();
 
   const { data: user, isLoading, isFetching, isPending } = useUser(id);
-  const loading = isLoading || isFetching || isPending;
+  const loading = isPending;
   const router = useRouter();
   return (
     <Animated.View
@@ -28,7 +28,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
         style={{
           flex: 1,
           paddingHorizontal: 10,
-          height: 50,
+          height: 70,
           borderColor: '#000',
         }}
         onPress={() => router.push('/search')}
@@ -49,24 +49,17 @@ export const TopHeader = ({}: Props): JSX.Element => {
 
       <Pressable onPress={() => router.push('/cart')}>
         <FontAwesome name="shopping-cart" size={25} color={'#000'} />
-        {user && (
-          <View
-            style={{
-              position: 'absolute',
-              backgroundColor: 'green',
-              borderRadius: 10,
-              width: 20,
-              top: -10,
-              right: -6,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+        {user ? (
+          <View style={styles.absolute}>
             {loading ? (
               <Text style={{ color: '#fff' }}>0</Text>
             ) : (
               <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
             )}
+          </View>
+        ) : (
+          <View style={styles.absolute}>
+            <Text style={{ color: '#fff' }}>0</Text>
           </View>
         )}
       </Pressable>
@@ -74,4 +67,15 @@ export const TopHeader = ({}: Props): JSX.Element => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  absolute: {
+    position: 'absolute',
+    backgroundColor: 'green',
+    borderRadius: 10,
+    width: 20,
+    top: -10,
+    right: -6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

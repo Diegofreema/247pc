@@ -394,6 +394,7 @@ export const useGetFullOrder = () => {
 
       return data as Order[];
     },
+    refetchInterval: 10000,
   });
 };
 export const useWalletBalance = () => {
