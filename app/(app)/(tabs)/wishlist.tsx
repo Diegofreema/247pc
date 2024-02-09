@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import NavigationHeader from '../../../components/NavigationHeader';
 import Container from '../../../components/Container';
 import Wishlist from '../../../components/Wishlist';
@@ -10,60 +10,105 @@ import { ActivityIndicator } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
 import { MyButton } from '../../../components/MyButton';
 import { colors } from '../../../constants/Colors';
+import { WishlistType } from '../../../lib/types';
+import axios from 'axios';
+import { isLoading } from 'expo-font';
 type Props = {};
-
+const api = process.env.EXPO_PUBLIC_API_URL;
 const wishlist = (props: Props) => {
   const { id } = useStoreId();
   const [reload, setReload] = useState(false);
+  const [loading, setLoading] = useState(false);
+  console.log('🚀 ~ wishlist ~ loading:', loading);
+  const [wishlist, setWishlist] = useState<WishlistType[]>([]);
+  const [isError, setIsError] = useState(false);
+  const [pending, setPending] = useState(false);
 
   // const [data, setData] = useState<WishlistType[]>([]);
-  const {
-    data,
-    isFetching,
-    isError,
-    isPending,
-    isPaused,
-    refetch,
-    isRefetching,
-  } = useWishlist();
+
+  const refetch = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${api}?api=wishlist&statename=imo&myuserid=${id}`
+      );
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
+
+      setWishlist(data);
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useFocusEffect(
+    useCallback(() => {
+      const getWishList = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(
+            `${api}?api=wishlist&statename=imo&myuserid=${id}`
+          );
+          let data = [];
+          if (
+            Object.prototype.toString.call(response.data) === '[object Object]'
+          ) {
+            data.push(response.data);
+          } else if (
+            Object.prototype.toString.call(response.data) === '[object Array]'
+          ) {
+            data = [...response.data];
+          }
+
+          setWishlist(data);
+        } catch (error) {
+          setIsError(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+      getWishList();
+    }, [])
+  );
+  // useEffect(() => {
+  //   const getWishlist = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.get(
+  //         `${api}?api=wishlist&statename=imo&myuserid=${id}`
+  //       );
+  //       let data = [];
+  //       if (
+  //         Object.prototype.toString.call(response.data) === '[object Object]'
+  //       ) {
+  //         data.push(response.data);
+  //       } else if (
+  //         Object.prototype.toString.call(response.data) === '[object Array]'
+  //       ) {
+  //         data = [...response.data];
+  //       }
+
+  //       setWishlist(data);
+  //     } catch (error) {
+  //       setIsError(true);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getWishlist();
+  // }, []);
   const handleRefetch = () => {
     setReload(!reload);
     refetch();
   };
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     let isActive = true;
-  //     if (isActive) {
-  //       refetch();
-  //     }
 
-  //     return () => {
-  //       isActive = false;
-  //     };
-  //   }, [id])
-  // );
-
-  if (isPaused) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Please check your internet connection
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
-  }
   if (isError) {
     return (
       <View
@@ -98,14 +143,14 @@ const wishlist = (props: Props) => {
             alignItems: 'center',
           }}
         >
-          {isPending || isFetching ? (
+          {loading ? (
             <ActivityIndicator animating color="#000" size="large" />
           ) : (
             <View style={{ flex: 1, width: '100%' }}>
               <FlatList
                 contentContainerStyle={{ paddingBottom: 70 }}
                 showsVerticalScrollIndicator={false}
-                data={data}
+                data={wishlist}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <Wishlist
@@ -115,8 +160,8 @@ const wishlist = (props: Props) => {
                     category={item?.category}
                   />
                 )}
-                onRefresh={refetch}
-                refreshing={isRefetching}
+                onRefresh={handleRefetch}
+                refreshing={loading}
               />
             </View>
           )}

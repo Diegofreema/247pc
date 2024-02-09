@@ -22,6 +22,7 @@ import Animated, {
 type Props = {
   title?: string;
   back?: boolean;
+  white?: boolean;
 };
 
 const links = [
@@ -43,7 +44,7 @@ const links = [
   },
 ];
 
-const NavigationHeader = ({ title, back }: Props) => {
+const NavigationHeader = ({ title, back, white }: Props) => {
   const router = useRouter();
   const { id } = useStoreId();
   const pathname = usePathname();
@@ -72,7 +73,13 @@ const NavigationHeader = ({ title, back }: Props) => {
           <AntDesign name="arrowleft" size={24} color="black" />
         </Pressable>
       )}
-      <Text style={{ fontSize: 15, fontFamily: 'PoppinsBold', color: '#000' }}>
+      <Text
+        style={{
+          fontSize: 15,
+          fontFamily: 'PoppinsBold',
+          color: white ? '#fff' : '#000',
+        }}
+      >
         {title}
       </Text>
 
@@ -80,7 +87,11 @@ const NavigationHeader = ({ title, back }: Props) => {
         {pathname !== '/cart' && (
           <Pressable onPress={() => router.push('/cart')}>
             {id && (
-              <FontAwesome name="shopping-cart" size={25} color={'#000'} />
+              <FontAwesome
+                name="shopping-cart"
+                size={25}
+                color={white ? '#fff' : '#000'}
+              />
             )}
             {id && (
               <View
@@ -89,13 +100,34 @@ const NavigationHeader = ({ title, back }: Props) => {
                   backgroundColor: 'green',
                   borderRadius: 10,
                   width: 20,
+                  height: 20,
                   top: -10,
                   right: -6,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
+                {user ? (
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 10,
+                      fontFamily: 'Poppins',
+                    }}
+                  >
+                    {user?.productInCart}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 10,
+                      fontFamily: 'Poppins',
+                    }}
+                  >
+                    {0}
+                  </Text>
+                )}
               </View>
             )}
           </Pressable>

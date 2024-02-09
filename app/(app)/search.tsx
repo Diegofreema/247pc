@@ -79,8 +79,9 @@ const search = () => {
     setProducts(filteredDataCopy);
   };
   const handleNext = () => {
+    if (!products) return;
     setPage(page + 1);
-    if (flatListRef) {
+    if (flatListRef && flatListRef.current && products.length > 0) {
       flatListRef?.current?.scrollToIndex({ animated: true, index: 0 });
     }
   };

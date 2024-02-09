@@ -6,7 +6,7 @@ import {
   View,
   NativeScrollEvent,
   Animated,
-  StatusBar,
+  RefreshControl,
 } from 'react-native';
 
 import { ActivityIndicator } from 'react-native-paper';
@@ -15,21 +15,18 @@ import {
   useGetRecentlyViewed,
   useNewArrival,
   useSpecial,
+  useUser,
 } from '../../../lib/queries';
 import { Text } from 'react-native-paper';
 import { TopHeader } from '../../../components/TopHeader';
 import { Image } from 'expo-image';
 import { useStoreId } from '../../../lib/zustand/auth';
-import { Redirect, useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { MyButton } from '../../../components/MyButton';
 import { colors } from '../../../constants/Colors';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 import axios from 'axios';
-import { Toast, useToast } from 'react-native-toast-notifications';
-import Carousel from 'react-native-reanimated-carousel';
-import { AddToCartButton } from '../../../components/AddToCartButton';
-import { Platform } from 'react-native';
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -38,36 +35,70 @@ export const checkTextLength = (text: string) => {
   return text;
 };
 const NAVBAR_HEIGHT = 70;
-const STATUS_BAR_HEIGHT = Platform.select({ ios: 20, android: 24 });
+const api = process.env.EXPO_PUBLIC_API_URL;
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
-  const { id, user, getUser, getId } = useStoreId();
-  console.log('🚀 ~ TabOneScreen ~ id:', id, typeof id);
+  const { id, getUser, getId } = useStoreId();
+  // const [special, setSpecial] = useState<Id[]>([]);
+  // const [error, setError] = useState(false);
+  // const [isPendingSpecial, setIsPendingSpecial] = useState(false);
+  const {
+    data: user,
+    isLoading,
+    isFetching,
+    isPending: isPendingUser,
+    error: isUserError,
+    isPaused: isUserPaused,
+  } = useUser(id);
+  // const fetchSpecial = async () => {
+  //   setIsPendingSpecial(true);
+  //   try {
+  //     const response = await axios.get(
+  //       `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()} `
+  //     );
+
+  //     let data = [];
+  //     if (Object.prototype.toString.call(response.data) === '[object Object]') {
+  //       data.push(response.data);
+  //     } else if (
+  //       Object.prototype.toString.call(response.data) === '[object Array]'
+  //     ) {
+  //       data = [...response.data];
+  //     }
+  //     setSpecial(data);
+  //   } catch (error) {
+  //     setError(true);
+  //   } finally {
+  //     setIsPendingSpecial(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchSpecial();
+  // }, [id, fetchSpecial]);
+
   useEffect(() => {
     getId();
     getUser();
   }, []);
-  const scrollY = new Animated.Value(0);
-  const diffClamp = Animated.diffClamp(scrollY, 0, NAVBAR_HEIGHT);
-
-  const router = useRouter();
-
-  const {
-    data: recentlyViewed,
-    isFetching: isFetchingRecentlyViewed,
-    isPending: isPendingRecentlyViewed,
-    isPaused: isPausedRecentlyViewed,
-    error: errorRecentlyViewed,
-  } = useGetRecentlyViewed();
 
   const {
     data: special,
-    isFetching: isFetchingSpecial,
     isPaused,
     isPending: isPendingSpecial,
     refetch,
     error,
   } = useSpecial(user?.statename?.toLowerCase() as string);
+
+  const router = useRouter();
+
+  const {
+    data: recentlyViewed,
+    isPending: isPendingRecentlyViewed,
+    isPaused: isPausedRecentlyViewed,
+    error: errorRecentlyViewed,
+    refetch: refetchRecentlyViewed,
+  } = useGetRecentlyViewed();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView | null>(null);
 
@@ -105,6 +136,7 @@ export default function TabOneScreen() {
     isPending,
     isPaused: isPausedNew,
     error: errorNew,
+    refetch: refetchNew,
   } = useNewArrival();
 
   const [reload, setReload] = useState(false);
@@ -112,9 +144,11 @@ export default function TabOneScreen() {
   const handleRefetch = () => {
     setReload(!reload);
     refetch();
+    refetchNew();
+    refetchRecentlyViewed();
   };
 
-  if (error || errorNew) {
+  if (isUserError) {
     return (
       <View
         style={{
@@ -136,7 +170,41 @@ export default function TabOneScreen() {
     );
   }
 
-  if (isPaused || isPausedNew) {
+  if (error || errorNew || errorRecentlyViewed) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+          Something went wrong
+        </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={handleRefetch}
+          text="Retry"
+        />
+      </View>
+    );
+  }
+
+  if (isPendingUser || isFetching) {
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 8,
+      }}
+    >
+      <ActivityIndicator color="black" size={'large'} animating />
+    </View>;
+  }
+  if (isUserPaused || isPaused || isPausedRecentlyViewed || isPausedNew) {
     return (
       <View
         style={{
@@ -158,6 +226,21 @@ export default function TabOneScreen() {
     );
   }
 
+  if (isPendingSpecial) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <ActivityIndicator color="black" size={'large'} animating />
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <View style={{ marginTop: 10 }}>
@@ -165,80 +248,44 @@ export default function TabOneScreen() {
       </View>
 
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isPending} onRefresh={handleRefetch} />
+        }
         showsVerticalScrollIndicator={false}
         style={{ paddingBottom: 20, backgroundColor: 'white' }}
       >
         <View style={{ flex: 1 }}>
-          {isPendingSpecial ? (
-            <View
+          <View
+            style={{
+              flex: 1,
+              marginTop: 5,
+              marginBottom: -20,
+            }}
+          >
+            <Text
               style={{
-                minHeight: 300,
-                justifyContent: 'center',
-                alignItems: 'center',
+                fontSize: 18,
+                fontFamily: 'PoppinsBold',
+                textAlign: 'center',
+                marginTop: 10,
+                color: '#000',
+                marginBottom: -30,
               }}
             >
-              <ActivityIndicator animating color="#000" size="large" />
-            </View>
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                marginTop: 5,
-                marginBottom: -20,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: 'PoppinsBold',
-                  textAlign: 'center',
-                  marginTop: 10,
-                  color: '#000',
-                  marginBottom: -30,
-                }}
-              >
-                Special offers
-              </Text>
+              Special offer
+            </Text>
 
-              {Array.isArray(special) && special?.length > 0 ? (
-                // <View style={{ flex: 1 }}>
-                //   <ScrollView
-                //     ref={scrollViewRef}
-                //     horizontal
-                //     pagingEnabled
-                //     showsHorizontalScrollIndicator={false}
-                //     onScroll={handleScroll}
-                //   >
-                //     {special?.map((item, index) => {
-                //       return (
-                //         <Pressable
-                //           onPress={() => router.push(`/special/${item?.id}`)}
-                //           style={styles.imageContainer}
-                //           key={item?.id}
-                //         >
-                //           <Image
-                //             source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
-                //             style={styles.image}
-                //             contentFit="contain"
-                //           />
-                //         </Pressable>
-                //       );
-                //     })}
-                //   </ScrollView>
-                // </View>
-                <View style={{ flex: 1 }}>
-                  <Carousel
-                    style={{ height: 300 }}
-                    loop
-                    width={width}
-                    height={width}
-                    autoPlay={true}
-                    data={special}
-                    scrollAnimationDuration={500}
-                    onSnapToItem={(index) =>
-                      console.log('current index:', index)
-                    }
-                    renderItem={({ item, index }) => (
+            {special?.length > 0 && (
+              <View style={{ flex: 1 }}>
+                <ScrollView
+                  ref={scrollViewRef}
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  onScroll={handleScroll}
+                >
+                  {special?.map((item, index) => {
+                    return (
                       <Pressable
                         onPress={() => router.push(`/special/${item?.id}`)}
                         style={styles.imageContainer}
@@ -250,29 +297,31 @@ export default function TabOneScreen() {
                           contentFit="contain"
                         />
                       </Pressable>
-                    )}
-                  />
-                </View>
-              ) : (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minHeight: 300,
-                  }}
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            )}
+
+            {special?.length === 0 && (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minHeight: 300,
+                }}
+              >
+                <Text
+                  variant="titleLarge"
+                  style={{ color: '#000', fontWeight: 'bold' }}
                 >
-                  <Text
-                    variant="titleLarge"
-                    style={{ color: '#000', fontWeight: 'bold' }}
-                  >
-                    No Special Offers Yet
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
+                  No Special Offers
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
-        {!isFetchingSpecial && !isPendingSpecial && (
+        {!isPendingSpecial && (
           <View
             style={{
               marginBottom: 10,
@@ -283,7 +332,7 @@ export default function TabOneScreen() {
           />
         )}
         <View style={{ marginBottom: 20, flex: 1 }}>
-          {isFetchingNewArrival || isPending ? null : (
+          {isPending ? null : (
             <View style={styles.container}>
               <Text
                 style={{
@@ -405,7 +454,7 @@ export default function TabOneScreen() {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          {isFetchingRecentlyViewed || isPendingRecentlyViewed ? null : (
+          {isPendingRecentlyViewed ? null : (
             <View style={styles.container}>
               <View
                 style={{

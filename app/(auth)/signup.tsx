@@ -109,7 +109,7 @@ const SignUp = (props: Props) => {
           duration: 4000,
           animationType: 'slide-in',
         });
-        router.push('/(tabs)/');
+        router.push('/(app)/(tabs)/');
         return;
       },
     });
@@ -290,6 +290,7 @@ const SignUp = (props: Props) => {
                 </View>
               ) : (
                 <SelectList
+                  search={false}
                   boxStyles={{
                     ...styles2.border,
                     justifyContent: 'flex-start',

@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View, Text, Pressable, Animated } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import { Searchbar, Button } from 'react-native-paper';
 import { useStoreId } from '../lib/zustand/auth';
 import { useUser } from '../lib/queries';
 
@@ -16,7 +16,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
   const loading = isPending;
   const router = useRouter();
   return (
-    <Animated.View
+    <View
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -25,26 +25,22 @@ export const TopHeader = ({}: Props): JSX.Element => {
       }}
     >
       <Pressable
-        style={{
-          flex: 1,
-          paddingHorizontal: 10,
-          height: 70,
-          borderColor: '#000',
-        }}
+        style={({ pressed }) => [
+          pressed && { opacity: 0.5 },
+          {
+            paddingHorizontal: 10,
+            height: 55,
+            borderColor: '#000',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            width: '90%',
+            borderRadius: 10,
+            justifyContent: 'center',
+          },
+        ]}
         onPress={() => router.push('/search')}
       >
-        <Searchbar
-          style={{
-            backgroundColor: 'transparent',
-            color: 'black',
-            borderWidth: 1,
-            borderColor: 'black',
-            borderRadius: 8,
-          }}
-          editable={false}
-          value=""
-          icon={() => <FontAwesome name="search" size={20} />}
-        />
+        <FontAwesome name="search" size={25} />
       </Pressable>
 
       <Pressable onPress={() => router.push('/cart')}>
@@ -52,18 +48,30 @@ export const TopHeader = ({}: Props): JSX.Element => {
         {user ? (
           <View style={styles.absolute}>
             {loading ? (
-              <Text style={{ color: '#fff' }}>0</Text>
+              <Text
+                style={{ color: '#fff', fontSize: 10, fontFamily: 'Poppins' }}
+              >
+                0
+              </Text>
             ) : (
-              <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
+              <Text
+                style={{ color: '#fff', fontSize: 10, fontFamily: 'Poppins' }}
+              >
+                {user?.productInCart}
+              </Text>
             )}
           </View>
         ) : (
           <View style={styles.absolute}>
-            <Text style={{ color: '#fff' }}>0</Text>
+            <Text
+              style={{ color: '#fff', fontSize: 10, fontFamily: 'Poppins' }}
+            >
+              0
+            </Text>
           </View>
         )}
       </Pressable>
-    </Animated.View>
+    </View>
   );
 };
 
@@ -73,6 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     borderRadius: 10,
     width: 20,
+    height: 20,
     top: -10,
     right: -6,
     justifyContent: 'center',

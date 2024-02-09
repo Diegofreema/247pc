@@ -16,6 +16,7 @@ import {
   WishlistType,
 } from './types';
 import { useStoreId } from './zustand/auth';
+import { getProfile } from './helpers';
 
 const api = process.env.EXPO_PUBLIC_API_URL;
 export const useCart = () => {
@@ -58,13 +59,21 @@ export type Id = {
 
 export const useSpecial = (state: string) => {
   return useQuery({
-    queryKey: ['id', state],
+    queryKey: ['special', state],
     queryFn: async () => {
       const response = await axios.get(
         `${api}?api=specialoffers&statename=${state} `
       );
 
-      return response.data as Id[];
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
+      return data as Id[];
     },
   });
 };

@@ -11,6 +11,7 @@ import { useStoreId } from '../lib/zustand/auth';
 import { useUser, useWalletBalance } from '../lib/queries';
 import { MyButton } from './MyButton';
 import { useState } from 'react';
+import NavigationHeader from './NavigationHeader';
 
 type Props = {
   user?: LoggedUserType;
@@ -21,13 +22,6 @@ const Header = ({}: Props) => {
   const { id } = useStoreId();
   const pathname = usePathname();
   const {
-    data: walletBalance,
-    isFetching: walletBalanceIsFetching,
-    isPaused,
-    isPending: walletBalanceIsPending,
-    isError: walletBalanceIsError,
-  } = useWalletBalance();
-  const {
     data: user,
     isFetching,
     isPending,
@@ -35,6 +29,13 @@ const Header = ({}: Props) => {
     isError,
     refetch,
   } = useUser(id);
+  const {
+    data: walletBalance,
+    isFetching: walletBalanceIsFetching,
+    isPaused,
+    isPending: walletBalanceIsPending,
+    isError: walletBalanceIsError,
+  } = useWalletBalance();
 
   const isLoggedIn = user ? true : false;
   const loading =
@@ -102,55 +103,8 @@ const Header = ({}: Props) => {
         backgroundColor: colors.black,
       }}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-
-          alignItems: 'center',
-          gap: 10,
-          marginHorizontal: 10,
-          paddingVertical: 20,
-        }}
-      >
-        <Text
-          style={{
-            flex: 1,
-            color: '#fff',
-            fontFamily: 'PoppinsMedium',
-            fontSize: 15,
-          }}
-        >
-          Account
-        </Text>
-
-        <Pressable onPress={() => router.push('/cart')}>
-          <FontAwesome
-            name="shopping-cart"
-            style={{ marginRight: 5 }}
-            size={25}
-            color={'#fff'}
-          />
-          {user && (
-            <View
-              style={{
-                position: 'absolute',
-                backgroundColor: 'green',
-                borderRadius: 10,
-                width: 20,
-                top: -10,
-                right: -6,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {loading ? (
-                <Text style={{ color: '#fff' }}>0</Text>
-              ) : (
-                <Text style={{ color: '#fff' }}>{user?.productInCart}</Text>
-              )}
-            </View>
-          )}
-        </Pressable>
+      <View style={{ marginHorizontal: 10, marginTop: -10, marginBottom: 10 }}>
+        <NavigationHeader title="Account" white />
       </View>
 
       <Profile

@@ -17,12 +17,19 @@ import { colors } from '../../../constants/Colors';
 import { ProductItem } from '../../../components/ProductItem';
 import { MyButton } from '../../../components/MyButton';
 import { FloatingNav } from '../../../components/FloatingNav';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 type Props = {};
 
 const ProductDetail = (props: Props) => {
   const { id } = useStoreId();
   const scrollViewRef = useRef<ScrollView>(null);
   const router = useRouter();
+  const scale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
   const { productId } = useLocalSearchParams();
   const { mutateAsync, isPending: isMutatingWishlist } = useAddToWishlist();
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
@@ -37,6 +44,18 @@ const ProductDetail = (props: Props) => {
   const inWishlist = wishList?.find(
     (item: WishlistType) => item?.id === productId
   );
+
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      scale.value = savedScale.value * e.scale;
+    })
+    .onEnd(() => {
+      savedScale.value = scale.value;
+    });
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   const addedToWishlist = inWishlist?.id === productId;
   const { width } = useWindowDimensions();
@@ -190,13 +209,15 @@ const ProductDetail = (props: Props) => {
               }}
             />
             <View style={{ alignItems: 'center' }}>
-              <Image
-                source={{
-                  uri: `https://247pharmacy.net/Uploads/${productId}.jpg`,
-                }}
-                style={{ width: 250, height: 250 }}
-                contentFit="contain"
-              />
+              <GestureDetector gesture={pinchGesture}>
+                <Animated.Image
+                  source={{
+                    uri: `https://247pharmacy.net/Uploads/${productId}.jpg`,
+                  }}
+                  style={[{ width: 250, height: 250 }, animatedStyle]}
+                  resizeMode="contain"
+                />
+              </GestureDetector>
             </View>
             <Card.Content style={{ marginVertical: 10, gap: 5 }}>
               <View
