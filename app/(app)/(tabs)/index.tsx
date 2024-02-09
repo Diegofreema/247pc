@@ -12,6 +12,7 @@ import {
 import { ActivityIndicator } from 'react-native-paper';
 
 import {
+  Id,
   useGetRecentlyViewed,
   useNewArrival,
   useSpecial,
@@ -38,56 +39,63 @@ const NAVBAR_HEIGHT = 70;
 const api = process.env.EXPO_PUBLIC_API_URL;
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
-  const { id, getUser, getId } = useStoreId();
-  // const [special, setSpecial] = useState<Id[]>([]);
-  // const [error, setError] = useState(false);
-  // const [isPendingSpecial, setIsPendingSpecial] = useState(false);
-  const {
-    data: user,
-    isLoading,
-    isFetching,
-    isPending: isPendingUser,
-    error: isUserError,
-    isPaused: isUserPaused,
-  } = useUser(id);
-  // const fetchSpecial = async () => {
-  //   setIsPendingSpecial(true);
-  //   try {
-  //     const response = await axios.get(
-  //       `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()} `
-  //     );
+  const { id, getUser, getId, user } = useStoreId();
 
-  //     let data = [];
-  //     if (Object.prototype.toString.call(response.data) === '[object Object]') {
-  //       data.push(response.data);
-  //     } else if (
-  //       Object.prototype.toString.call(response.data) === '[object Array]'
-  //     ) {
-  //       data = [...response.data];
-  //     }
-  //     setSpecial(data);
-  //   } catch (error) {
-  //     setError(true);
-  //   } finally {
-  //     setIsPendingSpecial(false);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchSpecial();
-  // }, [id, fetchSpecial]);
+  const [special, setSpecial] = useState<Id[]>([]);
+  const [error, setError] = useState(false);
+  const [isPendingSpecial, setIsPendingSpecial] = useState(false);
+
+  const refetchSpecial = async () => {
+    try {
+      const response = await axios.get(
+        `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()} `
+      );
+
+      let data = [];
+      if (Object.prototype.toString.call(response.data) === '[object Object]') {
+        data.push(response.data);
+      } else if (
+        Object.prototype.toString.call(response.data) === '[object Array]'
+      ) {
+        data = [...response.data];
+      }
+      setSpecial(data);
+    } catch (error) {
+      setError(true);
+    }
+  };
 
   useEffect(() => {
     getId();
     getUser();
   }, []);
+  useEffect(() => {
+    const fetchSpecial = async () => {
+      setIsPendingSpecial(true);
+      try {
+        const response = await axios.get(
+          `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()} `
+        );
 
-  const {
-    data: special,
-    isPaused,
-    isPending: isPendingSpecial,
-    refetch,
-    error,
-  } = useSpecial(user?.statename?.toLowerCase() as string);
+        let data = [];
+        if (
+          Object.prototype.toString.call(response.data) === '[object Object]'
+        ) {
+          data.push(response.data);
+        } else if (
+          Object.prototype.toString.call(response.data) === '[object Array]'
+        ) {
+          data = [...response.data];
+        }
+        setSpecial(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsPendingSpecial(false);
+      }
+    };
+    fetchSpecial();
+  }, [user]);
 
   const router = useRouter();
 
@@ -132,7 +140,7 @@ export default function TabOneScreen() {
   );
   const {
     data: newArrival,
-    isFetching: isFetchingNewArrival,
+
     isPending,
     isPaused: isPausedNew,
     error: errorNew,
@@ -143,32 +151,10 @@ export default function TabOneScreen() {
 
   const handleRefetch = () => {
     setReload(!reload);
-    refetch();
+    refetchSpecial();
     refetchNew();
     refetchRecentlyViewed();
   };
-
-  if (isUserError) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Something went wrong
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
-  }
 
   if (error || errorNew || errorRecentlyViewed) {
     return (
@@ -192,7 +178,7 @@ export default function TabOneScreen() {
     );
   }
 
-  if (isPendingUser || isFetching) {
+  if (isPendingSpecial) {
     <View
       style={{
         flex: 1,
@@ -204,7 +190,7 @@ export default function TabOneScreen() {
       <ActivityIndicator color="black" size={'large'} animating />
     </View>;
   }
-  if (isUserPaused || isPaused || isPausedRecentlyViewed || isPausedNew) {
+  if (isPausedRecentlyViewed || isPausedNew) {
     return (
       <View
         style={{

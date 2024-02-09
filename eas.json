@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 7.1.2"
+    "version": ">= 7.1.2",
+    "promptToConfigurePushNotifications": false
   },
   "build": {
     "development": {
@@ -11,7 +12,6 @@
     "preview": {
       "distribution": "internal",
       "node": "18.18.0",
-
       "android": {
         "buildType": "apk"
       },
