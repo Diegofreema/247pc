@@ -1,20 +1,46 @@
 import { StyleSheet, View, Pressable } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { Image } from 'expo-image';
 import { trimTitle } from '../lib/helpers';
 import { FontAwesome } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import Rating from './Rating';
+import { MyButton } from './MyButton';
+import { colors } from '../constants/Colors';
+import axios from 'axios';
+import { useStoreId } from '../lib/zustand/auth';
+import { useToast } from 'react-native-toast-notifications';
 
 type Props = {
   id?: string;
   title?: string;
   price?: string;
   category: string;
+  refetch: () => void;
 };
 
-const Wishlist = ({ id, category, price, title }: Props) => {
+const Wishlist = ({ id, category, price, title, refetch }: Props) => {
+  const { id: userId } = useStoreId();
+  const [removing, setRemoving] = useState(false);
+  const toast = useToast();
+  const removeFromWishList = async () => {
+    setRemoving(true);
+    try {
+      await axios.post(
+        `https://247api.netpro.software/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
+      );
+      refetch();
+    } catch (error) {
+      toast.show('Something went wrong', {
+        type: 'danger',
+        animationType: 'slide-in',
+        placement: 'bottom',
+      });
+    } finally {
+      setRemoving(false);
+    }
+  };
   return (
     <View
       style={{
@@ -85,6 +111,15 @@ const Wishlist = ({ id, category, price, title }: Props) => {
           </View>
         </Pressable>
       </Link>
+      <View style={{ marginBottom: 15 }}>
+        <MyButton
+          disabled={removing}
+          onPress={removeFromWishList}
+          text="Remove from wishlist"
+          buttonColor={colors.danger}
+        />
+      </View>
+
       <View
         style={{
           borderColor: 'gray',

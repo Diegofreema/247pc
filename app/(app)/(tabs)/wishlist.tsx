@@ -127,10 +127,14 @@ const wishlist = (props: Props) => {
                     title={item?.product}
                     price={item?.sellingprice}
                     category={item?.category}
+                    refetch={refetch}
                   />
                 )}
                 onRefresh={handleRefetch}
                 refreshing={loading}
+                ListEmptyComponent={
+                  <Text style={styles.empty}>Wishlist is currently empty</Text>
+                }
               />
             </View>
           )}
@@ -142,4 +146,11 @@ const wishlist = (props: Props) => {
 
 export default wishlist;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  empty: {
+    fontFamily: 'PoppinsBold',
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontSize: 20,
+  },
+});

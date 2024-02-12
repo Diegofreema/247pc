@@ -32,6 +32,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import axios from 'axios';
 import { useToast } from 'react-native-toast-notifications';
+import { useQueryClient } from '@tanstack/react-query';
 type Props = {};
 const api = process.env.EXPO_PUBLIC_API_URL;
 const ProductDetail = (props: Props) => {
@@ -42,7 +43,7 @@ const ProductDetail = (props: Props) => {
   const focalX = useSharedValue(0);
   const focalY = useSharedValue(0);
   const { productId } = useLocalSearchParams();
-
+  const queryClient = useQueryClient();
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
   const {
     data: wishList,
@@ -56,17 +57,6 @@ const ProductDetail = (props: Props) => {
     (item: WishlistType) => item?.id === productId
   );
 
-  // const pinchGesture = Gesture.Pinch()
-  //   .onUpdate((e) => {
-  //     scale.value = savedScale.value * e.scale;
-  //   })
-  //   .onEnd(() => {
-  //     savedScale.value = scale.value;
-  //   });
-
-  // const animatedStyle = useAnimatedStyle(() => ({
-  //   transform: [{ scale: scale.value }],
-  // }));
   const pinchHandler =
     useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
       onActive: (event) => {
@@ -205,6 +195,7 @@ const ProductDetail = (props: Props) => {
       await axios.post(
         `${api}?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
+      queryClient.invalidateQueries({ queryKey: ['wishlist'] });
       show('Added to wishlist', {
         type: 'success',
         placement: 'bottom',
@@ -222,7 +213,30 @@ const ProductDetail = (props: Props) => {
       setAddingToWishlist(false);
     }
   };
-
+  const removeFromWishList = async () => {
+    setAddingToWishlist(true);
+    try {
+      await axios.post(
+        `https://247api.netpro.software/api.aspx?api=removewishlist&productid=${productId}&myuserid=${id}`
+      );
+      queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+    } catch (error) {
+      show('Something went wrong', {
+        type: 'danger',
+        animationType: 'slide-in',
+        placement: 'bottom',
+      });
+    } finally {
+      setAddingToWishlist(false);
+    }
+  };
+  const toggleWishList = () => {
+    if (addedToWishlist) {
+      removeFromWishList();
+    } else {
+      handleWishlist();
+    }
+  };
   const source: HTMLSource = {
     html: `<p style="font-size: 2rem;">
     ${data?.description}
@@ -397,7 +411,7 @@ const ProductDetail = (props: Props) => {
                 qty={qty}
                 onIncrease={handelIncrease}
                 onDecrease={handleDecrease}
-                addToWishlist={handleWishlist}
+                addToWishlist={toggleWishList}
                 loading={addingToWishlist}
                 inWishlist={addedToWishlist || isFetchingWishlist}
                 addingToCart={isMutatingCart}
