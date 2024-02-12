@@ -46,22 +46,23 @@ export default function TabOneScreen() {
   const [isPendingSpecial, setIsPendingSpecial] = useState(false);
 
   const refetchSpecial = async () => {
+    setIsPendingSpecial(true);
     try {
       const response = await axios.get(
-        `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()} `
+        `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
       );
 
-      let data = [];
-      if (Object.prototype.toString.call(response.data) === '[object Object]') {
-        data.push(response.data);
-      } else if (
-        Object.prototype.toString.call(response.data) === '[object Array]'
-      ) {
-        data = [...response.data];
+      if (Array.isArray(response.data)) {
+        setSpecial(response.data);
+      } else if (typeof response.data === 'object' && response.data !== null) {
+        setSpecial([response.data]);
+      } else {
+        setSpecial([]); // Set to an empty array if the response data is neither an array nor an object
       }
-      setSpecial(data);
     } catch (error) {
       setError(true);
+    } finally {
+      setIsPendingSpecial(false);
     }
   };
 
@@ -74,20 +75,19 @@ export default function TabOneScreen() {
       setIsPendingSpecial(true);
       try {
         const response = await axios.get(
-          `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()} `
+          `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
         );
 
-        let data = [];
-        if (
-          Object.prototype.toString.call(response.data) === '[object Object]'
-        ) {
-          data.push(response.data);
+        if (Array.isArray(response.data)) {
+          setSpecial(response.data);
         } else if (
-          Object.prototype.toString.call(response.data) === '[object Array]'
+          typeof response.data === 'object' &&
+          response.data !== null
         ) {
-          data = [...response.data];
+          setSpecial([response.data]);
+        } else {
+          setSpecial([]); // Set to an empty array if the response data is neither an array nor an object
         }
-        setSpecial(data);
       } catch (error) {
         setError(true);
       } finally {
@@ -212,7 +212,7 @@ export default function TabOneScreen() {
     );
   }
 
-  if (isPendingSpecial) {
+  if (isPendingSpecial && special?.length === 0) {
     return (
       <View
         style={{
@@ -301,7 +301,7 @@ export default function TabOneScreen() {
                   variant="titleLarge"
                   style={{ color: '#000', fontWeight: 'bold' }}
                 >
-                  No Special Offers
+                  No Special Offers Available
                 </Text>
               </View>
             )}

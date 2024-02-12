@@ -212,7 +212,11 @@ const search = () => {
             style={{
               gap: 5,
             }}
-            contentContainerStyle={{ gap: 10 }}
+            contentContainerStyle={{
+              gap: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
             <Pressable
               style={{

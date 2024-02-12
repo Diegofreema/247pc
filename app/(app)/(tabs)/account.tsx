@@ -14,14 +14,15 @@ import {
 } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useWalletBalance } from '../../../lib/queries';
+import { DeleteModal } from '../../../components/DeleteModal';
 type Props = {};
 
 const pages = [
-  // {
-  //   name: 'Update Profile',
-  //   link: '/updateProfile',
-  //   icon: <Entypo name="user" size={30} color="black" />,
-  // },
+  {
+    name: 'Update Profile',
+    link: '/updateProfile',
+    icon: <Entypo name="user" size={30} color="black" />,
+  },
   {
     name: 'Update Password',
     link: '/updatePassword',
@@ -40,14 +41,18 @@ const pages = [
 ];
 const Account = (props: Props) => {
   const [loading, setLoading] = useState(false);
-
+  const [visible, setVisible] = useState(false);
   const { user, id } = useStoreId();
 
   const router = useRouter();
+  const onClose = () => {
+    setVisible(false);
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <Header user={user} />
+
       <Container>
         <ScrollView
           style={{ flex: 1 }}
@@ -80,6 +85,19 @@ const Account = (props: Props) => {
               <Entypo name="chevron-right" size={24} color="black" />
             </Pressable>
           ))}
+          <Pressable
+            onPress={() => setVisible(true)}
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.5 : 1 },
+              { flexDirection: 'row', gap: 20, marginBottom: 'auto' },
+            ]}
+          >
+            <Entypo name="trash" size={24} color="black" />
+            <Text style={{ fontFamily: 'PoppinsMedium', fontSize: 15 }}>
+              Delete Profile
+            </Text>
+          </Pressable>
+          <DeleteModal visible={visible} onClose={onClose} />
         </ScrollView>
       </Container>
     </View>

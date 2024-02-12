@@ -7,7 +7,10 @@ import NavigationHeader from '../../../components/NavigationHeader';
 import { Card, Text } from 'react-native-paper';
 import RenderHtml, { HTMLSource } from 'react-native-render-html';
 import { ActivityIndicator } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  PinchGestureHandlerGestureEvent,
+  ScrollView,
+} from 'react-native-gesture-handler';
 import CounterCartButton from '../../../components/CounterCartButton';
 import { useAddToCart, useAddToWishlist } from '../../../lib/mutation';
 import { useStoreId } from '../../../lib/zustand/auth';
@@ -17,21 +20,29 @@ import { colors } from '../../../constants/Colors';
 import { ProductItem } from '../../../components/ProductItem';
 import { MyButton } from '../../../components/MyButton';
 import { FloatingNav } from '../../../components/FloatingNav';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import {
+  Gesture,
+  GestureDetector,
+  PinchGestureHandler,
+} from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  useAnimatedGestureHandler,
 } from 'react-native-reanimated';
+import axios from 'axios';
+import { useToast } from 'react-native-toast-notifications';
 type Props = {};
-
+const api = process.env.EXPO_PUBLIC_API_URL;
 const ProductDetail = (props: Props) => {
   const { id } = useStoreId();
   const scrollViewRef = useRef<ScrollView>(null);
   const router = useRouter();
   const scale = useSharedValue(1);
-  const savedScale = useSharedValue(1);
+  const focalX = useSharedValue(0);
+  const focalY = useSharedValue(0);
   const { productId } = useLocalSearchParams();
-  const { mutateAsync, isPending: isMutatingWishlist } = useAddToWishlist();
+
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
   const {
     data: wishList,
@@ -45,18 +56,59 @@ const ProductDetail = (props: Props) => {
     (item: WishlistType) => item?.id === productId
   );
 
-  const pinchGesture = Gesture.Pinch()
-    .onUpdate((e) => {
-      scale.value = savedScale.value * e.scale;
-    })
-    .onEnd(() => {
-      savedScale.value = scale.value;
+  // const pinchGesture = Gesture.Pinch()
+  //   .onUpdate((e) => {
+  //     scale.value = savedScale.value * e.scale;
+  //   })
+  //   .onEnd(() => {
+  //     savedScale.value = scale.value;
+  //   });
+
+  // const animatedStyle = useAnimatedStyle(() => ({
+  //   transform: [{ scale: scale.value }],
+  // }));
+  const pinchHandler =
+    useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
+      onActive: (event) => {
+        scale.value = event.scale;
+        focalX.value = event.focalX;
+        focalY.value = event.focalY;
+      },
     });
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: focalX.value,
+        },
+        {
+          translateY: focalY.value,
+        },
+        {
+          translateX: -250 / 2,
+        },
+        {
+          translateY: -250 / 2,
+        },
+        {
+          scale: scale.value,
+        },
+        {
+          translateX: -focalX.value,
+        },
+        {
+          translateY: -focalY.value,
+        },
+        {
+          translateX: 250 / 2,
+        },
+        {
+          translateY: 250 / 2,
+        },
+      ],
+    };
+  });
   const addedToWishlist = inWishlist?.id === productId;
   const { width } = useWindowDimensions();
   const [qty, setQty] = useState(1);
@@ -74,7 +126,7 @@ const ProductDetail = (props: Props) => {
     setReload(!reload);
     refetch();
   };
-
+  const { show } = useToast();
   const {
     data: category,
     isPending: isCategoryPending,
@@ -82,6 +134,7 @@ const ProductDetail = (props: Props) => {
     isError: isCategoryError,
     isPaused: isCategoryPaused,
   } = useProductCat(data?.category as string);
+  const [addingToWishlist, setAddingToWishlist] = useState(false);
   if (isPaused || isProductPaused || isCategoryPaused) {
     return (
       <View
@@ -146,9 +199,30 @@ const ProductDetail = (props: Props) => {
     console.log('🚀 ~ scrollTopFn ~ scrollTopFn');
   };
 
-  const handleWishlist = async (productId?: string, id?: any) => {
-    mutateAsync(productId as string, id);
+  const handleWishlist = async () => {
+    setAddingToWishlist(true);
+    try {
+      await axios.post(
+        `${api}?api=addtowishlist&productid=${productId}&myuserid=${id}`
+      );
+      show('Added to wishlist', {
+        type: 'success',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    } catch (error) {
+      show('Something went wrong adding to wishlist', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    } finally {
+      setAddingToWishlist(false);
+    }
   };
+
   const source: HTMLSource = {
     html: `<p style="font-size: 2rem;">
     ${data?.description}
@@ -184,6 +258,7 @@ const ProductDetail = (props: Props) => {
         </View>
       ) : (
         <ScrollView
+          zoomScale={1}
           ref={scrollViewRef}
           style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
@@ -209,15 +284,17 @@ const ProductDetail = (props: Props) => {
               }}
             />
             <View style={{ alignItems: 'center' }}>
-              <GestureDetector gesture={pinchGesture}>
-                <Animated.Image
-                  source={{
-                    uri: `https://247pharmacy.net/Uploads/${productId}.jpg`,
-                  }}
-                  style={[{ width: 250, height: 250 }, animatedStyle]}
-                  resizeMode="contain"
-                />
-              </GestureDetector>
+              <PinchGestureHandler onGestureEvent={pinchHandler}>
+                <Animated.View style={{ overflow: 'hidden' }}>
+                  <Animated.Image
+                    source={{
+                      uri: `https://247pharmacy.net/Uploads/${productId}.jpg`,
+                    }}
+                    style={[{ width: 250, height: 250 }, animatedStyle]}
+                    resizeMode="contain"
+                  />
+                </Animated.View>
+              </PinchGestureHandler>
             </View>
             <Card.Content style={{ marginVertical: 10, gap: 5 }}>
               <View
@@ -320,8 +397,8 @@ const ProductDetail = (props: Props) => {
                 qty={qty}
                 onIncrease={handelIncrease}
                 onDecrease={handleDecrease}
-                addToWishlist={() => handleWishlist(productId as string, id)}
-                loading={isMutatingWishlist}
+                addToWishlist={handleWishlist}
+                loading={addingToWishlist}
                 inWishlist={addedToWishlist || isFetchingWishlist}
                 addingToCart={isMutatingCart}
               />

@@ -1,18 +1,15 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import NavigationHeader from '../../../components/NavigationHeader';
 import Container from '../../../components/Container';
 import Wishlist from '../../../components/Wishlist';
-import { useWishlist } from '../../../lib/queries';
 import { useStoreId } from '../../../lib/zustand/auth';
 import { useFocusEffect } from 'expo-router';
 import { ActivityIndicator } from 'react-native-paper';
-import { FlashList } from '@shopify/flash-list';
 import { MyButton } from '../../../components/MyButton';
 import { colors } from '../../../constants/Colors';
 import { WishlistType } from '../../../lib/types';
 import axios from 'axios';
-import { isLoading } from 'expo-font';
 type Props = {};
 const api = process.env.EXPO_PUBLIC_API_URL;
 const wishlist = (props: Props) => {
@@ -23,8 +20,6 @@ const wishlist = (props: Props) => {
   const [wishlist, setWishlist] = useState<WishlistType[]>([]);
   const [isError, setIsError] = useState(false);
   const [pending, setPending] = useState(false);
-
-  // const [data, setData] = useState<WishlistType[]>([]);
 
   const refetch = async () => {
     setLoading(true);
@@ -77,33 +72,7 @@ const wishlist = (props: Props) => {
       getWishList();
     }, [])
   );
-  // useEffect(() => {
-  //   const getWishlist = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await axios.get(
-  //         `${api}?api=wishlist&statename=imo&myuserid=${id}`
-  //       );
-  //       let data = [];
-  //       if (
-  //         Object.prototype.toString.call(response.data) === '[object Object]'
-  //       ) {
-  //         data.push(response.data);
-  //       } else if (
-  //         Object.prototype.toString.call(response.data) === '[object Array]'
-  //       ) {
-  //         data = [...response.data];
-  //       }
 
-  //       setWishlist(data);
-  //     } catch (error) {
-  //       setIsError(true);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getWishlist();
-  // }, []);
   const handleRefetch = () => {
     setReload(!reload);
     refetch();
