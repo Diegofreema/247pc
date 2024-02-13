@@ -68,7 +68,7 @@ const NavigationHeader = ({ title, back, white }: Props) => {
       {back && (
         <Pressable
           onPress={({}) => router.back()}
-          style={({ pressed }) => [pressed && { opacity: 0.5 }]}
+          style={({ pressed }) => [pressed && { opacity: 0.5 }, { padding: 3 }]}
         >
           <AntDesign name="arrowleft" size={24} color="black" />
         </Pressable>
@@ -85,7 +85,13 @@ const NavigationHeader = ({ title, back, white }: Props) => {
 
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
         {pathname !== '/cart' && (
-          <Pressable onPress={() => router.push('/cart')}>
+          <Pressable
+            style={({ pressed }) => [
+              pressed && { opacity: 0.5 },
+              { padding: 5 },
+            ]}
+            onPress={() => router.push('/cart')}
+          >
             {id && (
               <FontAwesome
                 name="shopping-cart"
@@ -101,7 +107,7 @@ const NavigationHeader = ({ title, back, white }: Props) => {
                   borderRadius: 10,
                   width: 20,
                   height: 20,
-                  top: -10,
+                  top: -5,
                   right: -6,
                   justifyContent: 'center',
                   alignItems: 'center',

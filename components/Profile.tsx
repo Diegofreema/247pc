@@ -7,13 +7,11 @@ import { useStoreId } from '../lib/zustand/auth';
 import { useToast } from 'react-native-toast-notifications';
 
 type Props = {
-  isLoggedIn: boolean;
   name?: string;
   email?: string;
-  loading: boolean;
 };
 
-const Profile = ({ isLoggedIn, email, name, loading }: Props) => {
+const Profile = ({ email, name }: Props) => {
   const router = useRouter();
   const { removeId, removeUser } = useStoreId();
   const toast = useToast();
@@ -40,34 +38,23 @@ const Profile = ({ isLoggedIn, email, name, loading }: Props) => {
       }}
     >
       <View>
-        {isLoggedIn && (
-          <>
-            {loading ? (
-              <ActivityIndicator animating />
-            ) : (
-              <>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontFamily: 'PoppinsMedium',
+        <Text
+          style={{
+            fontSize: 13,
+            fontFamily: 'PoppinsMedium',
 
-                    color: '#fff',
-                  }}
-                >
-                  Welcome {name}!
-                </Text>
-                <Text
-                  style={{ fontFamily: 'Poppins', fontSize: 9, color: '#fff' }}
-                >
-                  {email}
-                </Text>
-              </>
-            )}
-          </>
-        )}
+            color: '#fff',
+          }}
+        >
+          Welcome {name}!
+        </Text>
+        <Text style={{ fontFamily: 'Poppins', fontSize: 9, color: '#fff' }}>
+          {email}
+        </Text>
       </View>
 
       <Button
+        contentStyle={{ paddingVertical: 5 }}
         onPress={logout}
         textColor="#000"
         icon={'logout'}

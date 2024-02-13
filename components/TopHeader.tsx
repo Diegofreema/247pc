@@ -43,7 +43,10 @@ export const TopHeader = ({}: Props): JSX.Element => {
         <FontAwesome name="search" size={25} />
       </Pressable>
 
-      <Pressable onPress={() => router.push('/cart')}>
+      <Pressable
+        style={({ pressed }) => [pressed && { opacity: 0.5 }, { padding: 5 }]}
+        onPress={() => router.push('/cart')}
+      >
         <FontAwesome name="shopping-cart" size={25} color={'#000'} />
         {user ? (
           <View style={styles.absolute}>
@@ -82,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 20,
     height: 20,
-    top: -10,
+    top: -5,
     right: -6,
     justifyContent: 'center',
     alignItems: 'center',

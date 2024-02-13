@@ -278,6 +278,7 @@ const Update = (props: Props) => {
                   </View>
                 ) : (
                   <SelectList
+                    search={false}
                     fontFamily="Poppins"
                     boxStyles={{
                       ...styles2.border,
@@ -317,6 +318,7 @@ const Update = (props: Props) => {
                   </View>
                 ) : (
                   <SelectList
+                    search={false}
                     fontFamily="Poppins"
                     placeholder="Select your community"
                     boxStyles={{

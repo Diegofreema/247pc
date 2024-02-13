@@ -46,7 +46,6 @@ export default function TabOneScreen() {
   const [isPendingSpecial, setIsPendingSpecial] = useState(false);
 
   const refetchSpecial = async () => {
-    setIsPendingSpecial(true);
     try {
       const response = await axios.get(
         `${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
@@ -61,8 +60,6 @@ export default function TabOneScreen() {
       }
     } catch (error) {
       setError(true);
-    } finally {
-      setIsPendingSpecial(false);
     }
   };
 

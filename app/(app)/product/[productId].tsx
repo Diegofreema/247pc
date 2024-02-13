@@ -1,4 +1,10 @@
-import { StyleSheet, View, useWindowDimensions, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  useWindowDimensions,
+  Pressable,
+  RefreshControl,
+} from 'react-native';
 import React, { useRef, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useProduct, useProductCat, useWishlist } from '../../../lib/queries';
@@ -125,29 +131,6 @@ const ProductDetail = (props: Props) => {
     isPaused: isCategoryPaused,
   } = useProductCat(data?.category as string);
   const [addingToWishlist, setAddingToWishlist] = useState(false);
-  if (isPaused || isProductPaused || isCategoryPaused) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text
-          style={{ fontFamily: 'PoppinsMedium', fontSize: 20, color: 'black' }}
-        >
-          Please check your internet connection
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
-  }
 
   if (error || isError || isCategoryError) {
     return (
@@ -172,15 +155,40 @@ const ProductDetail = (props: Props) => {
       </View>
     );
   }
+  if (isPaused || isProductPaused || isCategoryPaused) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <Text
+          style={{ fontFamily: 'PoppinsMedium', fontSize: 20, color: 'black' }}
+        >
+          Please check your internet connection
+        </Text>
+        <MyButton
+          buttonColor={colors.lightGreen}
+          onPress={handleRefetch}
+          text="Retry"
+        />
+      </View>
+    );
+  }
 
   const handelIncrease = () => {
     if (data?.available && qty < +data?.available) {
       setQty((prevQty) => prevQty + 1);
+      queryClient.invalidateQueries({ queryKey: ['product'] });
     }
   };
   const handleDecrease = () => {
     if (qty > 1) {
       setQty((prevQty) => prevQty - 1);
+      queryClient.invalidateQueries({ queryKey: ['product'] });
     }
   };
 
@@ -272,6 +280,9 @@ const ProductDetail = (props: Props) => {
         </View>
       ) : (
         <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={isPending} onRefresh={handleRefetch} />
+          }
           zoomScale={1}
           ref={scrollViewRef}
           style={{ flex: 1 }}
@@ -327,7 +338,10 @@ const ProductDetail = (props: Props) => {
                   Sold by: {data?.seller}
                 </Text>
                 <Pressable
-                  style={({ pressed }) => [pressed && { opacity: 0.5 }]}
+                  style={({ pressed }) => [
+                    pressed && { opacity: 0.5 },
+                    { paddingVertical: 5 },
+                  ]}
                   onPress={() =>
                     router.push({
                       pathname: `/seller/${data?.sellerid}`,
@@ -337,7 +351,7 @@ const ProductDetail = (props: Props) => {
                 >
                   <Text
                     style={{
-                      color: 'skyblue',
+                      color: colors.lightGreen,
                       fontFamily: 'PoppinsBold',
                       fontSize: 11,
                     }}

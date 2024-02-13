@@ -34,6 +34,7 @@ export const MyButton = ({
       icon={icon}
       disabled={disabled}
       labelStyle={{ fontSize: 12, fontFamily: 'PoppinsMedium' }}
+      contentStyle={{ paddingVertical: 6 }}
     >
       {text}
     </Button>

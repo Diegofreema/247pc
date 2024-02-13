@@ -69,12 +69,14 @@ export const useAddToCart = () => {
         `${api}?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
       );
 
-      console.log(qty, user?.statename, productId, id);
+      console.log(response.data);
 
       return response.data;
     },
     onSuccess: async (data) => {
+      console.log('🚀 ~ useAddToCart ~ data:', data);
       queryClient.invalidateQueries({ queryKey: ['cartList'] });
+      queryClient.invalidateQueries({ queryKey: ['product'] });
       queryClient.invalidateQueries({ queryKey: ['user'] });
       show('Added to cart', {
         type: 'success',

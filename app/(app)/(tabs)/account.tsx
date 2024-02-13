@@ -67,6 +67,7 @@ const Account = (props: Props) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                padding: 5,
               }}
             >
               <View
@@ -89,7 +90,7 @@ const Account = (props: Props) => {
             onPress={() => setVisible(true)}
             style={({ pressed }) => [
               { opacity: pressed ? 0.5 : 1 },
-              { flexDirection: 'row', gap: 20, marginBottom: 'auto' },
+              { flexDirection: 'row', gap: 20, padding: 5 },
             ]}
           >
             <Entypo name="trash" size={24} color="black" />

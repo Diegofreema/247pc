@@ -1,20 +1,17 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, Text } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import { Image } from 'expo-image';
-import { FontAwesome } from '@expo/vector-icons';
-import { trimTitle } from '../lib/helpers';
-import CounterCartButton from './CounterCartButton';
 import { colors } from '../constants/Colors';
 import { CartType, WishlistType } from '../lib/types';
 import { useAddToWishlist } from '../lib/mutation';
-import { useGetOrder, useWishlist } from '../lib/queries';
 
 type Props = {
   removeFromCart: ({ salesId }: { salesId: string }) => void;
   removeFromCartPending: boolean;
   index: number;
   wishlist: WishlistType[];
+  reloadData: () => void;
 };
 
 const CartItem = ({
@@ -28,6 +25,7 @@ const CartItem = ({
   removeFromCartPending,
   index,
   wishlist,
+  reloadData,
 }: Props & CartType) => {
   const { mutateAsync, isPending } = useAddToWishlist();
 
@@ -45,7 +43,11 @@ const CartItem = ({
     }
   }, [wishlist, productid]);
   console.log(selectedIndex, clickedIndex);
-  const handleRemoveFromCart = (saleid: string, index: number) => {};
+  const handleRemoveFromCart = (saleid: string) => {
+    setSelectedIndex(saleid);
+    removeFromCart({ salesId: saleid });
+    reloadData();
+  };
   return (
     <View style={styles.containerStyle}>
       <View
@@ -132,15 +134,13 @@ const CartItem = ({
               width: '90%',
             }}
             labelStyle={{ fontSize: 12, fontFamily: 'Poppins' }}
+            contentStyle={{ paddingVertical: 6 }}
           >
             Save to wishlist
           </Button>
         )}
         <Button
-          onPress={() => {
-            setSelectedIndex(saleid);
-            removeFromCart({ salesId: saleid });
-          }}
+          onPress={() => handleRemoveFromCart(saleid)}
           loading={removeFromCartPending && saleid == selectedIndex}
           icon="delete"
           buttonColor={colors.danger}
@@ -151,6 +151,7 @@ const CartItem = ({
             width: '90%',
           }}
           labelStyle={{ fontSize: 12, fontFamily: 'Poppins' }}
+          contentStyle={{ paddingVertical: 6 }}
         >
           Remove from cart
         </Button>

@@ -56,11 +56,15 @@ const CounterCartButton = ({
               justifyContent: 'center',
             }}
           >
-            <Button onPress={onDecrease} disabled={qty === 1}>
+            <Button
+              contentStyle={{ padding: 5 }}
+              onPress={onDecrease}
+              disabled={qty === 1}
+            >
               <FontAwesome name="minus" size={15} color="#000" />
             </Button>
             <Text>{qty}</Text>
-            <Button onPress={onIncrease}>
+            <Button contentStyle={{ padding: 5 }} onPress={onIncrease}>
               <FontAwesome name="plus" size={15} color="#000" />
             </Button>
           </View>

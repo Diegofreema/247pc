@@ -5,8 +5,10 @@ import NavigationHeader from '../../components/NavigationHeader';
 import CartItem from '../../components/CartItem';
 import {
   useCart,
+  useFee,
   useGetCart,
   useGetOrder,
+  useUser,
   useWishlist,
 } from '../../lib/queries';
 import { ActivityIndicator, Button } from 'react-native-paper';
@@ -25,14 +27,26 @@ type Props = {};
 const api = process.env.EXPO_PUBLIC_API_URL;
 
 const cart = (props: Props) => {
-  const queryClient = useQueryClient();
+  const { id } = useStoreId();
+  const { data: user } = useUser(id);
+  const {
+    data: fee,
+    isPending: feeIsPending,
+    isPaused: feeIsPaused,
+    isError: feeIsError,
+  } = useFee(id, user?.productInCart, user?.communityId);
   const router = useRouter();
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { user, id } = useStoreId();
+  const [toggleReload, setToggleReload] = useState(false);
+
   const handleRefetch = () => {
     setReload(!reload);
     refetch();
+  };
+
+  const reloadData = async () => {
+    setToggleReload(!toggleReload);
   };
   // useEffect(() => {
   //   setLoading(true);
@@ -42,6 +56,8 @@ const cart = (props: Props) => {
   //         `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
   //       );
   //       console.log(res.data);
+  //       console.log('saving......');
+
   //       queryClient.invalidateQueries({ queryKey: ['order'] });
   //     } catch (error) {
   //       console.log(error);
@@ -52,26 +68,27 @@ const cart = (props: Props) => {
 
   //   loadData();
   // }, []);
-  useFocusEffect(
-    useCallback(() => {
-      setLoading(true);
-      const loadData = async () => {
-        try {
-          const res = await axios.post(
-            `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
-          );
-          console.log(res.data);
-          queryClient.invalidateQueries({ queryKey: ['order'] });
-        } catch (error) {
-          console.log(error);
-        } finally {
-          setLoading(false);
-        }
-      };
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setLoading(true);
+  //     const loadData = async () => {
+  //       try {
+  //         const res = await axios.post(
+  //           `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+  //         );
+  //         console.log(res.data);
+  //         queryClient.invalidateQueries({ queryKey: ['order'] });
+  //         console.log('saving......, useFocus');
+  //       } catch (error) {
+  //         console.log(error);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
 
-      loadData();
-    }, [])
-  );
+  //     loadData();
+  //   }, [])
+  // );
 
   const {
     data: order,
@@ -90,6 +107,7 @@ const cart = (props: Props) => {
   } = useWishlist();
   const { mutateAsync: removeFromCart, isPending: removeFromCartPending } =
     useRemoveFromCart();
+
   const {
     data,
     isFetching,
@@ -99,7 +117,7 @@ const cart = (props: Props) => {
     isLoading: isLoadingCart,
     refetch,
   } = useGetCart();
-  if (isPaused || isPausedOrder || isPausedWishlist) {
+  if (feeIsPaused || isPaused || isPausedOrder || isPausedWishlist) {
     return (
       <View
         style={{
@@ -120,7 +138,7 @@ const cart = (props: Props) => {
       </View>
     );
   }
-  if (isError || isErrorOrder || isErrorWishlist) {
+  if (feeIsError || isError || isErrorOrder || isErrorWishlist) {
     return (
       <View
         style={{
@@ -153,7 +171,7 @@ const cart = (props: Props) => {
           justifyContent: 'center',
         }}
       >
-        {loading ||
+        {feeIsPending ||
         isLoadingOrder ||
         isLoadingCart ||
         isPendingWishlist ||
@@ -171,13 +189,14 @@ const cart = (props: Props) => {
                   alignItems: 'flex-end',
                   justifyContent: 'flex-end',
                   fle1x: 1,
+                  padding: 5,
                 },
               ]}
               onPress={() => router.push('/updateProfile')}
             >
               <Text
                 style={{
-                  color: 'skyblue',
+                  color: colors.lightGreen,
                   fontFamily: 'PoppinsMedium',
                   fontSize: 12,
                   alignSelf: 'flex-end',
@@ -210,6 +229,8 @@ const cart = (props: Props) => {
               }
               contentContainerStyle={{ paddingBottom: 50 }}
               showsVerticalScrollIndicator={false}
+              onRefresh={refetch}
+              refreshing={isPending}
               data={data}
               keyExtractor={(item, index) => item.productid + index}
               renderItem={({ item, index }) => {
@@ -221,6 +242,7 @@ const cart = (props: Props) => {
                       {...item}
                       removeFromCart={removeFromCart}
                       removeFromCartPending={removeFromCartPending}
+                      reloadData={reloadData}
                     />
                   </>
                 );

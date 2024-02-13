@@ -221,7 +221,7 @@ const CheckOut = (props: Props) => {
         Change delivery address
       </Link>
       <View style={{ marginBottom: 40 }} />
-      {isFetching || isPending ? (
+      {isPending ? (
         <ActivityIndicator color="black" size={'large'} />
       ) : (
         <Card

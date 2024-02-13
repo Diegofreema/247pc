@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import axios from 'axios';
 import {
@@ -50,6 +50,7 @@ export const useGetCart = () => {
 
       return data;
     },
+    refetchInterval: 1000,
   });
 };
 
@@ -129,6 +130,21 @@ export const useUser = (id: any) => {
 
       return data as LoggedUserType;
     },
+    refetchInterval: 20000,
+  });
+};
+export const useFee = (id: any, productInCart: any, communityId: any) => {
+  const queryClient = useQueryClient();
+  return useQuery({
+    queryKey: ['fee'],
+    queryFn: async () => {
+      const res = await axios.post(
+        `${api}?api=cartpageload&productincart=${productInCart}&myuserid=${id}&communityId=${communityId}`
+      );
+      queryClient.invalidateQueries({ queryKey: ['order'] });
+      return res;
+    },
+    refetchInterval: 1000,
   });
 };
 export const useSpecialInfo = (state?: string, id?: string) => {

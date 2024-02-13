@@ -141,7 +141,6 @@ const SignUp = (props: Props) => {
         setLoadingStates(false);
       })
       .catch((error) => {
-        setError('Something went wrong, try again later');
         setLoadingStates(false);
       });
   }, []);
@@ -173,15 +172,15 @@ const SignUp = (props: Props) => {
       });
   }, [state]);
 
-  if (error.trim() !== '') {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'red' }}>
-          {error}
-        </Text>
-      </View>
-    );
-  }
+  // if (error.trim() !== '') {
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  //       <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'red' }}>
+  //         {error}
+  //       </Text>
+  //     </View>
+  //   );
+  // }
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <KeyboardAwareScrollView
@@ -326,6 +325,7 @@ const SignUp = (props: Props) => {
                 </View>
               ) : (
                 <SelectList
+                  search={false}
                   fontFamily="Poppins"
                   placeholder="Select your community"
                   boxStyles={{

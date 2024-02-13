@@ -19,11 +19,11 @@ type Props = {
 };
 
 const Header = ({}: Props) => {
-  const { id } = useStoreId();
-  const pathname = usePathname();
+  const { id, user: profile } = useStoreId();
+
   const {
     data: user,
-    isFetching,
+
     isPending,
     isPaused: userIsPaused,
     isError,
@@ -31,19 +31,14 @@ const Header = ({}: Props) => {
   } = useUser(id);
   const {
     data: walletBalance,
-    isFetching: walletBalanceIsFetching,
+
     isPaused,
     isPending: walletBalanceIsPending,
     isError: walletBalanceIsError,
   } = useWalletBalance();
 
-  const isLoggedIn = user ? true : false;
-  const loading =
-    walletBalanceIsFetching ||
-    isFetching ||
-    isPending ||
-    walletBalanceIsPending;
-  const router = useRouter();
+  const loading = isPending || walletBalanceIsPending;
+
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
     setReload(!reload);
@@ -107,12 +102,7 @@ const Header = ({}: Props) => {
         <NavigationHeader title="Account" white />
       </View>
 
-      <Profile
-        isLoggedIn={isLoggedIn}
-        name={user?.customername}
-        email={user?.email}
-        loading={loading}
-      />
+      <Profile name={profile?.customername} email={profile?.email} />
       {!loading && (
         <View
           style={{

@@ -10,6 +10,7 @@ export default function AppLayoutNav() {
   const queryClient = useQueryClient();
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['user'] });
+    console.log('Querying');
   }, []);
   useEffect(() => {
     getId();

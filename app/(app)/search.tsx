@@ -38,6 +38,8 @@ const search = () => {
     setReload(!reload);
     refetch();
   };
+  console.log(data?.[0].description);
+
   const [products, setProducts] = useState(data);
   const [value, setValue] = useState('');
   useEffect(() => {
@@ -52,7 +54,10 @@ const search = () => {
         (item) =>
           item?.Dealer?.toLowerCase().includes(value.toLowerCase()) ||
           item?.category?.toLowerCase().includes(value.toLowerCase()) ||
-          item?.product?.toLowerCase().includes(value.toLowerCase())
+          item?.product?.toLowerCase().includes(value.toLowerCase()) ||
+          item?.description
+            ?.toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
       );
       setProducts(filteredData);
     } else {
@@ -246,7 +251,6 @@ const search = () => {
                 borderWidth: 1,
                 borderColor: 'black',
                 padding: 11,
-                borderRadius: 8,
                 alignItems: 'center',
               }}
             >

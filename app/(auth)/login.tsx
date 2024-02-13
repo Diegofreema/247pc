@@ -44,7 +44,7 @@ const index = (props: Props) => {
       onSubmit: async (values) => {
         try {
           const response = await axios.post(
-            `${api}?api=userlogin&emailaddress=${values.email}&pasword=${values.password}`
+            `${api}?api=userlogin&emailaddress=${values?.email}&pasword=${values?.password}`
           );
 
           if (response.data === 'incorrect email or password') {
@@ -123,7 +123,7 @@ const index = (props: Props) => {
       </View>
       <Container>
         <Text
-          onPress={() => router.push('/signup')}
+          onPress={() => router.push('/(auth)/signup')}
           style={{
             alignSelf: 'flex-end',
             color: '#1A91FF',

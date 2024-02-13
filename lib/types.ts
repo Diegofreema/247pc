@@ -44,6 +44,7 @@ export type WishlistType = {
   id: string;
   product: string;
   sellingprice: string;
+  description?: string;
 };
 
 export type Cat = {
