@@ -19,6 +19,19 @@ import { useStoreId } from './zustand/auth';
 import { getProfile } from './helpers';
 
 const api = process.env.EXPO_PUBLIC_API_URL;
+// export const useSpecial = () => {
+//   const { id, user } = useStoreId();
+//   return useQuery({
+//     queryKey: ['cart'],
+//     queryFn: async () => {
+//       const response = await axios.get(
+//         `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+//       );
+
+//       return response.data;
+//     },
+//   });
+// };
 export const useCart = () => {
   const { id, user } = useStoreId();
   return useQuery({
@@ -58,7 +71,7 @@ export type Id = {
   id: string;
 };
 
-export const useSpecial = (state: string) => {
+export const useSpecial = (state: any) => {
   return useQuery({
     queryKey: ['special', state],
     queryFn: async () => {
@@ -67,12 +80,12 @@ export const useSpecial = (state: string) => {
       );
 
       let data = [];
-      if (Object.prototype.toString.call(response.data) === '[object Object]') {
-        data.push(response.data);
-      } else if (
-        Object.prototype.toString.call(response.data) === '[object Array]'
-      ) {
-        data = [...response.data];
+      if (Array.isArray(response.data)) {
+        data = response.data;
+      } else if (typeof response.data === 'object' && response.data !== null) {
+        data = [response.data];
+      } else {
+        data = []; // Set to an empty array if the response data is neither an array nor an object
       }
       return data as Id[];
     },
@@ -217,7 +230,7 @@ export const useNewArrival = () => {
     queryKey: ['newArrival', user?.statename],
     queryFn: async () => {
       const response = await axios.get(
-        `${api}?api=newarrivals&statename=${user?.statename}`
+        `https://247api.netpro.software/api.aspx?api=newarrivals&statename=${user?.statename}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -432,6 +445,56 @@ export const useWalletBalance = () => {
       );
 
       return data;
+    },
+  });
+};
+
+export const useGetUpdateUser = (id: string) => {
+  return useQuery({
+    queryKey: ['updatedUser', id],
+    queryFn: async () => {
+      const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
+
+      return data;
+    },
+  });
+};
+export const useGetState = () => {
+  return useQuery({
+    queryKey: ['state'],
+    queryFn: async () => {
+      const { data } = await axios.get(`${api}?api=states`);
+      let newArray: State[] = data?.map((item: { statename: string }) => {
+        return {
+          key: item?.statename,
+          value: item?.statename,
+        };
+      });
+      return newArray;
+    },
+  });
+};
+
+type ComType = {
+  key: string;
+  value: string;
+};
+export const useGetCom = (state: string) => {
+  return useQuery({
+    queryKey: ['communities', state],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `${api}?api=communities&statename=${state}`
+      );
+      let newArray: ComType[] = data?.map(
+        (item: { communityname: string; id: string }) => {
+          return {
+            key: item.id,
+            value: item.communityname,
+          };
+        }
+      );
+      return newArray;
     },
   });
 };

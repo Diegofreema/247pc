@@ -19,7 +19,7 @@ type Props = {};
 const validationSchema = yup.object().shape({
   amount: yup.string().required('Amount is required'),
 });
-
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 const api = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
 const Wallet = (props: Props) => {
   const {
@@ -64,7 +64,7 @@ const Wallet = (props: Props) => {
 
       try {
         const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
+          `${apiUrl}?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
         console.log(response.data);

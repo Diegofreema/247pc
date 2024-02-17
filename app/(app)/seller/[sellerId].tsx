@@ -7,33 +7,23 @@ import NavigationHeader from '../../../components/NavigationHeader';
 import { ActivityIndicator } from 'react-native-paper';
 import { Image } from 'expo-image';
 import { FloatingNav } from '../../../components/FloatingNav';
+import { ErrorComponent } from '../../../components/ErrorComponent';
 
 type Props = {};
 
 const Seller = (props: Props) => {
   const { sellerId, seller } = useLocalSearchParams();
   const router = useRouter();
-  const { data, isPending, isFetching, isError, isPaused } = useSeller(
+  const { data, isPending, isFetching, isError, isPaused, refetch } = useSeller(
     sellerId as string
   );
-  if (isPaused) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Please check your internet connection
-        </Text>
-      </View>
-    );
-  }
 
-  if (isError) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Something went wrong
-        </Text>
-      </View>
-    );
+  const handleRefetch = () => {
+    refetch();
+  };
+
+  if (isError || isPaused) {
+    return <ErrorComponent refetch={handleRefetch} />;
   }
 
   return (

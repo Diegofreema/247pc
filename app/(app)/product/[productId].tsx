@@ -39,6 +39,7 @@ import Animated, {
 import axios from 'axios';
 import { useToast } from 'react-native-toast-notifications';
 import { useQueryClient } from '@tanstack/react-query';
+import { ErrorComponent } from '../../../components/ErrorComponent';
 type Props = {};
 const api = process.env.EXPO_PUBLIC_API_URL;
 const ProductDetail = (props: Props) => {
@@ -132,51 +133,15 @@ const ProductDetail = (props: Props) => {
   } = useProductCat(data?.category as string);
   const [addingToWishlist, setAddingToWishlist] = useState(false);
 
-  if (error || isError || isCategoryError) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text
-          style={{ fontFamily: 'PoppinsMedium', fontSize: 20, color: 'black' }}
-        >
-          Something went wrong
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
-  }
-  if (isPaused || isProductPaused || isCategoryPaused) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text
-          style={{ fontFamily: 'PoppinsMedium', fontSize: 20, color: 'black' }}
-        >
-          Please check your internet connection
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
+  if (
+    isPaused ||
+    isProductPaused ||
+    isCategoryPaused ||
+    error ||
+    isError ||
+    isCategoryError
+  ) {
+    return <ErrorComponent refetch={handleRefetch} />;
   }
 
   const handelIncrease = () => {

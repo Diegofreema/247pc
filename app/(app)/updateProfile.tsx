@@ -1,4 +1,4 @@
-import { Text, View, Dimensions, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, Dimensions, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 
@@ -6,7 +6,7 @@ import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import { ActivityIndicator, Button } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 import { colors } from '../../constants/Colors';
 import { useRouter } from 'expo-router';
 
@@ -19,8 +19,9 @@ import { useToast } from 'react-native-toast-notifications';
 import { MyButton } from '../../components/MyButton';
 import { getProfile } from '../../lib/helpers';
 import { useQueryClient } from '@tanstack/react-query';
-import { Community, State } from '../../lib/types';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { ErrorComponent } from '../../components/ErrorComponent';
+import { useGetCom, useGetState, useGetUpdateUser } from '../../lib/queries';
 
 type Props = {};
 const width = Dimensions.get('window').width;
@@ -35,6 +36,7 @@ const validationSchema = yup.object().shape({
 
   communityId: yup.string().required('Community is required'),
 });
+const api = process.env.EXPO_PUBLIC_API_URL;
 const Update = (props: Props) => {
   const {
     setId,
@@ -47,14 +49,8 @@ const Update = (props: Props) => {
   } = useStoreId();
   const queryClient = useQueryClient();
 
-  const [states, setStates] = useState<State[]>([]);
-  const [loadingStates, setLoadingStates] = useState(false);
-  const [communities, setCommunities] = useState<Community[]>([]);
-  const [loadingCommunities, setLoadingCommunities] = useState(false);
-  const [gettingUser, setGettingUser] = useState(false);
-  const [error, setError] = useState('');
   const toast = useToast();
-
+  const [reload, setReload] = useState(false);
   const {
     values,
     isSubmitting,
@@ -77,7 +73,7 @@ const Update = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
+        `${api}?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
       );
 
       if (response.data === 'saved') {
@@ -105,94 +101,100 @@ const Update = (props: Props) => {
       }
     },
   });
-  console.log(profile);
+  console.log(values);
 
-  const { address, email, name, phoneNumber, state } = values;
-
+  const { address, email, name, phoneNumber, state, communityId } = values;
   useEffect(() => {
-    const getUser = async () => {
-      setGettingUser(true);
-      try {
-        getId();
-        const { data } = await axios.get(
-          `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
-        );
-        setValues({
-          address: data?.addres,
-          state: data?.statename,
-          email: data?.email,
-          name: data?.customername,
-          phoneNumber: data?.phone,
-          communityId: data?.communityId,
-        });
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setGettingUser(false);
-      }
-    };
-    getUser();
-  }, []);
-  useEffect(() => {
-    axios
-      .get('https://247api.netpro.software/api.aspx?api=states')
-      .then(({ data }) => {
-        setLoadingStates(true);
-        let newArray: State[] = data?.map((item: { statename: string }) => {
-          return {
-            key: item.statename,
-            value: item.statename,
-          };
-        });
-
-        setStates(newArray);
-
-        setLoadingStates(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError('Something went wrong, try again later');
-        setLoadingStates(false);
-      });
+    getId();
   }, []);
 
+  const { data, isError, isPending, isPaused, refetch } = useGetUpdateUser(id);
   useEffect(() => {
-    setLoadingCommunities(true);
-    axios
-      .get(
-        `https://247api.netpro.software/api.aspx?api=communities&statename=${state}`
-      )
-      .then(({ data }) => {
-        let newArray: Community[] = data?.map(
-          (item: { communityname: string; id: string }) => {
-            return {
-              key: item.id,
-              value: item.communityname,
-            };
-          }
-        );
+    setValues({
+      address: data?.addres,
+      state: data?.statename,
+      email: data?.email,
+      name: data?.customername,
+      phoneNumber: data?.phone,
+      communityId: data?.communityId,
+    });
+  }, [data]);
+  const {
+    data: states,
+    isError: isErrorState,
+    isPending: isPendingState,
+    refetch: refetchState,
+    isPaused: isPausedState,
+  } = useGetState();
 
-        setCommunities(newArray);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError('Something went wrong, try again later');
-      })
-      .finally(() => {
-        setLoadingCommunities(false);
-      });
-  }, [state]);
+  const {
+    data: communities,
+    isError: isErrorCom,
+    isPending: isPendingCom,
+    refetch: refetchCom,
+    isPaused: isPausedCom,
+  } = useGetCom(state);
+  // useEffect(() => {
+  //   setLoadingCommunities(true);
+  //   axios
+  //     .get(`247pharmacy.net/api.aspx?api=communities&statename=${state}`)
+  //     .then(({ data }) => {
+  //       let newArray: Community[] = data?.map(
+  //         (item: { communityname: string; id: string }) => {
+  //           return {
+  //             key: item.id,
+  //             value: item.communityname,
+  //           };
+  //         }
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       // setError(true);
+  //     })
+  //     .finally(() => {
+  //       setLoadingCommunities(false);
+  //     });
+  // }, [state]);
   const router = useRouter();
+  const handleRefetch = () => {
+    refetch();
+    refetchState();
+    refetchCom();
+    setReload(!reload);
+  };
+  if (
+    isError ||
+    isErrorState ||
+    isErrorCom ||
+    isPaused ||
+    isPausedState ||
+    isPausedCom
+  ) {
+    return <ErrorComponent refetch={handleRefetch} />;
+  }
 
-  if (error.trim() !== '') {
+  if (!id) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'red' }}>
-          {error}
-        </Text>
+        <ActivityIndicator size="large" color="black" />
       </View>
     );
   }
+
+  if (isPending) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="black" />
+      </View>
+    );
+  }
+
+  const community = communities?.find((item) => item?.key === communityId);
+  console.log('🚀 ~ Update ~ communities:', communities);
+  console.log('🚀 ~ Update ~ communityId:', communityId);
+  console.log('🚀 ~ Update ~ community:', community);
+
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <KeyboardAwareScrollView
@@ -215,155 +217,156 @@ const Update = (props: Props) => {
             </Text>
           </View>
         </View>
-        {gettingUser ? (
-          <ActivityIndicator size="large" color="black" />
-        ) : (
-          <Container>
-            <View style={{ gap: 10 }}>
-              <>
-                <InputComponent
-                  label="Your Name"
-                  placeholder="Your name"
-                  keyboardType="default"
-                  onChangeText={handleChange('name')}
-                  value={name}
-                />
-                {touched.name && errors.name && (
-                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                    {errors.name}
-                  </Text>
-                )}
-              </>
-              <>
-                <InputComponent
-                  label="Email"
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  onChangeText={handleChange('email')}
-                  value={email}
-                />
-                {touched.email && errors.email && (
-                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                    {errors.email}
-                  </Text>
-                )}
-              </>
-              <>
-                <InputComponent
-                  label="Mobile Number"
-                  placeholder="Mobile Number"
-                  keyboardType="numeric"
-                  onChangeText={handleChange('phoneNumber')}
-                  value={phoneNumber}
-                />
-                {touched.phoneNumber && errors.phoneNumber && (
-                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                    {errors.phoneNumber}
-                  </Text>
-                )}
-              </>
-              <>
-                {loadingStates ? (
-                  <View style={styles2.border}>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginLeft: 15,
-                        marginBottom: 10,
-                      }}
-                    >
-                      <Text style={{ fontFamily: 'Poppins' }}>Loading...</Text>
-                    </View>
-                  </View>
-                ) : (
-                  <SelectList
-                    search={false}
-                    fontFamily="Poppins"
-                    boxStyles={{
-                      ...styles2.border,
-                      justifyContent: 'flex-start',
-                      backgroundColor: 'white',
-                    }}
-                    inputStyles={{ textAlign: 'left' }}
-                    setSelected={handleChange('state')}
-                    data={states}
-                    save="value"
-                    placeholder="Select your state"
-                    defaultOption={{
-                      key: state,
-                      value: state,
-                    }}
-                  />
-                )}
-                {touched.state && errors.state && (
-                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                    {errors.state}
-                  </Text>
-                )}
-              </>
-              <>
-                {loadingCommunities ? (
-                  <View style={styles2.border}>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginLeft: 15,
-                        marginBottom: 10,
-                      }}
-                    >
-                      <Text>Loading...</Text>
-                    </View>
-                  </View>
-                ) : (
-                  <SelectList
-                    search={false}
-                    fontFamily="Poppins"
-                    placeholder="Select your community"
-                    boxStyles={{
-                      ...styles2.border,
-                      justifyContent: 'flex-start',
-                      backgroundColor: 'white',
-                    }}
-                    inputStyles={{ textAlign: 'left' }}
-                    setSelected={handleChange('communityId')}
-                    data={communities}
-                    save="key"
-                  />
-                )}
-                {touched.communityId && errors.communityId && (
-                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                    {errors.communityId}
-                  </Text>
-                )}
-              </>
-              <>
-                <InputComponent
-                  label="Street"
-                  placeholder="Address"
-                  keyboardType="default"
-                  onChangeText={handleChange('address')}
-                  value={address}
-                />
-                {touched.address && errors.address && (
-                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                    {errors.address}
-                  </Text>
-                )}
-              </>
 
-              <MyButton
-                loading={isSubmitting}
-                style={{ marginTop: 20, borderRadius: 5 }}
-                buttonColor={colors.lightGreen}
-                onPress={() => handleSubmit()}
-                text="Update"
-                textColor={'white'}
+        <Container>
+          <View style={{ gap: 10 }}>
+            <>
+              <InputComponent
+                label="Your Name"
+                placeholder="Your name"
+                keyboardType="default"
+                onChangeText={handleChange('name')}
+                value={name}
               />
-            </View>
-          </Container>
-        )}
+              {touched.name && errors.name && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.name}
+                </Text>
+              )}
+            </>
+            <>
+              <InputComponent
+                label="Email"
+                placeholder="Email"
+                keyboardType="email-address"
+                onChangeText={handleChange('email')}
+                value={email}
+              />
+              {touched.email && errors.email && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.email}
+                </Text>
+              )}
+            </>
+            <>
+              <InputComponent
+                label="Mobile Number"
+                placeholder="Mobile Number"
+                keyboardType="numeric"
+                onChangeText={handleChange('phoneNumber')}
+                value={phoneNumber}
+              />
+              {touched.phoneNumber && errors.phoneNumber && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.phoneNumber}
+                </Text>
+              )}
+            </>
+            <>
+              {isPendingState ? (
+                <View style={styles2.border}>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginLeft: 15,
+                      marginBottom: 10,
+                    }}
+                  >
+                    <Text style={{ fontFamily: 'Poppins' }}>Loading...</Text>
+                  </View>
+                </View>
+              ) : (
+                <SelectList
+                  search={false}
+                  fontFamily="Poppins"
+                  boxStyles={{
+                    ...styles2.border,
+                    justifyContent: 'flex-start',
+                    backgroundColor: 'white',
+                  }}
+                  inputStyles={{ textAlign: 'left' }}
+                  setSelected={handleChange('state')}
+                  data={states}
+                  save="value"
+                  placeholder="Select your state"
+                  defaultOption={{
+                    key: state,
+                    value: state,
+                  }}
+                />
+              )}
+              {touched.state && errors.state && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.state}
+                </Text>
+              )}
+            </>
+            <>
+              {isPendingCom ? (
+                <View style={styles2.border}>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginLeft: 15,
+                      marginBottom: 10,
+                    }}
+                  >
+                    <Text>Loading...</Text>
+                  </View>
+                </View>
+              ) : (
+                <SelectList
+                  search={false}
+                  fontFamily="Poppins"
+                  placeholder="Select your community"
+                  boxStyles={{
+                    ...styles2.border,
+                    justifyContent: 'flex-start',
+                    backgroundColor: 'white',
+                  }}
+                  inputStyles={{ textAlign: 'left' }}
+                  setSelected={handleChange('communityId')}
+                  data={communities}
+                  defaultOption={{
+                    key: communityId,
+                    value: community?.value,
+                  }}
+                  save="key"
+                />
+              )}
+              {touched.communityId && errors.communityId && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.communityId}
+                </Text>
+              )}
+            </>
+            <>
+              <InputComponent
+                label="Street"
+                placeholder="Address"
+                keyboardType="default"
+                onChangeText={handleChange('address')}
+                value={address}
+              />
+              {touched.address && errors.address && (
+                <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                  {errors.address}
+                </Text>
+              )}
+            </>
+
+            <MyButton
+              loading={isSubmitting}
+              style={{ marginTop: 20, borderRadius: 5 }}
+              buttonColor={colors.lightGreen}
+              onPress={() => handleSubmit()}
+              text="Update"
+              textColor={'white'}
+            />
+          </View>
+        </Container>
       </KeyboardAwareScrollView>
     </View>
   );

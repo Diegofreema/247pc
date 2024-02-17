@@ -81,7 +81,7 @@ const MyTheme = {
 function RootLayoutNav() {
   return (
     <ThemeProvider value={MyTheme}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
       <SafeAreaView
         style={{
           flex: 1,

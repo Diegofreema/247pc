@@ -22,7 +22,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 type Props = {};
 const width = Dimensions.get('window').width;
-
+const api = process.env.EXPO_PUBLIC_API_URL;
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
@@ -47,7 +47,7 @@ const SignUp = (props: Props) => {
   const router = useRouter();
   const [error, setError] = useState('');
 
-  const [states, setStates] = useState<State[]>([
+  const [states, setStates] = useState<any[]>([
     { statename: 'abuja', label: 'Abuja' },
     { statename: 'imo', label: 'Imo' },
   ]);
@@ -75,9 +75,11 @@ const SignUp = (props: Props) => {
       },
       validationSchema,
       onSubmit: async (values) => {
+        console.log(values);
+
         const name = `${values.firstName} ${values.lastName}`;
         const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
+          `${api}?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {

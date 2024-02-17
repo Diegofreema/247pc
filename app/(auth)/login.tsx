@@ -31,7 +31,6 @@ const index = (props: Props) => {
   const api = process.env.EXPO_PUBLIC_API_URL;
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
   const router = useRouter();
-  console.log(id.length, 'id', id, typeof id, 'dsdgsdgsd');
 
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
@@ -78,7 +77,11 @@ const index = (props: Props) => {
             return;
           }
           setId(response.data);
+          console.log(response.data, 'response.data');
+
           const user = await getProfile(response.data);
+          console.log(user, 'user');
+
           setUser(user);
           getUser();
           router.replace('/(app)/(tabs)/');

@@ -8,32 +8,21 @@ import { ActivityIndicator } from 'react-native-paper';
 import { ProductItem } from '../../../components/ProductItem';
 import { FlashList } from '@shopify/flash-list';
 import { FloatingNav } from '../../../components/FloatingNav';
+import { ErrorComponent } from '../../../components/ErrorComponent';
 type Props = {};
 
 const Chief = (props: Props) => {
   const { category } = useLocalSearchParams();
-  const { data, isPending, isFetching, isError, isPaused } = useNewCat(
+  const { data, isPending, isFetching, isError, isPaused, refetch } = useNewCat(
     category as string
   );
+  const handleRefetch = () => {
+    refetch();
+  };
   console.log(category);
-  if (isPaused) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Please check your internet connection
-        </Text>
-      </View>
-    );
-  }
 
-  if (isError) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Something went wrong
-        </Text>
-      </View>
-    );
+  if (isPaused || isError) {
+    return <ErrorComponent refetch={handleRefetch} />;
   }
   console.log(data && data[0].product);
 

@@ -71,9 +71,9 @@ const Header = ({}: Props) => {
     return (
       <View
         style={{
-          flexDirection: 'row',
           alignItems: 'center',
           gap: 8,
+          marginTop: 20,
         }}
       >
         <Text
@@ -93,7 +93,7 @@ const Header = ({}: Props) => {
   return (
     <View
       style={{
-        marginTop: 10,
+        paddingTop: 10,
         paddingBottom: 15,
         backgroundColor: colors.black,
       }}

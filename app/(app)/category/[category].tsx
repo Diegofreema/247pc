@@ -9,6 +9,7 @@ import { ProductItem } from '../../../components/ProductItem';
 import { MyButton } from '../../../components/MyButton';
 import { colors } from '../../../constants/Colors';
 import { FloatingNav } from '../../../components/FloatingNav';
+import { ErrorComponent } from '../../../components/ErrorComponent';
 // import { FlashList } from '@shopify/flash-list';
 type Props = {};
 
@@ -23,47 +24,9 @@ const Cat = (props: Props) => {
     setReload(!reload);
     refetch();
   };
-  if (isPaused) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Please check your internet connection
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
-  }
-  if (isError) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Something went wrong
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
+
+  if (isPaused || isError) {
+    return <ErrorComponent refetch={handleRefetch} />;
   }
 
   return (

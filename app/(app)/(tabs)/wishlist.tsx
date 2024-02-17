@@ -10,6 +10,7 @@ import { MyButton } from '../../../components/MyButton';
 import { colors } from '../../../constants/Colors';
 import { WishlistType } from '../../../lib/types';
 import axios from 'axios';
+import { ErrorComponent } from '../../../components/ErrorComponent';
 type Props = {};
 const api = process.env.EXPO_PUBLIC_API_URL;
 const wishlist = (props: Props) => {
@@ -79,25 +80,7 @@ const wishlist = (props: Props) => {
   };
 
   if (isError) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
-          Something went wrong
-        </Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
-    );
+    return <ErrorComponent refetch={handleRefetch} />;
   }
 
   return (
