@@ -40,15 +40,16 @@ import axios from 'axios';
 import { useToast } from 'react-native-toast-notifications';
 import { useQueryClient } from '@tanstack/react-query';
 import { ErrorComponent } from '../../../components/ErrorComponent';
+import { useImageModalState } from '../../../lib/zustand/imageModal';
+import { ImageModal } from '../../../components/ImageModal';
 type Props = {};
 const api = process.env.EXPO_PUBLIC_API_URL;
 const ProductDetail = (props: Props) => {
   const { id } = useStoreId();
   const scrollViewRef = useRef<ScrollView>(null);
   const router = useRouter();
-  const scale = useSharedValue(1);
-  const focalX = useSharedValue(0);
-  const focalY = useSharedValue(0);
+  const { onOpen } = useImageModalState();
+
   const { productId } = useLocalSearchParams();
   const queryClient = useQueryClient();
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
@@ -63,49 +64,10 @@ const ProductDetail = (props: Props) => {
   const inWishlist = wishList?.find(
     (item: WishlistType) => item?.id === productId
   );
+  const onPress = () => {
+    onOpen();
+  };
 
-  const pinchHandler =
-    useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
-      onActive: (event) => {
-        scale.value = event.scale;
-        focalX.value = event.focalX;
-        focalY.value = event.focalY;
-      },
-    });
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: focalX.value,
-        },
-        {
-          translateY: focalY.value,
-        },
-        {
-          translateX: -250 / 2,
-        },
-        {
-          translateY: -250 / 2,
-        },
-        {
-          scale: scale.value,
-        },
-        {
-          translateX: -focalX.value,
-        },
-        {
-          translateY: -focalY.value,
-        },
-        {
-          translateX: 250 / 2,
-        },
-        {
-          translateY: 250 / 2,
-        },
-      ],
-    };
-  });
   const addedToWishlist = inWishlist?.id === productId;
   const { width } = useWindowDimensions();
   const [qty, setQty] = useState(1);
@@ -273,19 +235,19 @@ const ProductDetail = (props: Props) => {
                 fontSize: 15,
               }}
             />
-            <View style={{ alignItems: 'center' }}>
-              <PinchGestureHandler onGestureEvent={pinchHandler}>
-                <Animated.View style={{ overflow: 'hidden' }}>
-                  <Animated.Image
-                    source={{
-                      uri: `https://247pharmacy.net/Uploads/${productId}.jpg`,
-                    }}
-                    style={[{ width: 250, height: 250 }, animatedStyle]}
-                    resizeMode="contain"
-                  />
-                </Animated.View>
-              </PinchGestureHandler>
-            </View>
+            <ImageModal
+              image={`https://247pharmacy.net/Uploads/${productId}.jpg`}
+            />
+            <Pressable style={{ alignItems: 'center' }} onPress={onPress}>
+              <Image
+                source={{
+                  uri: `https://247pharmacy.net/Uploads/${productId}.jpg`,
+                }}
+                style={[{ width: 250, height: 250 }]}
+                contentFit="contain"
+              />
+            </Pressable>
+
             <Card.Content style={{ marginVertical: 10, gap: 5 }}>
               <View
                 style={{

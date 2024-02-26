@@ -16,7 +16,6 @@ import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import InputComponent from '../../components/InputComponent';
-import Animated from 'react-native-reanimated';
 
 const itemsPerPage = 10;
 const search = () => {
@@ -38,7 +37,7 @@ const search = () => {
     setReload(!reload);
     refetch();
   };
-  console.log(data?.[0].description);
+  console.log(data?.[0]?.description);
 
   const [products, setProducts] = useState(data);
   const [value, setValue] = useState('');
@@ -81,8 +80,34 @@ const search = () => {
         (a, b) => +b.sellingprice - +a.sellingprice
       );
     }
+    console.log('calling');
+
     setProducts(filteredDataCopy);
   };
+  const filterByPriceLowToHigh = () => {
+    if (!products) return;
+    setSelectedPriceFilter('lowToHigh');
+    const data = products?.slice().sort((a, b) => {
+      const formattedAPrice = +a.sellingprice.replace(/,/g, '');
+      const formattedBPrice = +b.sellingprice.replace(/,/g, '');
+      return formattedAPrice - formattedBPrice;
+    });
+    setProducts(data);
+  };
+
+  // Function to filter products from high to low
+  const filterByPriceHighToLow = () => {
+    if (!products) return;
+    setSelectedPriceFilter('highToLow');
+    const data = products.slice().sort((a, b) => {
+      const formattedBPrice = +b.sellingprice.replace(/,/g, '');
+      const formattedAPrice = +a.sellingprice.replace(/,/g, '');
+      return formattedBPrice - formattedAPrice;
+    });
+    setProducts(data);
+  };
+  // console.log(products, 'products');
+
   const handleNext = () => {
     if (!products) return;
     setPage(page + 1);
@@ -116,8 +141,8 @@ const search = () => {
 
     const filteredDataCopy = data.filter(
       (product) =>
-        +product.sellingprice >= +price.from &&
-        +product.sellingprice <= +price.to
+        +product.sellingprice.replace(/,/g, '') >= +price.from &&
+        +product.sellingprice.replace(/,/g, '') <= +price.to
     );
 
     setProducts(filteredDataCopy);
@@ -266,7 +291,7 @@ const search = () => {
             </Pressable>
             <View style={{ flexDirection: 'row', gap: 5 }}>
               <Pressable
-                onPress={() => setSelectedPriceFilter('lowToHigh')}
+                onPress={filterByPriceLowToHigh}
                 style={[
                   styles.filterButton,
                   {
@@ -289,7 +314,7 @@ const search = () => {
                 </Text>
               </Pressable>
               <Pressable
-                onPress={() => setSelectedPriceFilter('highToLow')}
+                onPress={filterByPriceHighToLow}
                 style={[
                   styles.filterButton,
                   {
