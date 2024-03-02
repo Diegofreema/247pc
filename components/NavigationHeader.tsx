@@ -78,6 +78,8 @@ const NavigationHeader = ({ title, back, white }: Props) => {
           fontSize: 15,
           fontFamily: 'PoppinsBold',
           color: white ? '#fff' : '#000',
+          textAlign: 'center',
+          maxWidth: 180,
         }}
       >
         {title}

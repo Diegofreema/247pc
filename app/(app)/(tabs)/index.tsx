@@ -30,6 +30,7 @@ import { NativeSyntheticEvent } from 'react-native';
 import axios from 'axios';
 import { ErrorComponent } from '../../../components/ErrorComponent';
 import Carousel from 'react-native-reanimated-carousel';
+import { SpecialComponent } from '../../../components/Home/SpecialComponent';
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -44,65 +45,65 @@ export default function TabOneScreen() {
   const { id, getUser, getId, user } = useStoreId();
   console.log('🚀 ~ TabOneScreen ~ id:', id);
 
-  // const [special, setSpecial] = useState<Id[]>([]);
-  // const [error, setError] = useState(false);
-
+  const [special, setSpecial] = useState<Id[]>([]);
+  const [error, setError] = useState(false);
+  const [isPendingSpecial, setIsPendingSpecial] = useState(false);
   console.log(user, 'dfdf');
-  // const refetchSpecial = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `https://247api.netpro.software/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
-  //     );
+  const refetchSpecial = async () => {
+    try {
+      const response = await axios.get(
+        `https://247api.netpro.software/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+      );
 
-  //     if (Array.isArray(response.data)) {
-  //       setSpecial(response.data);
-  //     } else if (typeof response.data === 'object' && response.data !== null) {
-  //       setSpecial([response.data]);
-  //     } else {
-  //       setSpecial([]); // Set to an empty array if the response data is neither an array nor an object
-  //     }
-  //   } catch (error) {
-  //     setError(true);
-  //   }
-  // };
+      if (Array.isArray(response.data)) {
+        setSpecial(response.data);
+      } else if (typeof response.data === 'object' && response.data !== null) {
+        setSpecial([response.data]);
+      } else {
+        setSpecial([]); // Set to an empty array if the response data is neither an array nor an object
+      }
+    } catch (error) {
+      setError(true);
+    }
+  };
 
   useEffect(() => {
     getId();
     getUser();
   }, []);
-  // useEffect(() => {
-  //   const fetchSpecial = async () => {
-  //     setIsPendingSpecial(true);
-  //     try {
-  //       const response = await axios.get(
-  //         `https://247api.netpro.software/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
-  //       );
+  useEffect(() => {
+    const fetchSpecial = async () => {
+      setIsPendingSpecial(true);
+      try {
+        const response = await axios.get(
+          `https://247api.netpro.software/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+        );
 
-  //       if (Array.isArray(response.data)) {
-  //         setSpecial(response.data);
-  //       } else if (
-  //         typeof response.data === 'object' &&
-  //         response.data !== null
-  //       ) {
-  //         setSpecial([response.data]);
-  //       } else {
-  //         setSpecial([]); // Set to an empty array if the response data is neither an array nor an object
-  //       }
-  //     } catch (error) {
-  //       setError(true);
-  //     } finally {
-  //       setIsPendingSpecial(false);
-  //     }
-  //   };
-  //   fetchSpecial();
-  // }, [user]);
-  const {
-    data: special,
-    isPending: isPendingSpecial,
-    isError,
-    isPaused,
-    refetch,
-  } = useSpecial(user?.statename?.toLowerCase());
+        if (Array.isArray(response.data)) {
+          setSpecial(response.data);
+        } else if (
+          typeof response.data === 'object' &&
+          response.data !== null
+        ) {
+          setSpecial([response.data]);
+        } else {
+          setSpecial([]);
+        }
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsPendingSpecial(false);
+      }
+    };
+    fetchSpecial();
+  }, [user]);
+  // const {
+  //   data: special,
+  //   isPending: isPendingSpecial,
+  //   isError,
+  //   isPaused,
+  //   refetch,
+  // } = useSpecial(user?.statename?.toLowerCase());
   const router = useRouter();
 
   const {
@@ -156,8 +157,10 @@ export default function TabOneScreen() {
   const [reload, setReload] = useState(false);
 
   const handleRefetch = () => {
+    setError(false);
+    console.log('🚀 ~ handleRefetch ~ reload');
     setReload((prev) => !prev);
-    refetch();
+    refetchSpecial();
     refetchNew();
     refetchRecentlyViewed();
   };
@@ -165,8 +168,7 @@ export default function TabOneScreen() {
   if (
     isPausedRecentlyViewed ||
     isPausedNew ||
-    isPaused ||
-    isError ||
+    error ||
     errorNew ||
     errorRecentlyViewed
   ) {
@@ -203,7 +205,9 @@ export default function TabOneScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <View style={{ marginTop: 10 }}>
+      <View
+        style={{ marginTop: 10, backgroundColor: 'white', paddingBottom: 10 }}
+      >
         <TopHeader />
       </View>
 
@@ -212,96 +216,9 @@ export default function TabOneScreen() {
           <RefreshControl refreshing={isPending} onRefresh={handleRefetch} />
         }
         showsVerticalScrollIndicator={false}
-        style={{ paddingBottom: 20, backgroundColor: 'white' }}
+        style={{ backgroundColor: 'white' }}
       >
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flex: 1,
-              marginTop: 5,
-              marginBottom: -20,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 18,
-                fontFamily: 'PoppinsBold',
-                textAlign: 'center',
-                marginTop: 10,
-                color: '#000',
-                marginBottom: -30,
-              }}
-            >
-              Special offer
-            </Text>
-
-            {special?.length > 0 && (
-              <View style={{ flex: 1 }}>
-                <Carousel
-                  loop
-                  width={width}
-                  height={width}
-                  autoPlay={true}
-                  data={special}
-                  scrollAnimationDuration={500}
-                  renderItem={({ item, index }) => (
-                    <Pressable
-                      onPress={() => router.push(`/special/${item?.id}`)}
-                      style={styles.imageContainer}
-                      key={item?.id}
-                    >
-                      <Image
-                        source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
-                        style={styles.image}
-                        contentFit="contain"
-                      />
-                    </Pressable>
-                  )}
-                />
-                {/* <ScrollView
-                  ref={scrollViewRef}
-                  horizontal
-                  pagingEnabled
-                  showsHorizontalScrollIndicator={false}
-                  onScroll={handleScroll}
-                >
-                  {special?.map((item, index) => {
-                    return (
-                      <Pressable
-                        onPress={() => router.push(`/special/${item?.id}`)}
-                        style={styles.imageContainer}
-                        key={item?.id}
-                      >
-                        <Image
-                          source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
-                          style={styles.image}
-                          contentFit="contain"
-                        />
-                      </Pressable>
-                    );
-                  })}
-                </ScrollView> */}
-              </View>
-            )}
-
-            {special?.length === 0 && (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  minHeight: 300,
-                }}
-              >
-                <Text
-                  variant="titleLarge"
-                  style={{ color: '#000', fontWeight: 'bold' }}
-                >
-                  No Special Offers Available
-                </Text>
-              </View>
-            )}
-          </View>
-        </View>
+        <SpecialComponent special={special} />
         {!isPendingSpecial && (
           <View
             style={{
@@ -452,7 +369,7 @@ export default function TabOneScreen() {
                     fontFamily: 'PoppinsBold',
                     fontSize: 18,
                     color: '#000',
-                    marginBottom: 20,
+                    marginBottom: 30,
                   }}
                 >
                   Recently Viewed
@@ -466,8 +383,8 @@ export default function TabOneScreen() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: 10,
-                    marginBottom: 20,
-                    paddingBottom: 50,
+                    marginBottom: 10,
+                    paddingBottom: 20,
                   }}
                 >
                   {recentlyViewed?.map((item) => {
@@ -541,16 +458,6 @@ export default function TabOneScreen() {
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  imageContainer: {
-    height: 300,
-    overflow: 'hidden',
-    width: width,
-    borderRadius: 6,
-  },
   container: {
     alignItems: 'center',
     justifyContent: 'center',
