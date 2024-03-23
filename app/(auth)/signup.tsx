@@ -82,7 +82,7 @@ const SignUp = (props: Props) => {
 
         const name = `${values.firstName} ${values.lastName}`;
         const response = await axios.post(
-          `${api}?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
+          `https://247api.netpro.software/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {

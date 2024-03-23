@@ -64,7 +64,7 @@ const Wallet = (props: Props) => {
 
       try {
         const response = await axios.post(
-          `${apiUrl}?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
+          `https://247api.netpro.software/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
         console.log(response.data);

@@ -50,7 +50,9 @@ const Account = (props: Props) => {
   const queryClient = useQueryClient();
   useEffect(() => {
     const getProfile = async () => {
-      const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
+      const { data } = await axios.get(
+        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+      );
 
       return data;
     };

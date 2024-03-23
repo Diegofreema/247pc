@@ -47,7 +47,7 @@ const UpdatePassword = (props: Props) => {
       validationSchema,
       onSubmit: async (values) => {
         const response = await axios.post(
-          `${api}?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
+          `https://247api.netpro.software/api.aspx?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
         );
 
         if (response.data === 'incorrect previous password') {

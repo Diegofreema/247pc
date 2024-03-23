@@ -27,7 +27,7 @@ const wishlist = (props: Props) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${api}?api=wishlist&statename=imo&myuserid=${id}`
+        `https://247api.netpro.software/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -51,7 +51,7 @@ const wishlist = (props: Props) => {
         setLoading(true);
         try {
           const response = await axios.get(
-            `${api}?api=wishlist&statename=imo&myuserid=${id}`
+            `https://247api.netpro.software/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
           );
           let data = [];
           if (

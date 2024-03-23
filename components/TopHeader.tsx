@@ -11,9 +11,7 @@ import { LoggedUserType } from '../lib/types';
 
 const api = process.env.EXPO_PUBLIC_API_URL;
 type Props = {};
-const Max_Header_Height = 70;
-const Min_Header_Height = 0;
-const Scroll_Distance = Max_Header_Height - Min_Header_Height;
+
 export const TopHeader = ({}: Props): JSX.Element => {
   const [user, setUser] = useState<LoggedUserType>();
   const { id } = useStoreId();
@@ -21,7 +19,9 @@ export const TopHeader = ({}: Props): JSX.Element => {
   const queryClient = useQueryClient();
   useEffect(() => {
     const getProfile = async () => {
-      const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
+      const { data } = await axios.get(
+        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+      );
 
       return data;
     };
@@ -44,6 +44,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 10,
+        marginTop: 10,
       }}
     >
       <Pressable
@@ -51,7 +52,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
           pressed && { opacity: 0.5 },
           {
             paddingHorizontal: 10,
-            height: 55,
+            height: 50,
             borderColor: '#000',
             backgroundColor: 'transparent',
             borderWidth: 1,

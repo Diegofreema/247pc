@@ -129,7 +129,7 @@ const ProductDetail = (props: Props) => {
     setAddingToWishlist(true);
     try {
       await axios.post(
-        `${api}?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `https://247api.netpro.software/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
       show('Added to wishlist', {

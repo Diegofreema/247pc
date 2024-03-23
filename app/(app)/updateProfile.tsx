@@ -73,7 +73,7 @@ const Update = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const response = await axios.post(
-        `${api}?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
+        `https://247api.netpro.software/api.aspx?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
       );
 
       if (response.data === 'saved') {

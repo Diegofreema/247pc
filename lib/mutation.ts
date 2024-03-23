@@ -28,7 +28,7 @@ export const useAddToWishlist = () => {
     mutationFn: async (productId?: string) => {
       console.log(productId, id);
       const response = await axios.post(
-        `${api}?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `https://247api.netpro.software/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
 
       return response.data;
@@ -68,7 +68,7 @@ export const useAddToCart = () => {
     }) => {
       try {
         const response = await axios.post(
-          `${api}?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
+          `https://247api.netpro.software/api.aspx?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
         );
 
         console.log('sfdsfdg', response.data);
@@ -109,7 +109,7 @@ export const useRemoveFromCart = () => {
     mutationKey: ['removeFromCart'],
     mutationFn: async ({ salesId }: { salesId: string }) => {
       const response = await axios.post(
-        `${api}?api=removefromcart&saleid=${salesId}`
+        `https://247api.netpro.software/api.aspx?api=removefromcart&saleid=${salesId}`
       );
 
       return response.data;
@@ -156,7 +156,7 @@ export const usePayStack = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `${api}?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
+        `https://247api.netpro.software/api.aspx?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
       );
 
       return response.data as PaystackType;
@@ -190,7 +190,7 @@ export const useWallet = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `${api}?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
+        `https://247api.netpro.software/api.aspx?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
       );
 
       return response.data;
@@ -242,7 +242,7 @@ export const useJoinUs = () => {
       address: string;
     }) => {
       const response = await axios.post(
-        `${api}?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
+        `https://247api.netpro.software/api.aspx?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
       );
       console.log(response.data);
       return response.data;
@@ -298,7 +298,7 @@ export const useComment = () => {
       comment: string;
     }) => {
       const response = await axios.post(
-        `${api}?api=ratedeliveredprod&myuserid=${id}&productid=${productId}&fullname=${user?.customername}&ratestar=${rating}&rateinfo=${comment}`
+        `https://247api.netpro.software/api.aspx?api=ratedeliveredprod&myuserid=${id}&productid=${productId}&fullname=${user?.customername}&ratestar=${rating}&rateinfo=${comment}`
       );
       console.log(response.data);
       return response.data;

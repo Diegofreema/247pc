@@ -11,7 +11,6 @@ import {
 import { ActivityIndicator } from 'react-native-paper';
 
 import {
-  Id,
   useGetProfile,
   useGetRecentlyViewed,
   useNewArrival,
@@ -26,7 +25,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 import axios from 'axios';
 import { ErrorComponent } from '../../../components/ErrorComponent';
-import { useQueryClient } from '@tanstack/react-query';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -39,7 +42,14 @@ const api = process.env.EXPO_PUBLIC_API_URL;
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, getId } = useStoreId();
-
+  const opacity = useSharedValue(0);
+  const height = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+      height: height.value,
+    };
+  });
   // const [special, setSpecial] = useState<Id[]>([]);
   // console.log('🚀 ~ TabOneScreen ~ special:', special);
   // const [error, setError] = useState(false);
@@ -81,8 +91,6 @@ export default function TabOneScreen() {
     refetch: refetchSpecial,
     isPaused: isPausedSpecial,
   } = useSpecial(user?.statename?.toLowerCase());
-
-  console.log('Special', special);
 
   // useEffect(() => {
   //   const fetchSpecial = async () => {
@@ -168,7 +176,13 @@ export default function TabOneScreen() {
     refetchNew();
     refetchRecentlyViewed();
   };
-
+  if (isErrorUser) {
+    return (
+      <View>
+        <Text>sdfdfs</Text>
+      </View>
+    );
+  }
   if (
     isErrorUser ||
     isErrorSpecial ||
@@ -201,22 +215,42 @@ export default function TabOneScreen() {
       </View>
     );
   }
-
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const y = event.nativeEvent.contentOffset.y;
+    if (y > 350) {
+      opacity.value = withTiming(1);
+      height.value = withTiming(70);
+    } else {
+      opacity.value = withTiming(0);
+      height.value = withTiming(0);
+    }
+  };
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <View
-        style={{ marginTop: 10, backgroundColor: 'white', paddingBottom: 10 }}
-      >
+      <Animated.View style={[animatedStyle]}>
         <TopHeader />
-      </View>
+      </Animated.View>
 
       <ScrollView
+        scrollEventThrottle={16}
+        onScroll={onScroll}
         refreshControl={
           <RefreshControl refreshing={isPending} onRefresh={handleRefetch} />
         }
         showsVerticalScrollIndicator={false}
         style={{ backgroundColor: 'white' }}
       >
+        <Text
+          style={{
+            fontFamily: 'PoppinsBold',
+            fontSize: 18,
+            color: '#000',
+            textAlign: 'center',
+            marginVertical: 10,
+          }}
+        >
+          Special Offers
+        </Text>
         <ScrollView
           ref={scrollViewRef}
           horizontal
@@ -549,7 +583,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   imageContainer: {
-    height: 300,
+    height: 200,
     overflow: 'hidden',
     width: width,
     borderRadius: 6,

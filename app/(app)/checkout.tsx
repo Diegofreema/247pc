@@ -84,7 +84,7 @@ const CheckOut = (props: Props) => {
     setIsPaying(true);
     try {
       const { data } = await axios.post(
-        `${api}?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
+        `https://247api.netpro.software/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
       console.log(data);
 

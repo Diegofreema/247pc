@@ -27,9 +27,9 @@ const validationSchema = yup.object().shape({
     .min(5, 'Password must be at least 5 characters')
     .required('Password is required'),
 });
+const api = process.env.EXPO_PUBLIC_API_URL;
 
 const index = (props: Props) => {
-  const api = process.env.EXPO_PUBLIC_API_URL;
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
   const router = useRouter();
   const { mutate, isPending, isSuccess } = useGetProfile();
@@ -71,7 +71,7 @@ const index = (props: Props) => {
 
           setId(response.data);
 
-          toast.show('Welcome back', {
+          toast.show('Welcome back!!!', {
             type: 'success',
             placement: 'bottom',
             duration: 4000,
@@ -79,7 +79,7 @@ const index = (props: Props) => {
           });
 
           router.push('/(app)/(tabs)/');
-        } catch (error) {
+        } catch (error: any) {
           toast.show('Something went wrong', {
             type: 'error',
             placement: 'bottom',
