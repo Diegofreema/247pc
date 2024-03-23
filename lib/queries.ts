@@ -63,7 +63,8 @@ export const useGetCart = () => {
 
       return data;
     },
-    refetchInterval: 1000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
   });
 };
 
@@ -75,18 +76,10 @@ export const useSpecial = (state: any) => {
   return useQuery({
     queryKey: ['special', state],
     queryFn: async () => {
-      const response = await axios.get(
+      const { data } = await axios.get(
         `${api}?api=specialoffers&statename=${state} `
       );
 
-      let data = [];
-      if (Array.isArray(response.data)) {
-        data = response.data;
-      } else if (typeof response.data === 'object' && response.data !== null) {
-        data = [response.data];
-      } else {
-        data = []; // Set to an empty array if the response data is neither an array nor an object
-      }
       return data as Id[];
     },
   });
@@ -110,6 +103,8 @@ export const useProduct = (id: any) => {
       const response = await axios.get(
         `${api}?api=productinfo&productid=${id}`
       );
+      // console.log('🚀 ~ useProduct ~ response:', JSON.parse(response.data));
+
       return response.data as Product;
     },
   });
@@ -139,11 +134,15 @@ export const useUser = (id: any) => {
   return useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
+      const { data } = await axios.get(
+        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+      );
 
       return data as LoggedUserType;
     },
-    refetchInterval: 20000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
+    retry: 5,
   });
 };
 export const useFee = (id: any, productInCart: any, communityId: any) => {
@@ -157,7 +156,8 @@ export const useFee = (id: any, productInCart: any, communityId: any) => {
       queryClient.invalidateQueries({ queryKey: ['order'] });
       return res;
     },
-    refetchInterval: 1000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
   });
 };
 export const useSpecialInfo = (state?: string, id?: string) => {
@@ -366,9 +366,15 @@ export const useSearch = () => {
   return useQuery({
     queryKey: ['search', user?.statename],
     queryFn: async () => {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `${api}?api=allproduct&statename=${user?.statename}`
       );
+      console.log('🚀 ~ useSearch ~ response:', response);
+
+      let data = [];
+      if (response.data.length > 0) {
+        data = response.data;
+      }
 
       return data as Searched[];
     },
@@ -432,7 +438,8 @@ export const useGetFullOrder = () => {
 
       return data as Order[];
     },
-    refetchInterval: 10000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
   });
 };
 export const useWalletBalance = () => {
@@ -495,6 +502,21 @@ export const useGetCom = (state: string) => {
         }
       );
       return newArray;
+    },
+  });
+};
+export const useGetProfile = (id: string) => {
+  const getProfile = async () => {
+    const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
+
+    return data;
+  };
+  return useQuery({
+    queryKey: ['profile', id],
+    queryFn: async () => {
+      const data = await getProfile();
+
+      return data;
     },
   });
 };

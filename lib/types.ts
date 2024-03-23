@@ -4,7 +4,7 @@ export type User = {
   email: string;
   address: string;
   state: string;
-  password: string;
+  password?: string;
   location: string;
   phoneNumber: string;
   communityId: string;

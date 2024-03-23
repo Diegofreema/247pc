@@ -5,7 +5,8 @@ import { useToast } from 'react-native-toast-notifications';
 import { useStoreId } from './zustand/auth';
 import { useModalState } from './zustand/modalState';
 import { colors } from '../constants/Colors';
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
+import { getProfile } from './helpers';
 const api = process.env.EXPO_PUBLIC_API_URL;
 
 // export const useNewUser = () => {
@@ -65,13 +66,16 @@ export const useAddToCart = () => {
       productId: string;
       qty: number;
     }) => {
-      const response = await axios.post(
-        `${api}?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
-      );
+      try {
+        const response = await axios.post(
+          `${api}?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
+        );
 
-      console.log(response.data);
-
-      return response.data;
+        console.log('sfdsfdg', response.data);
+        return response.data;
+      } catch (error) {
+        console.log('🚀 ~ useAddToCart ~ error:', error);
+      }
     },
     onSuccess: async (data) => {
       console.log('🚀 ~ useAddToCart ~ data:', data);
@@ -328,6 +332,26 @@ export const useComment = () => {
         duration: 4000,
         animationType: 'slide-in',
       });
+    },
+  });
+};
+export const useGetProfile = () => {
+  const { show } = useToast();
+  const { user, id } = useStoreId();
+  const router = useRouter();
+  return useMutation({
+    mutationKey: ['profile'],
+    mutationFn: async () => {
+      const data = await getProfile(id);
+      console.log(data, 'query data');
+      return data;
+    },
+    onSuccess: async (data) => {
+      console.log(data);
+    },
+
+    onError: async () => {
+      router.push('/');
     },
   });
 };

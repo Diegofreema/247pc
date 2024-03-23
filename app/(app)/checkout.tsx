@@ -37,12 +37,10 @@ const CheckOut = (props: Props) => {
   const { show } = useToast();
   const queryClient = useQueryClient();
   const { mutateAsync: onWalletPay, isPending: walletLoading } = useWallet();
-  const { mutateAsync, isPending: loading, data: paystackData } = usePayStack();
 
   const [paying, setIsPaying] = useState(false);
   const [salesRef, setSalesRef] = useState('');
-
-  console.log('🚀 ~ CheckOut ~ paystackData:', paystackData);
+  const [totalCost, setTotalCost] = useState('');
 
   const {
     handleChange,
@@ -85,18 +83,14 @@ const CheckOut = (props: Props) => {
   const payWithCard = async () => {
     setIsPaying(true);
     try {
-      const { data }: { data: string } = await axios.post(
+      const { data } = await axios.post(
         `${api}?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
       console.log(data);
-      const payRef = data
-        .split(':')[2]
-        .trim()
-        .replace(/^'|' }$/g, '');
 
-      console.log('🚀 ~ payWithCard ~ salesref:', payRef);
-      if (data) {
-        setSalesRef(payRef);
+      if (data?.salesref) {
+        setSalesRef(data.salesref);
+        setTotalCost(data?.totalcost);
         paystackWebViewRef?.current?.startTransaction();
       }
     } catch (error) {
@@ -110,11 +104,7 @@ const CheckOut = (props: Props) => {
     setReload(!reload);
     refetch();
   };
-  useEffect(() => {
-    if (paystackData?.salesref) {
-      paystackWebViewRef?.current?.startTransaction();
-    }
-  }, [paystackData]);
+
   const {
     data,
     isPaused,
@@ -168,8 +158,8 @@ const CheckOut = (props: Props) => {
     );
   }
 
-  const amount = parseInt(data?.total.replace(',', '') as string);
-  console.log(salesRef, 'skcsasklkdjasdjadjk');
+  const amount = parseInt(totalCost);
+
   return (
     <Container>
       <ModalComponent />
@@ -246,24 +236,32 @@ const CheckOut = (props: Props) => {
                 animationType: 'slide-in',
               });
             }}
-            onSuccess={async (res) => {
-              console.log('trf', res.transactionRef);
-              console.log('status', res.status);
+            onSuccess={async ({ transactionRef }) => {
+              // @ts-ignore
 
-              axios
-                .post(`https://247pharmacy.net/checkout.aspx?zxc=${salesRef}`)
-                .then((response) => console.log(response.status));
-
-              show('Payment successful', {
-                type: 'success',
-                placement: 'bottom',
-                duration: 4000,
-                animationType: 'slide-in',
-              });
-              const user = await getProfile(id);
-              setUser(user);
-              queryClient.invalidateQueries({ queryKey: ['user'] });
-              router.push('/order');
+              try {
+                await axios.post(
+                  `https://247pharmacy.net/checkout.aspx?zxc=${salesRef}`
+                );
+                alert('Payment successful');
+                show('Payment successful', {
+                  type: 'success',
+                  placement: 'bottom',
+                  duration: 4000,
+                  animationType: 'slide-in',
+                });
+                const user = await getProfile(id);
+                setUser(user);
+                queryClient.invalidateQueries({ queryKey: ['user'] });
+                router.push('/order');
+              } catch (error) {
+                show('Something went wrong', {
+                  type: 'error',
+                  placement: 'bottom',
+                  duration: 4000,
+                  animationType: 'slide-in',
+                });
+              }
             }}
             // @ts-ignore
             ref={paystackWebViewRef}

@@ -19,6 +19,8 @@ import { useToast } from 'react-native-toast-notifications';
 import { getProfile } from '../../lib/helpers';
 import { Community, State } from '../../lib/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useGetProfile } from '../../lib/mutation';
+import { AuthModal } from '../../components/Modals/AuthModal';
 
 type Props = {};
 const width = Dimensions.get('window').width;
@@ -46,6 +48,7 @@ const SignUp = (props: Props) => {
   const toast = useToast();
   const router = useRouter();
   const [error, setError] = useState('');
+  const { mutateAsync, isPending, isSuccess } = useGetProfile();
 
   const [states, setStates] = useState<any[]>([
     { statename: 'abuja', label: 'Abuja' },
@@ -102,19 +105,20 @@ const SignUp = (props: Props) => {
         }
 
         setId(response.data);
-        const user = await getProfile(response.data);
-        setUser(user);
-        getUser();
+
         toast.show('Account created successfully', {
           type: 'success',
           placement: 'bottom',
           duration: 4000,
           animationType: 'slide-in',
         });
+
         router.push('/(app)/(tabs)/');
+
         return;
       },
     });
+  console.log(states);
 
   const {
     address,
@@ -130,15 +134,19 @@ const SignUp = (props: Props) => {
     axios
       .get('https://247api.netpro.software/api.aspx?api=states')
       .then(({ data }) => {
+        console.log('dfgfgfhdh', data);
+
         setLoadingStates(true);
         let newArray: State[] = data?.map((item: { statename: string }) => {
           return {
-            key: item.statename,
-            value: item.statename,
+            key: item?.statename,
+            value: item?.statename,
           };
         });
-
-        setStates(newArray);
+        console.log('dv', newArray);
+        if (newArray && newArray.length > 0) {
+          setStates(newArray);
+        }
 
         setLoadingStates(false);
       })
@@ -149,263 +157,259 @@ const SignUp = (props: Props) => {
 
   useEffect(() => {
     setLoadingCommunities(true);
-    axios
-      .get(
-        `https://247api.netpro.software/api.aspx?api=communities&statename=${state}`
-      )
-      .then(({ data }) => {
-        let newArray: Community[] = data?.map(
-          (item: { communityname: string; id: string }) => {
-            return {
-              key: item.id,
-              value: item.communityname,
-            };
-          }
-        );
+    if (state && state.length > 0) {
+      axios
+        .get(
+          `https://247api.netpro.software/api.aspx?api=communities&statename=${state}`
+        )
+        .then(({ data }) => {
+          let newArray: Community[] = data?.map(
+            (item: { communityname: string; id: string }) => {
+              return {
+                key: item.id,
+                value: item.communityname,
+              };
+            }
+          );
 
-        setCommunities(newArray);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError('Something went wrong, try again later');
-      })
-      .finally(() => {
-        setLoadingCommunities(false);
-      });
+          setCommunities(newArray);
+        })
+        .catch((error) => {
+          console.log(error);
+          setError('Something went wrong, try again later');
+        })
+        .finally(() => {
+          setLoadingCommunities(false);
+        });
+    }
   }, [state]);
 
-  // if (error.trim() !== '') {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  //       <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'red' }}>
-  //         {error}
-  //       </Text>
-  //     </View>
-  //   );
-  // }
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <KeyboardAwareScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 50,
-        }}
-      >
-        <AuthHeader />
+    <>
+      <AuthModal isPending={isPending} />
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <KeyboardAwareScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 50,
+          }}
+        >
+          <AuthHeader />
 
-        <View style={{ alignItems: 'center', marginTop: 30 }}>
-          <Image
-            source={require('../../assets/images/logo.png')}
-            style={{ width: width * 0.6, height: 150 }}
-            contentFit="contain"
-          />
-          <View style={{ marginTop: 30 }}>
-            <Text style={{ fontFamily: 'PoppinsBold', fontSize: 20 }}>
-              Sign up
-            </Text>
+          <View style={{ alignItems: 'center', marginTop: 30 }}>
+            <Image
+              source={require('../../assets/images/logo.png')}
+              style={{ width: width * 0.6, height: 150 }}
+              contentFit="contain"
+            />
+            <View style={{ marginTop: 30 }}>
+              <Text style={{ fontFamily: 'PoppinsBold', fontSize: 20 }}>
+                Sign up
+              </Text>
+            </View>
           </View>
-        </View>
-        <Container>
-          <Text
-            onPress={() => router.push('/login')}
-            style={{
-              alignSelf: 'flex-end',
-              color: '#1A91FF',
-              marginTop: 20,
-              fontFamily: 'Poppins',
-              fontSize: 10,
-            }}
-          >
-            Already have an account?
-          </Text>
-          <View style={{ gap: 10 }}>
-            <>
-              <InputComponent
-                label="First Name"
-                placeholder="First name"
-                keyboardType="default"
-                onChangeText={handleChange('firstName')}
-                value={firstName}
-              />
-              {touched.firstName && errors.firstName && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.firstName}
-                </Text>
-              )}
-            </>
-            <>
-              <InputComponent
-                label="Last Name"
-                placeholder="Last name"
-                keyboardType="default"
-                onChangeText={handleChange('lastName')}
-                value={lastName}
-              />
-              {touched.lastName && errors.lastName && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.lastName}
-                </Text>
-              )}
-            </>
-            <>
-              <InputComponent
-                label="Email"
-                placeholder="Email"
-                keyboardType="email-address"
-                onChangeText={handleChange('email')}
-                value={email}
-              />
-              {touched.email && errors.email && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.email}
-                </Text>
-              )}
-            </>
-            <>
-              <InputComponent
-                label="Mobile Number"
-                placeholder="Mobile Number"
-                keyboardType="numeric"
-                onChangeText={handleChange('phoneNumber')}
-                value={phoneNumber}
-              />
-              {touched.phoneNumber && errors.phoneNumber && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.phoneNumber}
-                </Text>
-              )}
-            </>
-            <>
-              {loadingStates ? (
-                <View style={styles2.border}>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginLeft: 15,
-                      marginBottom: 15,
-                    }}
-                  >
-                    <Text>Loading...</Text>
-                  </View>
-                </View>
-              ) : (
-                <SelectList
-                  search={false}
-                  boxStyles={{
-                    ...styles2.border,
-                    justifyContent: 'flex-start',
-                    backgroundColor: 'white',
-                  }}
-                  inputStyles={{ textAlign: 'left' }}
-                  fontFamily="Poppins"
-                  setSelected={handleChange('state')}
-                  data={states}
-                  save="key"
-                  placeholder="Select your state"
-                />
-              )}
-              {touched.state && errors.state && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.state}
-                </Text>
-              )}
-            </>
-            <>
-              {loadingCommunities ? (
-                <View style={styles2.border}>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginLeft: 15,
-                      marginBottom: 15,
-                    }}
-                  >
-                    <Text style={{ fontFamily: 'Poppins' }}>Loading...</Text>
-                  </View>
-                </View>
-              ) : (
-                <SelectList
-                  search={false}
-                  fontFamily="Poppins"
-                  placeholder="Select your community"
-                  boxStyles={{
-                    ...styles2.border,
-                    justifyContent: 'flex-start',
-                    backgroundColor: 'white',
-                  }}
-                  inputStyles={{ textAlign: 'left' }}
-                  setSelected={handleChange('communityId')}
-                  data={communities}
-                  save="key"
-                />
-              )}
-              {touched.communityId && errors.communityId && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.communityId}
-                </Text>
-              )}
-            </>
-            <>
-              <InputComponent
-                label="Street"
-                placeholder="Address"
-                keyboardType="default"
-                onChangeText={handleChange('address')}
-                value={address}
-              />
-              {touched.address && errors.address && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.address}
-                </Text>
-              )}
-            </>
-            <>
-              <InputComponent
-                label="Password"
-                placeholder="Password"
-                keyboardType="default"
-                onChangeText={handleChange('password')}
-                value={password}
-                secureTextEntry
-              />
-              {touched.password && errors.password && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.password}
-                </Text>
-              )}
-            </>
-            <>
-              <InputComponent
-                label="Confirm Password"
-                placeholder="Confirm Password"
-                keyboardType="default"
-                onChangeText={handleChange('confirmPassword')}
-                value={confirmPassword}
-                secureTextEntry
-              />
-              {touched.confirmPassword && errors.confirmPassword && (
-                <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.confirmPassword}
-                </Text>
-              )}
-            </>
-            <Button
-              loading={isSubmitting}
-              style={{ marginTop: 20, borderRadius: 5 }}
-              mode="contained"
-              buttonColor={colors.lightGreen}
-              onPress={() => handleSubmit()}
-              textColor={'white'}
-              labelStyle={{ fontFamily: 'Poppins' }}
+          <Container>
+            <Text
+              onPress={() => router.push('/login')}
+              style={{
+                alignSelf: 'flex-end',
+                color: '#1A91FF',
+                marginTop: 20,
+                fontFamily: 'Poppins',
+                fontSize: 10,
+              }}
             >
-              Sign up
-            </Button>
-          </View>
-        </Container>
-      </KeyboardAwareScrollView>
-    </View>
+              Already have an account?
+            </Text>
+            <View style={{ gap: 10 }}>
+              <>
+                <InputComponent
+                  label="First Name"
+                  placeholder="First name"
+                  keyboardType="default"
+                  onChangeText={handleChange('firstName')}
+                  value={firstName}
+                />
+                {touched.firstName && errors.firstName && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.firstName}
+                  </Text>
+                )}
+              </>
+              <>
+                <InputComponent
+                  label="Last Name"
+                  placeholder="Last name"
+                  keyboardType="default"
+                  onChangeText={handleChange('lastName')}
+                  value={lastName}
+                />
+                {touched.lastName && errors.lastName && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.lastName}
+                  </Text>
+                )}
+              </>
+              <>
+                <InputComponent
+                  label="Email"
+                  placeholder="Email"
+                  keyboardType="email-address"
+                  onChangeText={handleChange('email')}
+                  value={email}
+                />
+                {touched.email && errors.email && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.email}
+                  </Text>
+                )}
+              </>
+              <>
+                <InputComponent
+                  label="Mobile Number"
+                  placeholder="Mobile Number"
+                  keyboardType="numeric"
+                  onChangeText={handleChange('phoneNumber')}
+                  value={phoneNumber}
+                />
+                {touched.phoneNumber && errors.phoneNumber && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.phoneNumber}
+                  </Text>
+                )}
+              </>
+              <>
+                {loadingStates ? (
+                  <View style={styles2.border}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginLeft: 15,
+                        marginBottom: 15,
+                      }}
+                    >
+                      <Text>Loading...</Text>
+                    </View>
+                  </View>
+                ) : (
+                  <SelectList
+                    search={false}
+                    boxStyles={{
+                      ...styles2.border,
+                      justifyContent: 'flex-start',
+                      backgroundColor: 'white',
+                    }}
+                    inputStyles={{ textAlign: 'left' }}
+                    fontFamily="Poppins"
+                    setSelected={handleChange('state')}
+                    data={states}
+                    save="key"
+                    placeholder="Select your state"
+                  />
+                )}
+                {touched.state && errors.state && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.state}
+                  </Text>
+                )}
+              </>
+              <>
+                {loadingCommunities ? (
+                  <View style={styles2.border}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginLeft: 15,
+                        marginBottom: 15,
+                      }}
+                    >
+                      <Text style={{ fontFamily: 'Poppins' }}>Loading...</Text>
+                    </View>
+                  </View>
+                ) : (
+                  <SelectList
+                    search={false}
+                    fontFamily="Poppins"
+                    placeholder="Select your community"
+                    boxStyles={{
+                      ...styles2.border,
+                      justifyContent: 'flex-start',
+                      backgroundColor: 'white',
+                    }}
+                    inputStyles={{ textAlign: 'left' }}
+                    setSelected={handleChange('communityId')}
+                    data={communities}
+                    save="key"
+                  />
+                )}
+                {touched.communityId && errors.communityId && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.communityId}
+                  </Text>
+                )}
+              </>
+              <>
+                <InputComponent
+                  label="Street"
+                  placeholder="Address"
+                  keyboardType="default"
+                  onChangeText={handleChange('address')}
+                  value={address}
+                />
+                {touched.address && errors.address && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.address}
+                  </Text>
+                )}
+              </>
+              <>
+                <InputComponent
+                  label="Password"
+                  placeholder="Password"
+                  keyboardType="default"
+                  onChangeText={handleChange('password')}
+                  value={password}
+                  secureTextEntry
+                />
+                {touched.password && errors.password && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.password}
+                  </Text>
+                )}
+              </>
+              <>
+                <InputComponent
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  keyboardType="default"
+                  onChangeText={handleChange('confirmPassword')}
+                  value={confirmPassword}
+                  secureTextEntry
+                />
+                {touched.confirmPassword && errors.confirmPassword && (
+                  <Text style={{ color: 'red', fontWeight: 'bold' }}>
+                    {errors.confirmPassword}
+                  </Text>
+                )}
+              </>
+              <Button
+                loading={isSubmitting}
+                style={{ marginTop: 20, borderRadius: 5 }}
+                mode="contained"
+                buttonColor={colors.lightGreen}
+                onPress={() => handleSubmit()}
+                textColor={'white'}
+                labelStyle={{ fontFamily: 'Poppins' }}
+              >
+                Sign up
+              </Button>
+            </View>
+          </Container>
+        </KeyboardAwareScrollView>
+      </View>
+    </>
   );
 };
 

@@ -20,8 +20,7 @@ import InputComponent from '../../components/InputComponent';
 const itemsPerPage = 10;
 const search = () => {
   const [page, setPage] = useState(1);
-  const { data, isPending, isFetching, isError, isPaused, refetch } =
-    useSearch();
+  const { data, isPending, isError, isPaused, refetch } = useSearch();
   const [showFilter, setShowFilter] = useState(false);
   const [selectedCat, setSelectedCat] = useState<string[]>([]);
   const [selectedPharmacy, setSelectedPharmacy] = useState<string[]>([]);
@@ -37,7 +36,6 @@ const search = () => {
     setReload(!reload);
     refetch();
   };
-  console.log(data?.[0]?.description);
 
   const [products, setProducts] = useState(data);
   const [value, setValue] = useState('');
@@ -53,10 +51,7 @@ const search = () => {
         (item) =>
           item?.Dealer?.toLowerCase().includes(value.toLowerCase()) ||
           item?.category?.toLowerCase().includes(value.toLowerCase()) ||
-          item?.product?.toLowerCase().includes(value.toLowerCase()) ||
-          item?.description
-            ?.toLocaleLowerCase()
-            .includes(value.toLocaleLowerCase())
+          item?.product?.toLowerCase().includes(value.toLowerCase())
       );
       setProducts(filteredData);
     } else {
@@ -139,7 +134,7 @@ const search = () => {
   const filterProductsByPrice = () => {
     if (!data) return;
 
-    const filteredDataCopy = data.filter(
+    const filteredDataCopy = data?.filter(
       (product) =>
         +product.sellingprice.replace(/,/g, '') >= +price.from &&
         +product.sellingprice.replace(/,/g, '') <= +price.to
@@ -159,8 +154,17 @@ const search = () => {
 
   if (isPaused) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Please check your internet connection</Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 10,
+        }}
+      >
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+          Please check your internet connection
+        </Text>
         <MyButton
           buttonColor={colors.lightGreen}
           onPress={handleRefetch}
@@ -172,8 +176,17 @@ const search = () => {
 
   if (isError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Something went wrong</Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 10,
+        }}
+      >
+        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}>
+          Something went wrong
+        </Text>
         <MyButton
           buttonColor={colors.lightGreen}
           onPress={handleRefetch}
@@ -182,6 +195,23 @@ const search = () => {
       </View>
     );
   }
+
+  if (isPending) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 10,
+        }}
+      >
+        <ActivityIndicator color="black" size="large" />
+      </View>
+    );
+  }
+  console.log(data[0], 'data');
+
   const resetFilter = () => {
     setProducts(data);
     setSelectedCat(['']);
@@ -277,6 +307,7 @@ const search = () => {
                 borderColor: 'black',
                 padding: 11,
                 alignItems: 'center',
+                borderRadius: 8,
               }}
             >
               <Text
@@ -516,80 +547,75 @@ const search = () => {
           </ScrollView>
         </ScrollView>
 
-        {isPending || isFetching ? (
-          <ActivityIndicator color="black" size="large" />
-        ) : (
-          <View style={{ flex: 1, width: '100%' }}>
-            <FlatList
-              ref={flatListRef}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingBottom: 40,
-              }}
-              data={currentItems}
-              renderItem={({ item }) => {
-                return <ProductItem {...item} />;
-              }}
-              keyExtractor={(item) => item.id}
-              ListEmptyComponent={
+        <View style={{ flex: 1, width: '100%' }}>
+          <FlatList
+            ref={flatListRef}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 40,
+            }}
+            data={currentItems}
+            renderItem={({ item }) => {
+              return <ProductItem {...item} />;
+            }}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Text>No products found</Text>
+              </View>
+            }
+            ListFooterComponentStyle={{
+              marginTop: 15,
+              alignItems: 'center',
+            }}
+            ListFooterComponent={() =>
+              data?.length && (
                 <View
                   style={{
-                    flex: 1,
-                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    gap: 10,
+                    width: '80%',
                     alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Text>No products found</Text>
-                </View>
-              }
-              ListFooterComponentStyle={{
-                marginTop: 15,
-                alignItems: 'center',
-              }}
-              ListFooterComponent={() =>
-                data?.length && (
-                  <View
+                  <MyButton
+                    style={{ width: 130 }}
+                    text="Previous"
+                    textColor="white"
+                    buttonColor={colors.lightGreen}
+                    onPress={() => setPage(page - 1)}
+                    disabled={page === 1}
+                  />
+                  <Text
                     style={{
-                      flexDirection: 'row',
-                      gap: 10,
-                      width: '80%',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      color: 'black',
+                      fontSize: 16,
+                      fontWeight: 'bold',
                     }}
                   >
-                    <MyButton
-                      style={{ width: 130 }}
-                      text="Previous"
-                      textColor="white"
-                      buttonColor={colors.lightGreen}
-                      onPress={() => setPage(page - 1)}
-                      disabled={page === 1}
-                    />
-                    <Text
-                      style={{
-                        color: 'black',
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {' '}
-                      {page}
-                    </Text>
+                    {page}
+                  </Text>
 
-                    <MyButton
-                      style={{ width: 130 }}
-                      text="Next"
-                      textColor="white"
-                      buttonColor={colors.lightGreen}
-                      onPress={handleNext}
-                      disabled={page === totalPages}
-                    />
-                  </View>
-                )
-              }
-            />
-          </View>
-        )}
+                  <MyButton
+                    style={{ width: 130 }}
+                    text="Next"
+                    textColor="white"
+                    buttonColor={colors.lightGreen}
+                    onPress={handleNext}
+                    disabled={page === totalPages}
+                  />
+                </View>
+              )
+            }
+          />
+        </View>
       </Container>
     </View>
   );

@@ -51,6 +51,7 @@ const ProductDetail = (props: Props) => {
   const { onOpen } = useImageModalState();
 
   const { productId } = useLocalSearchParams();
+  console.log('🚀 ~ ProductDetail ~ productId:', productId);
   const queryClient = useQueryClient();
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
   const {
@@ -172,9 +173,10 @@ const ProductDetail = (props: Props) => {
       handleWishlist();
     }
   };
+  console.log(typeof data);
   const source: HTMLSource = {
-    html: `<p style="font-size: 2rem;">
-    ${data?.description}
+    html: `<p style="font-size: 1.3rem; line-height: 1.5">
+    ${data?.description || 'No description available'}
     </p>`,
   };
 
@@ -182,7 +184,7 @@ const ProductDetail = (props: Props) => {
     body: {
       whiteSpace: 'normal',
       color: 'black',
-      fontSize: 16,
+      fontSize: 13,
     },
 
     p: {

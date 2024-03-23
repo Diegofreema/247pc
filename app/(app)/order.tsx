@@ -14,7 +14,6 @@ type Props = {};
 const order = (props: Props) => {
   const { data, isPending, isPaused, isError, refetch } = useGetFullOrder();
 
-  console.log('🚀 ~ order ~ data:', data);
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
     setReload(!reload);

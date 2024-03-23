@@ -25,6 +25,7 @@ export const ImageModal = ({ image }: Props): JSX.Element => {
         <Image
           source={{ uri: image }}
           style={{ width: '100%', height: '100%' }}
+          contentFit="contain"
         />
       </Modal>
     </Portal>

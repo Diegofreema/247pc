@@ -39,10 +39,31 @@ const pages = [
     icon: <AntDesign name="book" size={30} color="black" />,
   },
 ];
+const api = process.env.EXPO_PUBLIC_API_URL;
+
 const Account = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-  const { user, id } = useStoreId();
+  const [user, setUser] = useState<LoggedUserType>();
+  const { id } = useStoreId();
+
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    const getProfile = async () => {
+      const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
+
+      return data;
+    };
+    const getUser = async () => {
+      const data = await queryClient.fetchQuery({
+        queryKey: ['profile'],
+        queryFn: getProfile,
+      });
+      setUser(data);
+    };
+
+    getUser();
+  }, []);
 
   const router = useRouter();
   const onClose = () => {

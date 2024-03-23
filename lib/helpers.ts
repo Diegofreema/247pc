@@ -9,10 +9,9 @@ export const trimTitle = (title: string) => {
   return title;
 };
 
+const api = process.env.EXPO_PUBLIC_API_URL;
 export const getProfile = async (id: any) => {
-  const { data } = await axios.get(
-    `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
-  );
+  const { data } = await axios.get(`${api}?api=userinfo&myuserid=${id}`);
 
   return data;
 };

@@ -19,6 +19,7 @@ const wishlist = (props: Props) => {
   const [loading, setLoading] = useState(false);
   console.log('🚀 ~ wishlist ~ loading:', loading);
   const [wishlist, setWishlist] = useState<WishlistType[]>([]);
+  console.log('🚀 ~ wishlist ~ wishlist:', wishlist);
   const [isError, setIsError] = useState(false);
   const [pending, setPending] = useState(false);
 
