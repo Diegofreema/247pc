@@ -32,7 +32,7 @@ const Forgot = (props: Props) => {
       validationSchema,
       onSubmit: async (values) => {
         const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=recoverpassword&emailaddress=${values.email}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=recoverpassword&emailaddress=${values.email}`
         );
 
         if (response.data === 'email does not exist') {

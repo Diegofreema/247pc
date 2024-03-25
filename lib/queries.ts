@@ -18,14 +18,13 @@ import {
 import { useStoreId } from './zustand/auth';
 import { getProfile } from './helpers';
 
-const api = process.env.EXPO_PUBLIC_API_URL;
 // export const useSpecial = () => {
 //   const { id, user } = useStoreId();
 //   return useQuery({
 //     queryKey: ['cart'],
 //     queryFn: async () => {
 //       const response = await axios.get(
-//         `https://247api.netpro.software/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+//         `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
 //       );
 
 //       return response.data;
@@ -38,7 +37,7 @@ export const useCart = () => {
     queryKey: ['cart'],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
       );
 
       return response.data;
@@ -51,7 +50,7 @@ export const useGetCart = () => {
     queryKey: ['cartList'],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=cartlist&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartlist&myuserid=${id}`
       );
 
       let data = [];
@@ -79,7 +78,7 @@ export const useSpecial = (state: any) => {
     queryKey: ['special', state],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=specialoffers&statename=${state} `
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialoffers&statename=${state} `
       );
 
       return data as Id[];
@@ -91,7 +90,7 @@ export const useNewProducts = (state?: string, categories?: string) => {
     queryKey: ['newProducts'],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=newproducts&statename=imo&category=Fragrance%26Gift `
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=newproducts&statename=imo&category=Fragrance%26Gift `
       );
 
       return response.data;
@@ -103,7 +102,7 @@ export const useProduct = (id: any) => {
     queryKey: ['product', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=productinfo&productid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=productinfo&productid=${id}`
       );
       // console.log('🚀 ~ useProduct ~ response:', JSON.parse(response.data));
 
@@ -116,7 +115,7 @@ export const useCommunities = (state = 'abuja') => {
     queryKey: ['communities', state],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=communities&statename=${state}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=communities&statename=${state}`
       );
       return response.data as Community[];
     },
@@ -127,7 +126,7 @@ export const useStates = () => {
     queryKey: ['state'],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=states`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=states`
       );
       return response.data as State[];
     },
@@ -139,7 +138,7 @@ export const useUser = (id: any) => {
     queryKey: ['user'],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data as LoggedUserType;
@@ -155,7 +154,7 @@ export const useFee = (id: any, productInCart: any, communityId: any) => {
     queryKey: ['fee'],
     queryFn: async () => {
       const res = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=cartpageload&productincart=${productInCart}&myuserid=${id}&communityId=${communityId}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpageload&productincart=${productInCart}&myuserid=${id}&communityId=${communityId}`
       );
       queryClient.invalidateQueries({ queryKey: ['order'] });
       return res;
@@ -169,7 +168,7 @@ export const useSpecialInfo = (state?: string, id?: string) => {
     queryKey: ['specialInfo', state, id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=specialofferinfo&statename=${state}&specialId=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialofferinfo&statename=${state}&specialId=${id}`
       );
 
       let data = [];
@@ -190,7 +189,7 @@ export const useSpecialOfferProducts = (productId?: string) => {
     queryKey: ['specialOfferProducts', productId],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=specialofferproducts&productlist=${productId}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialofferproducts&productlist=${productId}`
       );
 
       let data = [];
@@ -212,7 +211,7 @@ export const useWishlist = () => {
     queryKey: ['wishlist', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -234,7 +233,7 @@ export const useNewArrival = () => {
     queryKey: ['newArrival', user?.statename],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=newarrivals&statename=${user?.statename}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=newarrivals&statename=${user?.statename}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -254,7 +253,7 @@ export const useCat = () => {
     queryKey: ['categories'],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=maincategories`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=maincategories`
       );
 
       return data as Cat[];
@@ -269,7 +268,7 @@ export const useNewCat = (cat: string) => {
     queryKey: ['newCat'],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=newproducts&statename=${user?.statename}&category=${replacedPhrase}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=newproducts&statename=${user?.statename}&category=${replacedPhrase}`
       );
 
       return data as WishlistType[];
@@ -283,7 +282,7 @@ export const useSubCat = (cat: string) => {
     queryKey: ['subCat', cat],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=menusubcategories&category=${replacedPhrase} `
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=menusubcategories&category=${replacedPhrase} `
       );
 
       return data as SubProps[];
@@ -298,7 +297,7 @@ export const useProductCat = (cat: string) => {
     queryKey: ['productCat', cat],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=productbycategory&statename=${user?.statename}&category=${replacedPhrase}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=productbycategory&statename=${user?.statename}&category=${replacedPhrase}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -318,7 +317,7 @@ export const useSeller = (id: string) => {
     queryKey: ['seller', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=dealercategories&dealerid=${id} `
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=dealercategories&dealerid=${id} `
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -339,7 +338,7 @@ export const useSellerCat = (cat: string, id: string) => {
     queryKey: ['sellerCat', cat, id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=dealercategoryproducts&dealerid=${id}&category=${replacedPhrase} `
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=dealercategoryproducts&dealerid=${id}&category=${replacedPhrase} `
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -360,7 +359,7 @@ export const useGetOrder = () => {
     queryKey: ['order', id],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=ordersummary&myuserid=${id} `
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=ordersummary&myuserid=${id} `
       );
 
       return data as OrderType;
@@ -373,7 +372,7 @@ export const useSearch = () => {
     queryKey: ['search', user?.statename],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=allproduct&statename=${user?.statename}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=allproduct&statename=${user?.statename}`
       );
       console.log('🚀 ~ useSearch ~ response:', response);
 
@@ -392,7 +391,7 @@ export const useGetRecentlyViewed = () => {
     queryKey: ['recentlyViewed', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=recentlyviewed&statename=imo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=recentlyviewed&statename=imo&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -413,7 +412,7 @@ export const useWallet = () => {
     queryKey: ['wallet', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=walletinfo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=walletinfo&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -434,7 +433,7 @@ export const useGetFullOrder = () => {
     queryKey: ['fullOrder', id],
     queryFn: async () => {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=myorders&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=myorders&myuserid=${id}`
       );
 
       let data = [];
@@ -458,7 +457,7 @@ export const useWalletBalance = () => {
     queryKey: ['walletBalance', id],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=walletbalance&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=walletbalance&myuserid=${id}`
       );
 
       return data;
@@ -471,7 +470,7 @@ export const useGetUpdateUser = (id: string) => {
     queryKey: ['updatedUser', id],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data;
@@ -483,7 +482,7 @@ export const useGetState = () => {
     queryKey: ['state'],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=states`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=states`
       );
       let newArray: State[] = data?.map((item: { statename: string }) => {
         return {
@@ -505,7 +504,7 @@ export const useGetCom = (state: string) => {
     queryKey: ['communities', state],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=communities&statename=${state}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=communities&statename=${state}`
       );
       let newArray: ComType[] = data?.map(
         (item: { communityname: string; id: string }) => {
@@ -522,7 +521,7 @@ export const useGetCom = (state: string) => {
 export const useGetProfile = (id: string) => {
   const getProfile = async () => {
     const { data } = await axios.get(
-      `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+      `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
     );
 
     return data;

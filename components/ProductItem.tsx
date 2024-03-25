@@ -36,7 +36,7 @@ export const ProductItem = (
   const handlePress = () => {
     axios
       .post(
-        `https://247api.netpro.software/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
       )
       .then((res) => {
         console.log(res.data);

@@ -43,7 +43,7 @@ import { ErrorComponent } from '../../../components/ErrorComponent';
 import { useImageModalState } from '../../../lib/zustand/imageModal';
 import { ImageModal } from '../../../components/ImageModal';
 type Props = {};
-const api = process.env.EXPO_PUBLIC_API_URL;
+
 const ProductDetail = (props: Props) => {
   const { id } = useStoreId();
   const scrollViewRef = useRef<ScrollView>(null);
@@ -129,7 +129,7 @@ const ProductDetail = (props: Props) => {
     setAddingToWishlist(true);
     try {
       await axios.post(
-        `https://247api.netpro.software/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
       show('Added to wishlist', {
@@ -153,7 +153,7 @@ const ProductDetail = (props: Props) => {
     setAddingToWishlist(true);
     try {
       await axios.post(
-        `https://247api.netpro.software/api.aspx?api=removewishlist&productid=${productId}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=removewishlist&productid=${productId}&myuserid=${id}`
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
     } catch (error) {

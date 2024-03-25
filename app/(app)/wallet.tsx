@@ -14,12 +14,13 @@ import { useStoreId } from '../../lib/zustand/auth';
 import { useToast } from 'react-native-toast-notifications';
 import InputComponent from '../../components/InputComponent';
 import { MyButton } from '../../components/MyButton';
+import { useRouter } from 'expo-router';
 
 type Props = {};
 const validationSchema = yup.object().shape({
   amount: yup.string().required('Amount is required'),
 });
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
 const api = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
 const Wallet = (props: Props) => {
   const {
@@ -45,6 +46,7 @@ const Wallet = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const { id, user } = useStoreId();
   const { show } = useToast();
+  const router = useRouter();
   const {
     errors,
     values,
@@ -64,7 +66,7 @@ const Wallet = (props: Props) => {
 
       try {
         const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
         console.log(response.data);
@@ -138,7 +140,7 @@ const Wallet = (props: Props) => {
           paystackKey={api}
           billingEmail={user?.email as string}
           amount={finalAmount}
-          channels={['card']}
+          channels={['card', 'bank', 'ussd', 'mobile_money', 'qr']}
           onCancel={(e) => {
             show('Payment cancelled', {
               type: 'success',
@@ -158,7 +160,9 @@ const Wallet = (props: Props) => {
               duration: 4000,
               animationType: 'slide-in',
             });
+
             setReference('');
+            router.push('/order');
             resetForm({ values: { amount: '' } });
             walletBalanceRefetch();
           }}

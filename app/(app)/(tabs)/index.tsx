@@ -11,6 +11,7 @@ import {
 import { ActivityIndicator } from 'react-native-paper';
 
 import {
+  Id,
   useGetProfile,
   useGetRecentlyViewed,
   useNewArrival,
@@ -38,44 +39,38 @@ export const checkTextLength = (text: string) => {
   return text;
 };
 
-const api = process.env.EXPO_PUBLIC_API_URL;
 const width = Dimensions.get('window').width;
 export default function TabOneScreen() {
   const { id, getId } = useStoreId();
   const opacity = useSharedValue(0);
   const height = useSharedValue(0);
+  const router = useRouter();
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: opacity.value,
       height: height.value,
     };
   });
-  // const [special, setSpecial] = useState<Id[]>([]);
-  // console.log('🚀 ~ TabOneScreen ~ special:', special);
-  // const [error, setError] = useState(false);
-  // const [isPendingSpecial, setIsPendingSpecial] = useState(false);
+  const [special, setSpecial] = useState<Id[]>([]);
+  console.log('🚀 ~ TabOneScreen ~ special:', special);
 
-  // const refetchSpecial = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `https://247api.netpro.software/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
-  //     );
-
-  //     if (Array.isArray(response.data)) {
-  //       setSpecial(response.data);
-  //     } else if (typeof response.data === 'object' && response?.data !== null) {
-  //       setSpecial([response?.data]);
-  //     } else {
-  //       setSpecial([]); // Set to an empty array if the response data is neither an array nor an object
-  //     }
-  //   } catch (error) {
-  //     setError(true);
-  //   }
-  // };
+  const [error, setError] = useState(false);
+  const [isPendingSpecial, setIsPendingSpecial] = useState(false);
 
   useEffect(() => {
     getId();
   }, []);
+  const refetchSpecial = async () => {
+    try {
+      const response = await axios.get(
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+      );
+
+      setSpecial(response?.data);
+    } catch (error) {
+      setError(true);
+    }
+  };
   const {
     data: user,
     isPending: isPendingUser,
@@ -83,40 +78,33 @@ export default function TabOneScreen() {
     refetch: refetchUser,
     isPaused: isPausedUser,
   } = useGetProfile(id);
+  console.log(user?.statename?.toLowerCase());
 
-  const {
-    data: special,
-    isPending: isPendingSpecial,
-    isError: isErrorSpecial,
-    refetch: refetchSpecial,
-    isPaused: isPausedSpecial,
-  } = useSpecial(user?.statename?.toLowerCase());
+  // const {
+  //   data: special,
+  //   isPending: isPendingSpecial,
+  //   isError: isErrorSpecial,
+  //   refetch: refetchSpecial,
+  //   isPaused: isPausedSpecial,
+  // } = useSpecial(user?.statename?.toLowerCase());
 
-  // useEffect(() => {
-  //   const fetchSpecial = async () => {
-  //     try {
-  //       setIsPendingSpecial(true);
-  //       const response = await axios.get(
-  //         ` ${api}?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
-  //       );
-  //       console.log(response?.data);
+  useEffect(() => {
+    const fetchSpecial = async () => {
+      try {
+        setIsPendingSpecial(true);
+        const response = await axios.get(
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+        );
 
-  //       setSpecial([
-  //         ...(Array.isArray(response?.data)
-  //           ? response?.data
-  //           : [response?.data]
-  //         ).filter(Boolean),
-  //       ]);
-  //     } catch (error) {
-  //       setError(true);
-  //     } finally {
-  //       setIsPendingSpecial(false);
-  //     }
-  //   };
-  //   fetchSpecial();
-  // }, [user?.statename]);
-
-  const router = useRouter();
+        setSpecial(response?.data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsPendingSpecial(false);
+      }
+    };
+    fetchSpecial();
+  }, [user]);
 
   const {
     data: recentlyViewed,
@@ -176,20 +164,13 @@ export default function TabOneScreen() {
     refetchNew();
     refetchRecentlyViewed();
   };
-  if (isErrorUser) {
-    return (
-      <View>
-        <Text>sdfdfs</Text>
-      </View>
-    );
-  }
+
   if (
     isErrorUser ||
-    isErrorSpecial ||
+    error ||
     errorNew ||
     errorRecentlyViewed ||
     isPausedUser ||
-    isPausedSpecial ||
     isPausedNew ||
     isPausedRecentlyViewed
   ) {
@@ -216,8 +197,8 @@ export default function TabOneScreen() {
     );
   }
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const y = event.nativeEvent.contentOffset.y;
-    if (y > 350) {
+    const y = event?.nativeEvent?.contentOffset?.y;
+    if (y && y > 300) {
       opacity.value = withTiming(1);
       height.value = withTiming(70);
     } else {
@@ -227,9 +208,7 @@ export default function TabOneScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Animated.View style={[animatedStyle]}>
-        <TopHeader />
-      </Animated.View>
+      <TopHeader />
 
       <ScrollView
         scrollEventThrottle={16}
@@ -258,21 +237,23 @@ export default function TabOneScreen() {
           showsHorizontalScrollIndicator={false}
           onScroll={handleScroll}
         >
-          {special?.map((item, index) => {
-            return (
-              <Pressable
-                onPress={() => router.push(`/special/${item?.id}`)}
-                style={styles.imageContainer}
-                key={item?.id}
-              >
-                <Image
-                  source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
-                  style={styles.image}
-                  contentFit="contain"
-                />
-              </Pressable>
-            );
-          })}
+          {Array.isArray(special) &&
+            special?.length > 0 &&
+            special?.map((item, index) => {
+              return (
+                <Pressable
+                  onPress={() => router.push(`/special/${item?.id}`)}
+                  style={styles.imageContainer}
+                  key={item?.id}
+                >
+                  <Image
+                    source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
+                    style={styles.image}
+                    contentFit="contain"
+                  />
+                </Pressable>
+              );
+            })}
         </ScrollView>
         {!special?.length && (
           <View
@@ -335,7 +316,7 @@ export default function TabOneScreen() {
                     const handlePress = () => {
                       axios
                         .post(
-                          `https://247api.netpro.software/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+                          `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
                         )
                         .then((res) => {
                           console.log(res.data);
@@ -587,5 +568,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: width,
     borderRadius: 6,
+  },
+  top: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    zIndex: 100,
+    backgroundColor: 'white',
   },
 });

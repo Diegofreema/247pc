@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { LoggedUserType } from '../lib/types';
 
-const api = process.env.EXPO_PUBLIC_API_URL;
 type Props = {};
 
 export const TopHeader = ({}: Props): JSX.Element => {
@@ -20,7 +19,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
   useEffect(() => {
     const getProfile = async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data;

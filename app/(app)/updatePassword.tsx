@@ -33,7 +33,7 @@ const validationSchema = yup.object().shape({
     .min(5, 'New password must be at least 5 characters')
     .required('New password is required'),
 });
-const api = process.env.EXPO_PUBLIC_API_URL;
+
 const UpdatePassword = (props: Props) => {
   const { setId, id, getUser, setUser } = useStoreId();
   const toast = useToast();
@@ -47,7 +47,7 @@ const UpdatePassword = (props: Props) => {
       validationSchema,
       onSubmit: async (values) => {
         const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
         );
 
         if (response.data === 'incorrect previous password') {

@@ -59,7 +59,7 @@ const sell = (props: Props) => {
 
   useEffect(() => {
     axios
-      .get('https://247api.netpro.software/api.aspx?api=states')
+      .get('https://test.ngpoolsbetting.com.ng/api.aspx?api=states')
       .then(({ data }) => {
         setLoadingStates(true);
         let newArray: State[] = data?.map((item: { statename: string }) => {

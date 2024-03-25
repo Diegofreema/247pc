@@ -12,7 +12,7 @@ import { WishlistType } from '../../../lib/types';
 import axios from 'axios';
 import { ErrorComponent } from '../../../components/ErrorComponent';
 type Props = {};
-const api = process.env.EXPO_PUBLIC_API_URL;
+
 const wishlist = (props: Props) => {
   const { id } = useStoreId();
   const [reload, setReload] = useState(false);
@@ -27,7 +27,7 @@ const wishlist = (props: Props) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -51,7 +51,7 @@ const wishlist = (props: Props) => {
         setLoading(true);
         try {
           const response = await axios.get(
-            `https://247api.netpro.software/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
+            `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
           );
           let data = [];
           if (

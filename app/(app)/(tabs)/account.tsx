@@ -39,7 +39,6 @@ const pages = [
     icon: <AntDesign name="book" size={30} color="black" />,
   },
 ];
-const api = process.env.EXPO_PUBLIC_API_URL;
 
 const Account = (props: Props) => {
   const [loading, setLoading] = useState(false);
@@ -51,7 +50,7 @@ const Account = (props: Props) => {
   useEffect(() => {
     const getProfile = async () => {
       const { data } = await axios.get(
-        `https://247api.netpro.software/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data;

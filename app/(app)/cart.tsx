@@ -24,7 +24,6 @@ import { FloatingNav } from '../../components/FloatingNav';
 import axios from 'axios';
 import { useStoreId } from '../../lib/zustand/auth';
 type Props = {};
-// const api = process.env.EXPO_PUBLIC_API_URL;
 
 const cart = (props: Props) => {
   const { id } = useStoreId();

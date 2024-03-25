@@ -30,7 +30,7 @@ const validationSchema = yup.object().shape({
 });
 
 const paystackKey = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
-const api = process.env.EXPO_PUBLIC_API_URL;
+
 const CheckOut = (props: Props) => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const { id, user, setUser } = useStoreId();
@@ -57,7 +57,7 @@ const CheckOut = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const { data } = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
       );
       if (data === 'Invalid code!') {
         return show('Invalid code!', {
@@ -84,7 +84,7 @@ const CheckOut = (props: Props) => {
     setIsPaying(true);
     try {
       const { data } = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
       console.log(data);
 
@@ -227,7 +227,7 @@ const CheckOut = (props: Props) => {
             billingEmail={user?.email as string}
             amount={amount}
             refNumber={salesRef}
-            channels={['card']}
+            channels={['card', 'bank', 'ussd', 'mobile_money', 'qr']}
             onCancel={(e) => {
               show('Payment cancelled', {
                 type: 'success',

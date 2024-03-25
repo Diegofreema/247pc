@@ -27,7 +27,6 @@ const validationSchema = yup.object().shape({
     .min(5, 'Password must be at least 5 characters')
     .required('Password is required'),
 });
-const api = process.env.EXPO_PUBLIC_API_URL;
 
 const index = (props: Props) => {
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
@@ -46,7 +45,7 @@ const index = (props: Props) => {
       onSubmit: async (values) => {
         try {
           const response = await axios.post(
-            `${api}?api=userlogin&emailaddress=${values?.email}&pasword=${values?.password}`
+            `https://test.ngpoolsbetting.com.ng/api.aspx?api=userlogin&emailaddress=${values?.email}&pasword=${values?.password}`
           );
           console.log(response.data, 'response.data');
           if (response.data === '{result: "failed"}') {

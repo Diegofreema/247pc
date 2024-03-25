@@ -24,7 +24,7 @@ import { AuthModal } from '../../components/Modals/AuthModal';
 
 type Props = {};
 const width = Dimensions.get('window').width;
-const api = process.env.EXPO_PUBLIC_API_URL;
+
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
@@ -82,7 +82,7 @@ const SignUp = (props: Props) => {
 
         const name = `${values.firstName} ${values.lastName}`;
         const response = await axios.post(
-          `https://247api.netpro.software/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {
@@ -132,7 +132,7 @@ const SignUp = (props: Props) => {
   } = values;
   useEffect(() => {
     axios
-      .get('https://247api.netpro.software/api.aspx?api=states')
+      .get('https://test.ngpoolsbetting.com.ng/api.aspx?api=states')
       .then(({ data }) => {
         console.log('dfgfgfhdh', data);
 
@@ -160,7 +160,7 @@ const SignUp = (props: Props) => {
     if (state && state.length > 0) {
       axios
         .get(
-          `https://247api.netpro.software/api.aspx?api=communities&statename=${state}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=communities&statename=${state}`
         )
         .then(({ data }) => {
           let newArray: Community[] = data?.map(

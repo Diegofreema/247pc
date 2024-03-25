@@ -36,7 +36,7 @@ const validationSchema = yup.object().shape({
 
   communityId: yup.string().required('Community is required'),
 });
-const api = process.env.EXPO_PUBLIC_API_URL;
+
 const Update = (props: Props) => {
   const {
     setId,
@@ -73,7 +73,7 @@ const Update = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const response = await axios.post(
-        `https://247api.netpro.software/api.aspx?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
       );
 
       if (response.data === 'saved') {
@@ -85,7 +85,7 @@ const Update = (props: Props) => {
         });
         const user = await getProfile(id);
         setUser(user);
-        queryClient.invalidateQueries({ queryKey: ['user'] });
+        queryClient.invalidateQueries({ queryKey: ['profile'] });
         router.back();
       } else if (
         response.data === 'you may not change info while a delivery is en route'

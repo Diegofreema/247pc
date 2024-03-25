@@ -21,7 +21,7 @@ export const DeleteModal = ({ visible, onClose }: Props): JSX.Element => {
     setDeleting(true);
     try {
       await axios.post(
-        `https://247api.netpro.software/api.aspx?api=deleteuser&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=deleteuser&myuserid=${id}`
       );
       removeId();
       removeUser();

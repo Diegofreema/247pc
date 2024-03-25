@@ -18,17 +18,9 @@ type Props = {
   loading?: boolean;
 };
 
-const Header = ({}: Props) => {
+const Header = ({ user }: Props) => {
   const { id, user: profile } = useStoreId();
 
-  const {
-    data: user,
-
-    isPending,
-    isPaused: userIsPaused,
-    isError,
-    refetch,
-  } = useUser(id);
   const {
     data: walletBalance,
 
@@ -37,14 +29,13 @@ const Header = ({}: Props) => {
     isError: walletBalanceIsError,
   } = useWalletBalance();
 
-  const loading = isPending || walletBalanceIsPending;
+  const loading = walletBalanceIsPending;
 
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
     setReload(!reload);
-    refetch();
   };
-  if (isPaused || userIsPaused) {
+  if (isPaused) {
     return (
       <View
         style={{
@@ -67,7 +58,7 @@ const Header = ({}: Props) => {
       </View>
     );
   }
-  if (isError || walletBalanceIsError) {
+  if (walletBalanceIsError) {
     return (
       <View
         style={{
