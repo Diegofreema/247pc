@@ -227,7 +227,14 @@ const CheckOut = (props: Props) => {
             billingEmail={user?.email as string}
             amount={amount}
             refNumber={salesRef}
-            channels={['card', 'bank', 'ussd', 'mobile_money', 'qr']}
+            channels={[
+              'card',
+              'bank',
+              'ussd',
+              'mobile_money',
+              'qr',
+              'bank_transfer',
+            ]}
             onCancel={(e) => {
               show('Payment cancelled', {
                 type: 'success',

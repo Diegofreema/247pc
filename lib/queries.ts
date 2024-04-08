@@ -206,12 +206,12 @@ export const useSpecialOfferProducts = (productId?: string) => {
   });
 };
 export const useWishlist = () => {
-  const { id } = useStoreId();
+  const { id, user } = useStoreId();
   return useQuery({
-    queryKey: ['wishlist', id],
+    queryKey: ['wishlist', id, user?.statename],
     queryFn: async () => {
       const response = await axios.get(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {

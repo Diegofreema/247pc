@@ -14,7 +14,7 @@ import { ErrorComponent } from '../../../components/ErrorComponent';
 type Props = {};
 
 const wishlist = (props: Props) => {
-  const { id } = useStoreId();
+  const { id, user } = useStoreId();
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
   console.log('🚀 ~ wishlist ~ loading:', loading);
@@ -27,7 +27,7 @@ const wishlist = (props: Props) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -51,7 +51,7 @@ const wishlist = (props: Props) => {
         setLoading(true);
         try {
           const response = await axios.get(
-            `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=imo&myuserid=${id}`
+            `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
           );
           let data = [];
           if (
