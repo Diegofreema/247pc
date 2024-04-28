@@ -47,7 +47,7 @@ const UpdatePassword = (props: Props) => {
       validationSchema,
       onSubmit: async (values) => {
         const response = await axios.post(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
+          ` https://test.omega12x.net/api.aspx?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
         );
 
         if (response.data === 'incorrect previous password') {

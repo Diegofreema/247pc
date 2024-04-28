@@ -11,7 +11,7 @@ export const trimTitle = (title: string) => {
 
 export const getProfile = async (id: any) => {
   const { data } = await axios.get(
-    `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
+    ` https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
   );
 
   return data;

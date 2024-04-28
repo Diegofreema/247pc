@@ -57,7 +57,7 @@ const CheckOut = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const { data } = await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
+        ` https://test.omega12x.net/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
       );
       if (data === 'Invalid code!') {
         return show('Invalid code!', {
@@ -84,7 +84,7 @@ const CheckOut = (props: Props) => {
     setIsPaying(true);
     try {
       const { data } = await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
+        ` https://test.omega12x.net/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
       console.log(data);
 

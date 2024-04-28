@@ -24,16 +24,18 @@ import { AuthModal } from '../../components/Modals/AuthModal';
 
 type Props = {};
 const width = Dimensions.get('window').width;
-
+const passwordRegExp =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   password: yup
     .string()
-    .matches(/^[a-zA-Z0-9]+$/, 'Password can only contain letters and numbers')
-    .min(5, 'Password must be at least 5 characters')
-    .required('Password is required'),
+    .matches(
+      passwordRegExp,
+      'Password must include at least one capital letter, one number, one lower case letter, and one special character'
+    ),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
@@ -82,8 +84,11 @@ const SignUp = (props: Props) => {
         console.log(values);
 
         const name = `${values.firstName} ${values.lastName}`;
+        const formattedPassword = values.password
+          .replace(/[#?\/\\%&]/g, '')
+          .replace(/:/g, '');
         const response = await axios.post(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${values.password}&communityId=${values.communityId}`
+          ` https://test.omega12x.net/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${formattedPassword}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {
@@ -133,7 +138,7 @@ const SignUp = (props: Props) => {
   } = values;
   useEffect(() => {
     axios
-      .get('https://test.ngpoolsbetting.com.ng/api.aspx?api=states')
+      .get(' https://test.omega12x.net/api.aspx?api=states')
       .then(({ data }) => {
         console.log('dfgfgfhdh', data);
 
@@ -161,7 +166,7 @@ const SignUp = (props: Props) => {
     if (state && state.length > 0) {
       axios
         .get(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=communities&statename=${state}`
+          ` https://test.omega12x.net/api.aspx?api=communities&statename=${state}`
         )
         .then(({ data }) => {
           let newArray: Community[] = data?.map(

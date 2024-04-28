@@ -43,9 +43,12 @@ const index = (props: Props) => {
       },
       validationSchema,
       onSubmit: async (values) => {
+        const formattedPassword = values.password
+          .replace(/[#?\/\\%&]/g, '')
+          .replace(/:/g, '');
         try {
           const response = await axios.post(
-            `https://test.ngpoolsbetting.com.ng/api.aspx?api=userlogin&emailaddress=${values?.email}&pasword=${values?.password}`
+            ` https://test.omega12x.net/api.aspx?api=userlogin&emailaddress=${values?.email}&pasword=${formattedPassword}`
           );
           console.log(response.data, 'response.data');
           if (response.data === '{result: "failed"}') {
