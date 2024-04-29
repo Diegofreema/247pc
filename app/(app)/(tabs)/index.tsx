@@ -63,7 +63,7 @@ export default function TabOneScreen() {
   const refetchSpecial = async () => {
     try {
       const response = await axios.get(
-        ` https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+        `https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
       );
 
       setSpecial(response?.data);
@@ -93,7 +93,7 @@ export default function TabOneScreen() {
       try {
         setIsPendingSpecial(true);
         const response = await axios.get(
-          ` https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+          `https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
         );
 
         setSpecial(response?.data);
@@ -316,7 +316,7 @@ export default function TabOneScreen() {
                     const handlePress = () => {
                       axios
                         .post(
-                          ` https://test.omega12x.net/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+                          `https://test.omega12x.net/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
                         )
                         .then((res) => {
                           console.log(res.data);

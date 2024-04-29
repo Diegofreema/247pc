@@ -48,7 +48,7 @@ const index = (props: Props) => {
           .replace(/:/g, '');
         try {
           const response = await axios.post(
-            ` https://test.omega12x.net/api.aspx?api=userlogin&emailaddress=${values?.email}&pasword=${formattedPassword}`
+            `https://test.omega12x.net/api.aspx?api=userlogin&emailaddress=${values?.email}&pasword=${formattedPassword}`
           );
           console.log(response.data, 'response.data');
           if (response.data === '{result: "failed"}') {

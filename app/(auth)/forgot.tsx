@@ -32,7 +32,7 @@ const Forgot = (props: Props) => {
       validationSchema,
       onSubmit: async (values) => {
         const response = await axios.post(
-          ` https://test.omega12x.net/api.aspx?api=recoverpassword&emailaddress=${values.email}`
+          `https://test.omega12x.net/api.aspx?api=recoverpassword&emailaddress=${values.email}`
         );
 
         if (response.data === 'email does not exist') {

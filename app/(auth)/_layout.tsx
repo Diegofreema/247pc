@@ -1,6 +1,7 @@
 import { Redirect, Stack } from 'expo-router';
 import { useStoreId } from '../../lib/zustand/auth';
 import { useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 
 export default function AuthLayout() {
   const { id, getId } = useStoreId();
@@ -10,5 +11,10 @@ export default function AuthLayout() {
   if (id !== '') {
     return <Redirect href={'/'} />;
   }
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <>
+      <StatusBar style="dark" />
+      <Stack screenOptions={{ headerShown: false }} />
+    </>
+  );
 }

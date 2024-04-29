@@ -21,7 +21,7 @@ export const DeleteModal = ({ visible, onClose }: Props): JSX.Element => {
     setDeleting(true);
     try {
       await axios.post(
-        ` https://test.omega12x.net/api.aspx?api=deleteuser&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=deleteuser&myuserid=${id}`
       );
       removeId();
       removeUser();

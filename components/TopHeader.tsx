@@ -19,7 +19,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
   useEffect(() => {
     const getProfile = async () => {
       const { data } = await axios.get(
-        ` https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data;

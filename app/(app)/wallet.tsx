@@ -66,7 +66,7 @@ const Wallet = (props: Props) => {
 
       try {
         const response = await axios.post(
-          ` https://test.omega12x.net/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
+          `https://test.omega12x.net/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
         console.log(response.data);

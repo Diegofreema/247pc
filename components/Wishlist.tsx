@@ -28,7 +28,7 @@ const Wishlist = ({ id, category, price, title, refetch }: Props) => {
     setRemoving(true);
     try {
       await axios.post(
-        ` https://test.omega12x.net/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
+        `https://test.omega12x.net/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
       );
       refetch();
     } catch (error) {

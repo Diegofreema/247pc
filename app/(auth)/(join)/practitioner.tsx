@@ -168,7 +168,7 @@ const sell = (props: Props) => {
   };
   useEffect(() => {
     axios
-      .get(' https://test.omega12x.net/api.aspx?api=states')
+      .get('https://test.omega12x.net/api.aspx?api=states')
       .then(({ data }) => {
         setLoadingStates(true);
         let newArray: State[] = data?.map((item: { statename: string }) => {
