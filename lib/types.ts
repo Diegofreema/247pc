@@ -12,6 +12,7 @@ export type User = {
 
 export type State = {
   statename: string;
+  label: string;
 };
 export type Community = {
   communityname: string;

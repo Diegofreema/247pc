@@ -88,7 +88,7 @@ const SignUp = (props: Props) => {
           .replace(/[#?\/\\%&]/g, '')
           .replace(/:/g, '');
         const response = await axios.post(
-          `https://test.omega12x.net/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${formattedPassword}&communityId=${values.communityId}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${formattedPassword}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {
@@ -138,7 +138,7 @@ const SignUp = (props: Props) => {
   } = values;
   useEffect(() => {
     axios
-      .get('https://test.omega12x.net/api.aspx?api=states')
+      .get('https://test.ngpoolsbetting.com.ng/api.aspx?api=states')
       .then(({ data }) => {
         console.log('dfgfgfhdh', data);
 
@@ -166,7 +166,7 @@ const SignUp = (props: Props) => {
     if (state && state.length > 0) {
       axios
         .get(
-          `https://test.omega12x.net/api.aspx?api=communities&statename=${state}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=communities&statename=${state}`
         )
         .then(({ data }) => {
           let newArray: Community[] = data?.map(
@@ -358,7 +358,7 @@ const SignUp = (props: Props) => {
               </>
               <>
                 <InputComponent
-                  label="Street"
+                  label="Address"
                   placeholder="Address"
                   keyboardType="default"
                   onChangeText={handleChange('address')}

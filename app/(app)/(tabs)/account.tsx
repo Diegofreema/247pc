@@ -50,7 +50,7 @@ const Account = (props: Props) => {
   useEffect(() => {
     const getProfile = async () => {
       const { data } = await axios.get(
-        `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data;

@@ -27,7 +27,7 @@ const wishlist = (props: Props) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://test.omega12x.net/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -51,7 +51,7 @@ const wishlist = (props: Props) => {
         setLoading(true);
         try {
           const response = await axios.get(
-            `https://test.omega12x.net/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
+            `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
           );
           let data = [];
           if (

@@ -129,7 +129,7 @@ const ProductDetail = (props: Props) => {
     setAddingToWishlist(true);
     try {
       await axios.post(
-        `https://test.omega12x.net/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
       show('Added to wishlist', {
@@ -153,7 +153,7 @@ const ProductDetail = (props: Props) => {
     setAddingToWishlist(true);
     try {
       await axios.post(
-        `https://test.omega12x.net/api.aspx?api=removewishlist&productid=${productId}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=removewishlist&productid=${productId}&myuserid=${id}`
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
     } catch (error) {

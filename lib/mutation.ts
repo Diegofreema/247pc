@@ -27,7 +27,7 @@ export const useAddToWishlist = () => {
     mutationFn: async (productId?: string) => {
       console.log(productId, id);
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
 
       return response.data;
@@ -67,7 +67,7 @@ export const useAddToCart = () => {
     }) => {
       try {
         const response = await axios.post(
-          `https://test.omega12x.net/api.aspx?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
+          `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
         );
 
         console.log('sfdsfdg', response.data);
@@ -102,18 +102,33 @@ export const useAddToCart = () => {
 };
 export const useRemoveFromCart = () => {
   const queryClient = useQueryClient();
+  const { user, id } = useStoreId();
   const { show } = useToast();
+  const loadData = async () => {
+    try {
+      const res = await axios.post(
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+      );
+      console.log(res.data);
+      console.log('saving......');
 
+      queryClient.invalidateQueries({ queryKey: ['order'] });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return useMutation({
     mutationKey: ['removeFromCart'],
     mutationFn: async ({ salesId }: { salesId: string }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=removefromcart&saleid=${salesId}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=removefromcart&saleid=${salesId}`
       );
 
       return response.data;
     },
     onSuccess: async (data) => {
+      loadData();
+      queryClient.invalidateQueries({ queryKey: ['order'] });
       queryClient.invalidateQueries({ queryKey: ['cartList'] });
       queryClient.invalidateQueries({ queryKey: ['user'] });
       queryClient.invalidateQueries({ queryKey: ['order'] });
@@ -155,7 +170,7 @@ export const usePayStack = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
       );
 
       return response.data as PaystackType;
@@ -189,7 +204,7 @@ export const useWallet = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
       );
 
       return response.data;
@@ -241,7 +256,7 @@ export const useJoinUs = () => {
       address: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
       );
       console.log(response.data);
       return response.data;
@@ -297,7 +312,7 @@ export const useComment = () => {
       comment: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=ratedeliveredprod&myuserid=${id}&productid=${productId}&fullname=${user?.customername}&ratestar=${rating}&rateinfo=${comment}`
+        `https://test.ngpoolsbetting.com.ng/api.aspx?api=ratedeliveredprod&myuserid=${id}&productid=${productId}&fullname=${user?.customername}&ratestar=${rating}&rateinfo=${comment}`
       );
       console.log(response.data);
       return response.data;
