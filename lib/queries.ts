@@ -246,6 +246,7 @@ export const useNewArrival = () => {
 
       return data as WishlistType[];
     },
+    refetchInterval: 30000,
   });
 };
 export const useCat = () => {

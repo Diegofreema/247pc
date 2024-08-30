@@ -175,7 +175,7 @@ const ProductDetail = (props: Props) => {
   };
   console.log(typeof data);
   const source: HTMLSource = {
-    html: `<p style="font-size: 1.3rem; line-height: 1.5">
+    html: `<p style="font-size: 1rem; line-height: 1.5">
     ${data?.description || 'No description available'}
     </p>`,
   };
@@ -188,7 +188,7 @@ const ProductDetail = (props: Props) => {
     },
 
     p: {
-      fontFamily: 'PoppinsMedium',
+      fontFamily: 'Poppins',
     },
   };
 
