@@ -1,36 +1,35 @@
 import {
+  Dimensions,
+  NativeScrollEvent,
+  Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
-  Dimensions,
-  Pressable,
   View,
-  NativeScrollEvent,
-  RefreshControl,
 } from 'react-native';
 
 import { ActivityIndicator } from 'react-native-paper';
 
+import axios from 'axios';
+import { Image } from 'expo-image';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { NativeSyntheticEvent } from 'react-native';
+import { Text } from 'react-native-paper';
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { ErrorComponent } from '../../../components/ErrorComponent';
+import { TopHeader } from '../../../components/TopHeader';
 import {
   Id,
   useGetProfile,
   useGetRecentlyViewed,
   useNewArrival,
-  useSpecial,
 } from '../../../lib/queries';
-import { Text } from 'react-native-paper';
-import { TopHeader } from '../../../components/TopHeader';
-import { Image } from 'expo-image';
 import { useStoreId } from '../../../lib/zustand/auth';
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { NativeSyntheticEvent } from 'react-native';
-import axios from 'axios';
-import { ErrorComponent } from '../../../components/ErrorComponent';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -250,6 +249,8 @@ export default function TabOneScreen() {
                     source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
                     style={styles.image}
                     contentFit="contain"
+                    placeholder={require('../../../assets/images/place.jpg')}
+                    placeholderContentFit="contain"
                   />
                 </Pressable>
               );
@@ -344,6 +345,8 @@ export default function TabOneScreen() {
                             source={`https://247pharmacy.net/Uploads/${item?.id}.jpg`}
                             style={{ width: 250, height: 150, marginBottom: 5 }}
                             contentFit="contain"
+                            placeholder={require('../../../assets/images/place.jpg')}
+                            placeholderContentFit="contain"
                           />
                           <Text
                             style={{
@@ -467,6 +470,8 @@ export default function TabOneScreen() {
                           source={`https://247pharmacy.net/Uploads/${item?.id}.jpg`}
                           style={{ width: 200, height: 150, marginBottom: 5 }}
                           contentFit="contain"
+                          placeholder={require('../../../assets/images/place.jpg')}
+                          placeholderContentFit="contain"
                         />
                         <Text
                           style={{

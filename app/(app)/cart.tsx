@@ -1,27 +1,22 @@
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import Container from '../../components/Container';
-import NavigationHeader from '../../components/NavigationHeader';
+import { FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Button } from 'react-native-paper';
 import CartItem from '../../components/CartItem';
+import Container from '../../components/Container';
+import { FloatingNav } from '../../components/FloatingNav';
+import { MyButton } from '../../components/MyButton';
+import NavigationHeader from '../../components/NavigationHeader';
+import { colors } from '../../constants/Colors';
+import { useRemoveFromCart } from '../../lib/mutation';
 import {
-  useCart,
   useFee,
   useGetCart,
   useGetOrder,
   useUser,
   useWishlist,
 } from '../../lib/queries';
-import { ActivityIndicator, Button } from 'react-native-paper';
-import { colors } from '../../constants/Colors';
-import { FlashList } from '@shopify/flash-list';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRemoveFromCart } from '../../lib/mutation';
-import { CartType } from '../../lib/types';
-import { useFocusEffect, useRouter } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
-import { MyButton } from '../../components/MyButton';
-import { FloatingNav } from '../../components/FloatingNav';
-import axios from 'axios';
 import { useStoreId } from '../../lib/zustand/auth';
 type Props = {};
 

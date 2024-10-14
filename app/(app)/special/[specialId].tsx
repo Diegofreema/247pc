@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useStoreId } from '../../../lib/zustand/auth';
@@ -7,8 +7,6 @@ import { ActivityIndicator } from 'react-native-paper';
 import Container from '../../../components/Container';
 import NavigationHeader from '../../../components/NavigationHeader';
 import axios from 'axios';
-import { Image } from 'expo-image';
-import { FlashList } from '@shopify/flash-list';
 import { WishlistType } from '../../../lib/types';
 import { MyButton } from '../../../components/MyButton';
 import { colors } from '../../../constants/Colors';

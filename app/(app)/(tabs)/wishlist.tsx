@@ -6,8 +6,6 @@ import Wishlist from '../../../components/Wishlist';
 import { useStoreId } from '../../../lib/zustand/auth';
 import { useFocusEffect } from 'expo-router';
 import { ActivityIndicator } from 'react-native-paper';
-import { MyButton } from '../../../components/MyButton';
-import { colors } from '../../../constants/Colors';
 import { WishlistType } from '../../../lib/types';
 import axios from 'axios';
 import { ErrorComponent } from '../../../components/ErrorComponent';

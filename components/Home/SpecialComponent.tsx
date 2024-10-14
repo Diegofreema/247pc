@@ -3,7 +3,7 @@ import { Text } from 'react-native-paper';
 import { Id } from '../../lib/queries';
 import Carousel from 'react-native-reanimated-carousel';
 import { useRouter } from 'expo-router';
-import { Image } from 'react-native';
+import { Image } from 'expo-image';
 
 type Props = {
   special: Id[];
@@ -53,8 +53,10 @@ export const SpecialComponent = ({ special }: Props): JSX.Element => {
                     source={{
                       uri: `https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`,
                     }}
+                    placeholder={require('../../assets/images/place.jpg')}
+                    placeholderContentFit="cover"
                     style={styles.image}
-                    resizeMode="contain"
+                    contentFit="contain"
                   />
                 </Pressable>
               )}

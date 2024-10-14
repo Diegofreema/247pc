@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
 import { TextInput } from 'react-native-paper';
+import { FontAwesome } from '@expo/vector-icons';
 
 type Props = {
   label?: string;
@@ -12,6 +13,8 @@ type Props = {
   value: string;
   multiline?: boolean;
   numberOfLines?: number;
+  toggleSecureEntry?: () => void;
+  password?: boolean;
 };
 
 const InputComponent = ({
@@ -23,6 +26,8 @@ const InputComponent = ({
   value,
   multiline,
   numberOfLines,
+  toggleSecureEntry,
+  password,
 }: Props) => {
   return (
     <>
@@ -31,6 +36,7 @@ const InputComponent = ({
       >
         {label}
       </Text>
+
       <TextInput
         placeholder={placeholder}
         onChangeText={onChangeText}
@@ -51,6 +57,16 @@ const InputComponent = ({
         outlineStyle={{ borderColor: 'black', borderWidth: 1 }}
         multiline={multiline}
         numberOfLines={numberOfLines}
+        autoCapitalize={keyboardType === 'email-address' ? 'none' : 'sentences'}
+        right={
+          password ? (
+            <TextInput.Icon
+              icon={secureTextEntry ? 'eye' : 'eye-off'}
+              color={'black'}
+              onPress={toggleSecureEntry}
+            />
+          ) : null
+        }
       />
     </>
   );

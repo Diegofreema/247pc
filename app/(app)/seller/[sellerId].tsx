@@ -76,6 +76,8 @@ const Seller = (props: Props) => {
                   source={`https://247pharmacy.net/Uploads/${item.groupImageId}.jpg`}
                   style={{ width: 200, height: 200, marginBottom: 5 }}
                   contentFit="cover"
+                  placeholderContentFit="cover"
+                  placeholder={require('../../../assets//images/place.jpg')}
                 />
                 <Text
                   style={{

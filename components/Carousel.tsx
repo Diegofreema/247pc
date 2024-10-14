@@ -63,6 +63,8 @@ const Carousel = (special: Id[]) => {
               source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
               style={styles.image}
               contentFit="contain"
+              placeholderContentFit="cover"
+              placeholder={require('../assets/images/place.jpg')}
             />
           </Pressable>
         ))}

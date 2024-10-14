@@ -223,7 +223,7 @@ const CheckOut = (props: Props) => {
           }}
         >
           <Paystack
-            paystackKey={paystackKey}
+            paystackKey="pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe"
             billingEmail={user?.email as string}
             amount={amount}
             refNumber={salesRef}

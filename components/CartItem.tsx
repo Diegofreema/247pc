@@ -66,6 +66,8 @@ const CartItem = ({
             height: 100,
           }}
           contentFit="contain"
+          placeholderContentFit="cover"
+          placeholder={require('../assets/images/place.jpg')}
         />
         <View style={{ gap: 5, flex: 1 }}>
           <Text

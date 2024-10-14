@@ -1,15 +1,10 @@
 import { useRouter } from 'expo-router';
-import { StyleSheet, View, Text, Pressable, Dimensions } from 'react-native';
+import { StyleSheet, Text, Pressable, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 
 import { Searched, WishlistType } from '../lib/types';
 import axios from 'axios';
 import { useStoreId } from '../lib/zustand/auth';
-import CounterCartButton from './CounterCartButton';
-import { useProduct, useWishlist } from '../lib/queries';
-import { useAddToCart, useAddToWishlist } from '../lib/mutation';
-import { useState } from 'react';
-import { AddToCartButton } from './AddToCartButton';
 
 const { width } = Dimensions.get('window');
 type Prop = {
@@ -21,17 +16,6 @@ export const ProductItem = (
   const router = useRouter();
   const { id } = useStoreId();
 
-  const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
-
-  const [qty, setQty] = useState(1);
-  const {
-    data,
-    isFetching,
-    isPending,
-    error,
-    isPaused: isProductPaused,
-    refetch,
-  } = useProduct(item?.id);
   const { scroll } = item;
   const handlePress = () => {
     axios
@@ -70,6 +54,8 @@ export const ProductItem = (
         source={`https://247pharmacy.net/Uploads/${item.id}.jpg`}
         style={{ width: 250, height: 150, marginBottom: 5 }}
         contentFit="contain"
+        placeholder={require('../assets/images/place.jpg')}
+        placeholderContentFit="contain"
       />
       {item.Dealer && (
         <Text

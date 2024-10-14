@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Dimensions } from 'react-native';
+import { Text, Dimensions } from 'react-native';
 import React from 'react';
 import { Card } from 'react-native-paper';
 
@@ -46,6 +46,8 @@ const ProductCard = ({
         <Card.Cover
           source={{ uri: image }}
           style={{ marginBottom: 20, resizeMode: 'contain' }}
+          defaultSource={require('../assets/images/place.jpg')}
+          resizeMode="cover"
         />
         <Card.Content>
           <Text style={{ fontSize: 12, fontFamily: 'Poppins' }}>
@@ -61,5 +63,3 @@ const ProductCard = ({
 };
 
 export default ProductCard;
-
-const styles = StyleSheet.create({});

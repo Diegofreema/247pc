@@ -24,8 +24,7 @@ import { AuthModal } from '../../components/Modals/AuthModal';
 
 type Props = {};
 const width = Dimensions.get('window').width;
-const passwordRegExp =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
@@ -34,7 +33,7 @@ const validationSchema = yup.object().shape({
     .string()
     .matches(
       passwordRegExp,
-      'Password must include at least one capital letter, one number, one lower case letter, and one special character'
+      'Password must include at least one capital letter, one number, one lower case letter, and one special character and at least 5 characters long'
     ),
   confirmPassword: yup
     .string()
@@ -48,6 +47,8 @@ const validationSchema = yup.object().shape({
 });
 const SignUp = (props: Props) => {
   const { setId, getUser, setUser } = useStoreId();
+  const [secure, setSecure] = useState(true);
+  const [secure2, setSecure2] = useState(true);
   const toast = useToast();
   const router = useRouter();
   const [error, setError] = useState('');
@@ -377,7 +378,9 @@ const SignUp = (props: Props) => {
                   keyboardType="default"
                   onChangeText={handleChange('password')}
                   value={password}
-                  secureTextEntry
+                  secureTextEntry={secure}
+                  toggleSecureEntry={() => setSecure(!secure)}
+                  password
                 />
                 {touched.password && errors.password && (
                   <Text style={{ color: 'red', fontWeight: 'bold' }}>
@@ -392,7 +395,9 @@ const SignUp = (props: Props) => {
                   keyboardType="default"
                   onChangeText={handleChange('confirmPassword')}
                   value={confirmPassword}
-                  secureTextEntry
+                  secureTextEntry={secure2}
+                  toggleSecureEntry={() => setSecure2(!secure2)}
+                  password
                 />
                 {touched.confirmPassword && errors.confirmPassword && (
                   <Text style={{ color: 'red', fontWeight: 'bold' }}>

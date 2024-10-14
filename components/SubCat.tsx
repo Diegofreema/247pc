@@ -55,6 +55,8 @@ export const SubCat = ({
             borderRadius: 6,
           }}
           source={{ uri: img }}
+          placeholderContentFit="cover"
+          placeholder={require('../assets/images/place.jpg')}
           contentFit="cover"
         />
       )}

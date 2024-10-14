@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 type Props = {
   children: React.ReactNode;
@@ -15,6 +15,7 @@ export default Container;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 20,
+    paddingHorizontal: 20,
+    backgroundColor: 'white',
   },
 });

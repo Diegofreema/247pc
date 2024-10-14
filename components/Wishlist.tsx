@@ -75,6 +75,8 @@ const Wishlist = ({ id, category, price, title, refetch }: Props) => {
                 height: 150,
               }}
               contentFit="contain"
+              placeholderContentFit="contain"
+              placeholder={require('../assets/images/place.jpg')}
             />
           </View>
           <View style={{ flex: 0.6 }}>

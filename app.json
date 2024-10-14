@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.diegodark.247pharmacy",
-      "buildNumber": "1.0.8",
+
       "runtimeVersion": "1.0.8"
     },
     "android": {

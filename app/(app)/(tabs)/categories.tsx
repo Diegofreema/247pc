@@ -1,28 +1,22 @@
 import { useRef, useState } from 'react';
-import { categories } from '../../../constants';
 
-import {
-  FlatList,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  useWindowDimensions,
-  Pressable,
-} from 'react-native';
-import Header from '../../../components/Header';
-import { ActivityIndicator, Text } from 'react-native-paper';
 import * as Haptics from 'expo-haptics';
-import { TopHeader } from '../../../components/TopHeader';
-import { useCat, useSubCat } from '../../../lib/queries';
-import { SubCat } from '../../../components/SubCat';
-import { Floating } from '../../../components/Floating';
-import { MyButton } from '../../../components/MyButton';
-import { colors } from '../../../constants/Colors';
-import { Cats, subCats } from '../../../lib/helpers';
-import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
-import { Animated } from 'react-native';
+import { useRouter } from 'expo-router';
+import {
+  Animated,
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { Text } from 'react-native-paper';
+import { Floating } from '../../../components/Floating';
+import { TopHeader } from '../../../components/TopHeader';
+import { Cats, subCats } from '../../../lib/helpers';
 
 export default function Categories() {
   const [categories, setCategories] = useState(Cats);
@@ -64,7 +58,7 @@ export default function Categories() {
       <View style={{ marginTop: 10 }}>
         <TopHeader />
       </View>
-
+      {/* @ts-ignore */}
       <>
         <ScrollView
           ref={scrollRef}
@@ -131,6 +125,8 @@ export default function Categories() {
                   borderTopLeftRadius: 6,
                   borderTopRightRadius: 6,
                 }}
+                placeholderContentFit="cover"
+                placeholder={require('../../../assets/images/place.jpg')}
                 source={item?.img}
                 contentFit="cover"
               />

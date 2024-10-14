@@ -1,47 +1,32 @@
+import { useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { Image } from 'expo-image';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useRef, useState } from 'react';
 import {
+  Pressable,
+  RefreshControl,
   StyleSheet,
   View,
   useWindowDimensions,
-  Pressable,
-  RefreshControl,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useProduct, useProductCat, useWishlist } from '../../../lib/queries';
-import Container from '../../../components/Container';
-import NavigationHeader from '../../../components/NavigationHeader';
-import { Card, Text } from 'react-native-paper';
+import { ScrollView } from 'react-native-gesture-handler';
+import { ActivityIndicator, Card, Text } from 'react-native-paper';
 import RenderHtml, { HTMLSource } from 'react-native-render-html';
-import { ActivityIndicator } from 'react-native-paper';
-import {
-  PinchGestureHandlerGestureEvent,
-  ScrollView,
-} from 'react-native-gesture-handler';
-import CounterCartButton from '../../../components/CounterCartButton';
-import { useAddToCart, useAddToWishlist } from '../../../lib/mutation';
-import { useStoreId } from '../../../lib/zustand/auth';
-import { WishlistType } from '../../../lib/types';
-import { Image } from 'expo-image';
-import { colors } from '../../../constants/Colors';
-import { ProductItem } from '../../../components/ProductItem';
-import { MyButton } from '../../../components/MyButton';
-import { FloatingNav } from '../../../components/FloatingNav';
-import {
-  Gesture,
-  GestureDetector,
-  PinchGestureHandler,
-} from 'react-native-gesture-handler';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  useAnimatedGestureHandler,
-} from 'react-native-reanimated';
-import axios from 'axios';
 import { useToast } from 'react-native-toast-notifications';
-import { useQueryClient } from '@tanstack/react-query';
+import Container from '../../../components/Container';
+import CounterCartButton from '../../../components/CounterCartButton';
 import { ErrorComponent } from '../../../components/ErrorComponent';
-import { useImageModalState } from '../../../lib/zustand/imageModal';
+import { FloatingNav } from '../../../components/FloatingNav';
 import { ImageModal } from '../../../components/ImageModal';
+import NavigationHeader from '../../../components/NavigationHeader';
+import { ProductItem } from '../../../components/ProductItem';
+import { colors } from '../../../constants/Colors';
+import { useAddToCart } from '../../../lib/mutation';
+import { useProduct, useProductCat, useWishlist } from '../../../lib/queries';
+import { WishlistType } from '../../../lib/types';
+import { useStoreId } from '../../../lib/zustand/auth';
+import { useImageModalState } from '../../../lib/zustand/imageModal';
 type Props = {};
 
 const ProductDetail = (props: Props) => {
@@ -59,7 +44,6 @@ const ProductDetail = (props: Props) => {
     isFetching: isFetchingWishlist,
     isError,
     isPaused,
-    isPending: isPendingWishlist,
   } = useWishlist();
 
   const inWishlist = wishList?.find(
@@ -74,7 +58,7 @@ const ProductDetail = (props: Props) => {
   const [qty, setQty] = useState(1);
   const {
     data,
-    isFetching,
+
     isPending,
     error,
     isPaused: isProductPaused,
@@ -247,6 +231,8 @@ const ProductDetail = (props: Props) => {
                 }}
                 style={[{ width: 250, height: 250 }]}
                 contentFit="contain"
+                placeholder={require('../../../assets/images/place.jpg')}
+                placeholderContentFit="contain"
               />
             </Pressable>
 

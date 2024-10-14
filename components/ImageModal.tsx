@@ -11,10 +11,7 @@ type Props = {
 export const ImageModal = ({ image }: Props): JSX.Element => {
   const { isOpen, onClose } = useImageModalState();
   const router = useRouter();
-  const handleNav = () => {
-    onClose();
-    router.push('/wallet');
-  };
+
   return (
     <Portal>
       <Modal
@@ -26,6 +23,8 @@ export const ImageModal = ({ image }: Props): JSX.Element => {
           source={{ uri: image }}
           style={{ width: '100%', height: '100%' }}
           contentFit="contain"
+          placeholder={require('../assets/images/place.jpg')}
+          placeholderContentFit="contain"
         />
       </Modal>
     </Portal>

@@ -1,6 +1,6 @@
 import { Text, View, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
-import React from 'react';
+import React, { useState } from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
@@ -30,6 +30,7 @@ const validationSchema = yup.object().shape({
 
 const index = (props: Props) => {
   const { setId, getUser, setUser, id, getId, user } = useStoreId();
+  const [secure, setSecure] = useState(true);
   const router = useRouter();
   const { mutate, isPending, isSuccess } = useGetProfile();
   console.log('🚀 ~ index ~ isPending:', isPending);
@@ -151,7 +152,9 @@ const index = (props: Props) => {
                 keyboardType="default"
                 onChangeText={handleChange('password')}
                 value={password}
-                secureTextEntry
+                secureTextEntry={secure}
+                password
+                toggleSecureEntry={() => setSecure(!secure)}
               />
               {touched.password && errors.password && (
                 <Text style={{ color: 'red', fontWeight: 'bold' }}>

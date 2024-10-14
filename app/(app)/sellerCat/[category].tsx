@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View, Pressable, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSellerCat } from '../../../lib/queries';
 import Container from '../../../components/Container';
 import NavigationHeader from '../../../components/NavigationHeader';
-import { Image } from 'expo-image';
 import { ActivityIndicator } from 'react-native-paper';
 import { ProductItem } from '../../../components/ProductItem';
 import { MyButton } from '../../../components/MyButton';

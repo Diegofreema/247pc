@@ -15,12 +15,15 @@ export const OrderedProductCard = ({
   statuz,
 }: Order): JSX.Element => {
   return (
+    // @ts-ignore
     <>
       <View style={styles.container}>
         <Image
           style={styles.image}
           source={`https://247pharmacy.net/Uploads/${productid}.jpg`}
           contentFit="contain"
+          placeholderContentFit="cover"
+          placeholder={require('../assets/images/place.jpg')}
         />
         <Text
           style={{

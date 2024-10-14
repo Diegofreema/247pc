@@ -8,6 +8,7 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import * as Updates from 'expo-updates';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -64,13 +65,15 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <PaperProvider>
-        <ToastProvider>
-          <RootLayoutNav />
-        </ToastProvider>
-      </PaperProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <PaperProvider>
+          <ToastProvider>
+            <RootLayoutNav />
+          </ToastProvider>
+        </PaperProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }
 const MyTheme = {
