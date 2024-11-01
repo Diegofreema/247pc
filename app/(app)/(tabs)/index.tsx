@@ -250,7 +250,7 @@ export default function TabOneScreen() {
                     style={styles.image}
                     contentFit="contain"
                     placeholder={require('../../../assets/images/place.jpg')}
-                    placeholderContentFit="contain"
+                    placeholderContentFit="cover"
                   />
                 </Pressable>
               );

@@ -49,7 +49,7 @@ const index = (props: Props) => {
           .replace(/:/g, '');
         try {
           const response = await axios.post(
-            `https://test.ngpoolsbetting.com.ng/api.aspx?api=userlogin&emailaddress=${values?.email}&pasword=${formattedPassword}`
+            `https://test.ngpoolsbetting.com.ng/api.aspx?api=userlogin&emailaddress=${values?.email.toLowerCase()}&pasword=${formattedPassword}`
           );
           console.log(response.data, 'response.data');
           if (response.data === '{result: "failed"}') {
