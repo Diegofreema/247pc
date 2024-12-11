@@ -1,11 +1,11 @@
-import { StyleSheet, View, Text, Modal, Pressable } from 'react-native';
-import { MyButton } from './MyButton';
-import { colors } from '../constants/Colors';
+import {Modal, StyleSheet, Text, View} from 'react-native';
+import {MyButton} from './MyButton';
+import {colors} from '../constants/Colors';
 import axios from 'axios';
-import { useStoreId } from '../lib/zustand/auth';
-import { useState } from 'react';
-import { useRouter } from 'expo-router';
-import { useToast } from 'react-native-toast-notifications';
+import {useStoreId} from '../lib/zustand/auth';
+import {useState} from 'react';
+import {useRouter} from 'expo-router';
+import {useToast} from 'react-native-toast-notifications';
 
 type Props = {
   visible: boolean;
@@ -21,7 +21,7 @@ export const DeleteModal = ({ visible, onClose }: Props): JSX.Element => {
     setDeleting(true);
     try {
       await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=deleteuser&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=deleteuser&myuserid=${id}`
       );
       removeId();
       removeUser();

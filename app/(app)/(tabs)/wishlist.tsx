@@ -1,17 +1,17 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import NavigationHeader from '../../../components/NavigationHeader';
 import Container from '../../../components/Container';
 import Wishlist from '../../../components/Wishlist';
-import { useStoreId } from '../../../lib/zustand/auth';
-import { useFocusEffect } from 'expo-router';
-import { ActivityIndicator } from 'react-native-paper';
-import { WishlistType } from '../../../lib/types';
+import {useStoreId} from '../../../lib/zustand/auth';
+import {useFocusEffect} from 'expo-router';
+import {ActivityIndicator} from 'react-native-paper';
+import {WishlistType} from '../../../lib/types';
 import axios from 'axios';
-import { ErrorComponent } from '../../../components/ErrorComponent';
-type Props = {};
+import {ErrorComponent} from '../../../components/ErrorComponent';
 
-const wishlist = (props: Props) => {
+
+const wishlist = () => {
   const { id, user } = useStoreId();
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,13 +19,13 @@ const wishlist = (props: Props) => {
   const [wishlist, setWishlist] = useState<WishlistType[]>([]);
   console.log('🚀 ~ wishlist ~ wishlist:', wishlist);
   const [isError, setIsError] = useState(false);
-  const [pending, setPending] = useState(false);
+
 
   const refetch = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
       );
       let data = [];
       if (Object.prototype.toString.call(response.data) === '[object Object]') {
@@ -49,7 +49,7 @@ const wishlist = (props: Props) => {
         setLoading(true);
         try {
           const response = await axios.get(
-            `https://test.ngpoolsbetting.com.ng/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
+            `https://test.omega12x.net/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
           );
           let data = [];
           if (

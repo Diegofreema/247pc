@@ -1,13 +1,11 @@
-import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { StyleSheet, View, Text, Pressable, Animated } from 'react-native';
-import { Searchbar, Button, ActivityIndicator } from 'react-native-paper';
-import { useStoreId } from '../lib/zustand/auth';
-import { useUser } from '../lib/queries';
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import {FontAwesome} from '@expo/vector-icons';
+import {useRouter} from 'expo-router';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {useStoreId} from '../lib/zustand/auth';
+import {useQueryClient} from '@tanstack/react-query';
+import {useEffect, useState} from 'react';
 import axios from 'axios';
-import { LoggedUserType } from '../lib/types';
+import {LoggedUserType} from '../lib/types';
 
 type Props = {};
 
@@ -19,7 +17,7 @@ export const TopHeader = ({}: Props): JSX.Element => {
   useEffect(() => {
     const getProfile = async () => {
       const { data } = await axios.get(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data;

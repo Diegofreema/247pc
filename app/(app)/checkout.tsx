@@ -1,37 +1,30 @@
-import { StyleSheet, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import {View} from 'react-native';
+import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import NavigationHeader from '../../components/NavigationHeader';
-import {
-  ActivityIndicator,
-  Button,
-  Card,
-  TextInput,
-  Text,
-} from 'react-native-paper';
-import { useFormik } from 'formik';
+import {ActivityIndicator, Button, Card, Text, TextInput,} from 'react-native-paper';
+import {useFormik} from 'formik';
 import * as yup from 'yup';
-import { useGetOrder } from '../../lib/queries';
-import { colors } from '../../constants/Colors';
+import {useGetOrder} from '../../lib/queries';
+import {colors} from '../../constants/Colors';
 import axios from 'axios';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useToast } from 'react-native-toast-notifications';
-import { useQueryClient } from '@tanstack/react-query';
-import { Paystack, paystackProps } from 'react-native-paystack-webview';
-import { usePayStack, useWallet } from '../../lib/mutation';
-import { ModalComponent } from '../../components/Modal';
-import { useModalState } from '../../lib/zustand/modalState';
-import { MyButton } from '../../components/MyButton';
-import { Link, router } from 'expo-router';
-import { getProfile } from '../../lib/helpers';
-type Props = {};
+import {useStoreId} from '../../lib/zustand/auth';
+import {useToast} from 'react-native-toast-notifications';
+import {useQueryClient} from '@tanstack/react-query';
+import {Paystack, paystackProps} from 'react-native-paystack-webview';
+import {useWallet} from '../../lib/mutation';
+import {ModalComponent} from '../../components/Modal';
+import {MyButton} from '../../components/MyButton';
+import {Link, router} from 'expo-router';
+import {getProfile} from '../../lib/helpers';
+
+
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
 });
 
-const paystackKey = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
 
-const CheckOut = (props: Props) => {
+const CheckOut = () => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const { id, user, setUser } = useStoreId();
   const { show } = useToast();
@@ -49,7 +42,7 @@ const CheckOut = (props: Props) => {
     errors,
     touched,
     isSubmitting,
-    resetForm,
+
   } = useFormik({
     initialValues: {
       coupon: '',
@@ -57,7 +50,7 @@ const CheckOut = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const { data } = await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
+        `https://test.omega12x.net/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
       );
       if (data === 'Invalid code!') {
         return show('Invalid code!', {
@@ -84,7 +77,7 @@ const CheckOut = (props: Props) => {
     setIsPaying(true);
     try {
       const { data } = await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
+        `https://test.omega12x.net/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
       console.log(data);
 
@@ -109,9 +102,7 @@ const CheckOut = (props: Props) => {
     data,
     isPaused,
     isPending,
-    isFetching,
     isError,
-    isLoading: loadingOrder,
     refetch,
   } = useGetOrder();
 
@@ -236,6 +227,7 @@ const CheckOut = (props: Props) => {
               'bank_transfer',
             ]}
             onCancel={(e) => {
+                console.log(e)
               show('Payment cancelled', {
                 type: 'success',
                 placement: 'bottom',
@@ -243,7 +235,7 @@ const CheckOut = (props: Props) => {
                 animationType: 'slide-in',
               });
             }}
-            onSuccess={async ({ transactionRef }) => {
+            onSuccess={async () => {
               // @ts-ignore
 
               try {
@@ -437,4 +429,4 @@ const CheckOut = (props: Props) => {
 
 export default CheckOut;
 
-const styles = StyleSheet.create({});
+

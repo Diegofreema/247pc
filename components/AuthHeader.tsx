@@ -1,27 +1,28 @@
-import { FontAwesome } from '@expo/vector-icons';
+import {FontAwesome} from '@expo/vector-icons';
 import React from 'react';
-import { View, StyleSheet, Pressable, Linking } from 'react-native';
-import { Text } from 'react-native-paper';
-import { colors } from '../constants/Colors';
-import { Platform } from 'react-native';
-import { Link } from 'expo-router';
+import {Linking, Platform, Pressable, StyleSheet, View} from 'react-native';
+import {Text} from 'react-native-paper';
+import {Link} from 'expo-router';
 
-type Props = {};
 
-const AuthHeader = (props: Props) => {
-  const openDialScreen = () => {
-    let number = '';
+const phoneNumber = 2349011770294
+const url = `https://wa.me/${phoneNumber}?text=Hello%20dear!`;
+export const onOpenWhatsapp = async () => {
+        await Linking.openURL(url);
+
+}
+const AuthHeader = () => {
+
+  const openDialScreen = async () => {
+    let number;
     if (Platform.OS === 'ios') {
-      number = 'telprompt:${09011770294}';
+      number = `telprompt:+2439011770294`;
     } else {
-      number = 'tel:${09011770294}';
+      number = 'tel:+2439011770294';
     }
-    Linking.openURL(number);
+   await Linking.openURL(number);
   };
-  const onOpenWhatsapp = () => {
-      Linking.openURL('https://wa.me/09011770294');
-  }
-  return (
+    return (
     <View style={styles.container}>
       <Link href={'/(auth)/(join)/sell'} asChild>
         <Text
@@ -37,7 +38,7 @@ const AuthHeader = (props: Props) => {
         </Text>
       </Link>
       <Pressable style={styles.subContainer} onPress={openDialScreen}>
-          <FontAwesome name="whatsapp" size={15} color="#000" style={{marginRight: 5}} />
+          <FontAwesome name="phone" size={15} color="#000" style={{marginRight: 5}} />
 
         <Text
           style={{ fontFamily: 'PoppinsMedium', fontSize: 10, color: '#000' }}

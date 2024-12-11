@@ -1,19 +1,19 @@
-import { Dimensions, StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Container from '../../../components/Container';
-import { Image } from 'expo-image';
+import {Image} from 'expo-image';
 import NavigationHeader from '../../../components/NavigationHeader';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
-import { State } from '../../../lib/types';
-import { SelectList } from 'react-native-dropdown-select-list';
+import {State} from '../../../lib/types';
+import {SelectList} from 'react-native-dropdown-select-list';
 import InputComponent from '../../../components/InputComponent';
-import { MyButton } from '../../../components/MyButton';
-import { colors } from '../../../constants/Colors';
-import { useJoinUs } from '../../../lib/mutation';
-type Props = {};
+import {MyButton} from '../../../components/MyButton';
+import {colors} from '../../../constants/Colors';
+import {useJoinUs} from '../../../lib/mutation';
+
+
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name of pharmacy is required'),
 
@@ -24,15 +24,15 @@ const validationSchema = yup.object().shape({
   state: yup.string().required('State is required'),
 });
 const { width } = Dimensions.get('window');
-const sell = (props: Props) => {
+const sell = () => {
   const [states, setStates] = useState<State[]>([
     { statename: 'abuja', label: 'Abuja' },
     { statename: 'imo', label: 'Imo' },
   ]);
   const { mutateAsync, isPending } = useJoinUs();
   const [loadingStates, setLoadingStates] = useState(false);
-  const [error, setError] = useState('');
-  const { values, errors, handleChange, handleSubmit, touched, resetForm } =
+  const [_, setError] = useState('');
+  const { values, errors, handleChange, handleSubmit, touched, } =
     useFormik({
       initialValues: {
         name: '',
@@ -43,7 +43,7 @@ const sell = (props: Props) => {
       },
       validationSchema,
       onSubmit: async (values) => {
-        const response = await mutateAsync({
+        await mutateAsync({
           email: values.email,
           pharmacyName: values.name,
           stateName: values.state,
@@ -59,7 +59,7 @@ const sell = (props: Props) => {
 
   useEffect(() => {
     axios
-      .get('https://test.ngpoolsbetting.com.ng/api.aspx?api=states')
+      .get('https://test.omega12x.net/api.aspx?api=states')
       .then(({ data }) => {
         setLoadingStates(true);
         let newArray: State[] = data?.map((item: { statename: string }) => {
@@ -73,7 +73,7 @@ const sell = (props: Props) => {
 
         setLoadingStates(false);
       })
-      .catch((error) => {
+      .catch(() => {
         setError('Something went wrong, try again later');
         setLoadingStates(false);
       });

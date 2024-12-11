@@ -1,42 +1,36 @@
-import { useQueryClient } from '@tanstack/react-query';
+import {useQueryClient} from '@tanstack/react-query';
 import axios from 'axios';
-import { Image } from 'expo-image';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useRef, useState } from 'react';
-import {
-  Pressable,
-  RefreshControl,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { ActivityIndicator, Card, Text } from 'react-native-paper';
-import RenderHtml, { HTMLSource } from 'react-native-render-html';
-import { useToast } from 'react-native-toast-notifications';
+import {Image} from 'expo-image';
+import {useLocalSearchParams, useRouter} from 'expo-router';
+import React, {useRef, useState} from 'react';
+import {Pressable, RefreshControl, StyleSheet, useWindowDimensions, View,} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ActivityIndicator, Card, Text} from 'react-native-paper';
+import RenderHtml, {HTMLSource} from 'react-native-render-html';
+import {useToast} from 'react-native-toast-notifications';
 import Container from '../../../components/Container';
 import CounterCartButton from '../../../components/CounterCartButton';
-import { ErrorComponent } from '../../../components/ErrorComponent';
-import { FloatingNav } from '../../../components/FloatingNav';
-import { ImageModal } from '../../../components/ImageModal';
+import {ErrorComponent} from '../../../components/ErrorComponent';
+import {FloatingNav} from '../../../components/FloatingNav';
+import {ImageModal} from '../../../components/ImageModal';
 import NavigationHeader from '../../../components/NavigationHeader';
-import { ProductItem } from '../../../components/ProductItem';
-import { colors } from '../../../constants/Colors';
-import { useAddToCart } from '../../../lib/mutation';
-import { useProduct, useProductCat, useWishlist } from '../../../lib/queries';
-import { WishlistType } from '../../../lib/types';
-import { useStoreId } from '../../../lib/zustand/auth';
-import { useImageModalState } from '../../../lib/zustand/imageModal';
-type Props = {};
+import {ProductItem} from '../../../components/ProductItem';
+import {colors} from '../../../constants/Colors';
+import {useAddToCart} from '../../../lib/mutation';
+import {useProduct, useProductCat, useWishlist} from '../../../lib/queries';
+import {WishlistType} from '../../../lib/types';
+import {useStoreId} from '../../../lib/zustand/auth';
+import {useImageModalState} from '../../../lib/zustand/imageModal';
 
-const ProductDetail = (props: Props) => {
+
+const ProductDetail = () => {
   const { id } = useStoreId();
   const scrollViewRef = useRef<ScrollView>(null);
   const router = useRouter();
   const { onOpen } = useImageModalState();
 
   const { productId } = useLocalSearchParams();
-  console.log('🚀 ~ ProductDetail ~ productId:', productId);
+
   const queryClient = useQueryClient();
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
   const {
@@ -113,7 +107,7 @@ const ProductDetail = (props: Props) => {
     setAddingToWishlist(true);
     try {
       await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
       show('Added to wishlist', {
@@ -137,7 +131,7 @@ const ProductDetail = (props: Props) => {
     setAddingToWishlist(true);
     try {
       await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=removewishlist&productid=${productId}&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=removewishlist&productid=${productId}&myuserid=${id}`
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
     } catch (error) {
@@ -411,4 +405,4 @@ const ProductDetail = (props: Props) => {
 
 export default ProductDetail;
 
-const styles = StyleSheet.create({});
+

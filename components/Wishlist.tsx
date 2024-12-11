@@ -1,16 +1,14 @@
-import { StyleSheet, View, Pressable } from 'react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, Text } from 'react-native-paper';
-import { Image } from 'expo-image';
-import { trimTitle } from '../lib/helpers';
-import { FontAwesome } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import Rating from './Rating';
-import { MyButton } from './MyButton';
-import { colors } from '../constants/Colors';
+import {Pressable, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {Text} from 'react-native-paper';
+import {Image} from 'expo-image';
+import {trimTitle} from '../lib/helpers';
+import {Link} from 'expo-router';
+import {MyButton} from './MyButton';
+import {colors} from '../constants/Colors';
 import axios from 'axios';
-import { useStoreId } from '../lib/zustand/auth';
-import { useToast } from 'react-native-toast-notifications';
+import {useStoreId} from '../lib/zustand/auth';
+import {useToast} from 'react-native-toast-notifications';
 
 type Props = {
   id?: string;
@@ -28,7 +26,7 @@ const Wishlist = ({ id, category, price, title, refetch }: Props) => {
     setRemoving(true);
     try {
       await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
+        `https://test.omega12x.net/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
       );
       refetch();
     } catch (error) {
@@ -135,4 +133,4 @@ const Wishlist = ({ id, category, price, title, refetch }: Props) => {
 
 export default Wishlist;
 
-const styles = StyleSheet.create({});
+

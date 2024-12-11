@@ -1,28 +1,28 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { useWallet, useWalletBalance } from '../../lib/queries';
+import {FlatList, Text, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {useWallet, useWalletBalance} from '../../lib/queries';
 import Container from '../../components/Container';
 import NavigationHeader from '../../components/NavigationHeader';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
-import { colors } from '../../constants/Colors';
-import { useFormik } from 'formik';
-import { Paystack, paystackProps } from 'react-native-paystack-webview';
+import {FontAwesome, FontAwesome5} from '@expo/vector-icons';
+import {ActivityIndicator, Button} from 'react-native-paper';
+import {colors} from '../../constants/Colors';
+import {useFormik} from 'formik';
+import {Paystack, paystackProps} from 'react-native-paystack-webview';
 import * as yup from 'yup';
 import axios from 'axios';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useToast } from 'react-native-toast-notifications';
+import {useStoreId} from '../../lib/zustand/auth';
+import {useToast} from 'react-native-toast-notifications';
 import InputComponent from '../../components/InputComponent';
-import { MyButton } from '../../components/MyButton';
-import { useRouter } from 'expo-router';
+import {MyButton} from '../../components/MyButton';
+import {useRouter} from 'expo-router';
 
-type Props = {};
+
 const validationSchema = yup.object().shape({
   amount: yup.string().required('Amount is required'),
 });
 
 const api = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
-const Wallet = (props: Props) => {
+const Wallet = () => {
   const {
     data,
     refetch,
@@ -48,12 +48,11 @@ const Wallet = (props: Props) => {
   const { show } = useToast();
   const router = useRouter();
   const {
-    errors,
+
     values,
     handleChange,
     handleSubmit,
-    touched,
-    isSubmitting,
+
 
     resetForm,
   } = useFormik({
@@ -66,7 +65,7 @@ const Wallet = (props: Props) => {
 
       try {
         const response = await axios.post(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
+          `https://test.omega12x.net/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
         console.log(response.data);
@@ -141,7 +140,7 @@ const Wallet = (props: Props) => {
           billingEmail={user?.email as string}
           amount={finalAmount}
           channels={['card', 'bank', 'ussd', 'mobile_money', 'qr']}
-          onCancel={(e) => {
+          onCancel={() => {
             show('Payment cancelled', {
               type: 'success',
               placement: 'bottom',
@@ -149,7 +148,7 @@ const Wallet = (props: Props) => {
               animationType: 'slide-in',
             });
           }}
-          onSuccess={(res) => {
+          onSuccess={() => {
             axios
               .post(`https://247pharmacy.net/check-out.aspx?zxc=${reference}`)
               .then((response) => console.log(response));
@@ -293,7 +292,7 @@ const Wallet = (props: Props) => {
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => item}
+          keyExtractor={(item, ) => item}
           data={data}
           renderItem={({ item }) => (
             <Text
@@ -337,4 +336,4 @@ const Wallet = (props: Props) => {
 
 export default Wallet;
 
-const styles = StyleSheet.create({});
+

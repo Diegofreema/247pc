@@ -1,29 +1,29 @@
-import { Text, View, Dimensions, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
-import React, { useEffect, useState } from 'react';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Image} from 'expo-image';
+import React, {useEffect, useState} from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import { ActivityIndicator } from 'react-native-paper';
-import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
+import {ActivityIndicator} from 'react-native-paper';
+import {colors} from '../../constants/Colors';
+import {useRouter} from 'expo-router';
 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useToast } from 'react-native-toast-notifications';
-import { MyButton } from '../../components/MyButton';
-import { getProfile } from '../../lib/helpers';
-import { useQueryClient } from '@tanstack/react-query';
-import { SelectList } from 'react-native-dropdown-select-list';
-import { ErrorComponent } from '../../components/ErrorComponent';
-import { useGetCom, useGetState, useGetUpdateUser } from '../../lib/queries';
+import {useStoreId} from '../../lib/zustand/auth';
+import {useToast} from 'react-native-toast-notifications';
+import {MyButton} from '../../components/MyButton';
+import {getProfile} from '../../lib/helpers';
+import {useQueryClient} from '@tanstack/react-query';
+import {SelectList} from 'react-native-dropdown-select-list';
+import {ErrorComponent} from '../../components/ErrorComponent';
+import {useGetCom, useGetState, useGetUpdateUser} from '../../lib/queries';
 
-type Props = {};
+
 const width = Dimensions.get('window').width;
 
 const validationSchema = yup.object().shape({
@@ -37,15 +37,14 @@ const validationSchema = yup.object().shape({
   communityId: yup.string().required('Community is required'),
 });
 
-const Update = (props: Props) => {
+const Update = () => {
   const {
-    setId,
+
     id,
     getId,
-    getUser,
-    removeUser,
+
     setUser,
-    user: profile,
+
   } = useStoreId();
   const queryClient = useQueryClient();
 
@@ -73,7 +72,7 @@ const Update = (props: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const response = await axios.post(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
       );
 
       if (response.data === 'saved') {
@@ -381,27 +380,5 @@ const styles2 = StyleSheet.create({
     minHeight: 50,
     alignItems: 'flex-start',
     justifyContent: 'center',
-  },
-});
-const styles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });

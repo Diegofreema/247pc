@@ -1,6 +1,7 @@
 import {
   Dimensions,
   NativeScrollEvent,
+  NativeSyntheticEvent,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -8,28 +9,18 @@ import {
   View,
 } from 'react-native';
 
-import { ActivityIndicator } from 'react-native-paper';
+import {ActivityIndicator, Text} from 'react-native-paper';
 
 import axios from 'axios';
-import { Image } from 'expo-image';
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { NativeSyntheticEvent } from 'react-native';
-import { Text } from 'react-native-paper';
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import { ErrorComponent } from '../../../components/ErrorComponent';
-import { TopHeader } from '../../../components/TopHeader';
-import {
-  Id,
-  useGetProfile,
-  useGetRecentlyViewed,
-  useNewArrival,
-} from '../../../lib/queries';
-import { useStoreId } from '../../../lib/zustand/auth';
+import {Image} from 'expo-image';
+import {useFocusEffect, useRouter} from 'expo-router';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {useSharedValue, withTiming,} from 'react-native-reanimated';
+import {ErrorComponent} from '../../../components/ErrorComponent';
+import {TopHeader} from '../../../components/TopHeader';
+import {Id, useGetProfile, useGetRecentlyViewed, useNewArrival,} from '../../../lib/queries';
+import {useStoreId} from '../../../lib/zustand/auth';
+
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -44,14 +35,9 @@ export default function TabOneScreen() {
   const opacity = useSharedValue(0);
   const height = useSharedValue(0);
   const router = useRouter();
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-      height: height.value,
-    };
-  });
+
   const [special, setSpecial] = useState<Id[]>([]);
-  console.log('🚀 ~ TabOneScreen ~ special:', special);
+
 
   const [error, setError] = useState(false);
   const [isPendingSpecial, setIsPendingSpecial] = useState(false);
@@ -62,7 +48,7 @@ export default function TabOneScreen() {
   const refetchSpecial = async () => {
     try {
       const response = await axios.get(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+        `https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
       );
 
       setSpecial(response?.data);
@@ -92,7 +78,7 @@ export default function TabOneScreen() {
       try {
         setIsPendingSpecial(true);
         const response = await axios.get(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+          `https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
         );
 
         setSpecial(response?.data);
@@ -152,7 +138,7 @@ export default function TabOneScreen() {
     refetch: refetchNew,
   } = useNewArrival();
 
-  const [reload, setReload] = useState(false);
+  const [_, setReload] = useState(false);
 
   const handleRefetch = () => {
     // setError(false);
@@ -238,7 +224,7 @@ export default function TabOneScreen() {
         >
           {Array.isArray(special) &&
             special?.length > 0 &&
-            special?.map((item, index) => {
+            special?.map((item) => {
               return (
                 <Pressable
                   onPress={() => router.push(`/special/${item?.id}`)}
@@ -317,7 +303,7 @@ export default function TabOneScreen() {
                     const handlePress = () => {
                       axios
                         .post(
-                          `https://test.ngpoolsbetting.com.ng/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+                          `https://test.omega12x.net/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
                         )
                         .then((res) => {
                           console.log(res.data);

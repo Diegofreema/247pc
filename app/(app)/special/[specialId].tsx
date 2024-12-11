@@ -1,26 +1,25 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useStoreId } from '../../../lib/zustand/auth';
-import { useSpecialInfo } from '../../../lib/queries';
-import { ActivityIndicator } from 'react-native-paper';
+import {FlatList, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {useLocalSearchParams} from 'expo-router';
+import {useStoreId} from '../../../lib/zustand/auth';
+import {useSpecialInfo} from '../../../lib/queries';
+import {ActivityIndicator} from 'react-native-paper';
 import Container from '../../../components/Container';
 import NavigationHeader from '../../../components/NavigationHeader';
 import axios from 'axios';
-import { WishlistType } from '../../../lib/types';
-import { MyButton } from '../../../components/MyButton';
-import { colors } from '../../../constants/Colors';
-import { FloatingNav } from '../../../components/FloatingNav';
-import { ProductItem } from '../../../components/ProductItem';
+import {WishlistType} from '../../../lib/types';
+import {MyButton} from '../../../components/MyButton';
+import {colors} from '../../../constants/Colors';
+import {FloatingNav} from '../../../components/FloatingNav';
+import {ProductItem} from '../../../components/ProductItem';
 
-type Props = {};
 
-const Special = (props: Props) => {
+const Special = () => {
   const { specialId } = useLocalSearchParams();
   const { user } = useStoreId();
   const [products, setProducts] = useState<WishlistType[]>([]);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+
   const { data, isPaused, isFetching, isPending, error, refetch } =
     useSpecialInfo(user?.statename, specialId as string);
 
@@ -29,7 +28,7 @@ const Special = (props: Props) => {
     if (data && data[0]?.productlist) {
       axios
         .get(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=specialofferproducts&productlist=${data[0]?.productlist}`
+          `https://test.omega12x.net/api.aspx?api=specialofferproducts&productlist=${data[0]?.productlist}`
         )
         .then(({ data }) => {
           setProducts(data);
@@ -125,4 +124,4 @@ const Special = (props: Props) => {
 
 export default Special;
 
-const styles = StyleSheet.create({});
+

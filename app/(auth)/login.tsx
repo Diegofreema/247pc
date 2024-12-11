@@ -1,24 +1,24 @@
-import { Text, View, Dimensions } from 'react-native';
-import { Image } from 'expo-image';
-import React, { useState } from 'react';
+import {Dimensions, Text, View} from 'react-native';
+import {Image} from 'expo-image';
+import React, {useState} from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
+import {colors} from '../../constants/Colors';
+import {useRouter} from 'expo-router';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
-import { useToast } from 'react-native-toast-notifications';
-import { useStoreId } from '../../lib/zustand/auth';
-import { MyButton } from '../../components/MyButton';
-import { getProfile } from '../../lib/helpers';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useGetProfile } from '../../lib/mutation';
-import { AuthModal } from '../../components/Modals/AuthModal';
-type Props = {};
+import {useToast} from 'react-native-toast-notifications';
+import {useStoreId} from '../../lib/zustand/auth';
+import {MyButton} from '../../components/MyButton';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useGetProfile} from '../../lib/mutation';
+import {AuthModal} from '../../components/Modals/AuthModal';
+
+
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -28,12 +28,11 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
-const index = (props: Props) => {
-  const { setId, getUser, setUser, id, getId, user } = useStoreId();
+const index = () => {
+  const { setId, } = useStoreId();
   const [secure, setSecure] = useState(true);
   const router = useRouter();
-  const { mutate, isPending, isSuccess } = useGetProfile();
-  console.log('🚀 ~ index ~ isPending:', isPending);
+  const { isPending, } = useGetProfile();
 
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
@@ -49,7 +48,7 @@ const index = (props: Props) => {
           .replace(/:/g, '');
         try {
           const response = await axios.post(
-            `https://test.ngpoolsbetting.com.ng/api.aspx?api=userlogin&emailaddress=${values?.email.toLowerCase()}&pasword=${formattedPassword}`
+            `https://test.omega12x.net/api.aspx?api=userlogin&emailaddress=${values?.email.toLowerCase()}&pasword=${formattedPassword}`
           );
           console.log(response.data, 'response.data');
           if (response.data === '{result: "failed"}') {
@@ -83,6 +82,7 @@ const index = (props: Props) => {
 
           router.push('/(app)/(tabs)/');
         } catch (error: any) {
+          console.log(JSON.stringify(error, null, 2));
           toast.show('Something went wrong', {
             type: 'error',
             placement: 'bottom',

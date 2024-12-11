@@ -1,28 +1,27 @@
-import { Text, View, Dimensions, StyleSheet, ScrollView } from 'react-native';
-import { Image } from 'expo-image';
-import React, { useEffect, useState } from 'react';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Image} from 'expo-image';
+import React, {useEffect, useState} from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import { Button } from 'react-native-paper';
-import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
-import { SelectList } from 'react-native-dropdown-select-list';
+import {Button} from 'react-native-paper';
+import {colors} from '../../constants/Colors';
+import {useRouter} from 'expo-router';
+import {SelectList} from 'react-native-dropdown-select-list';
 
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useToast } from 'react-native-toast-notifications';
-import { getProfile } from '../../lib/helpers';
-import { Community, State } from '../../lib/types';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useGetProfile } from '../../lib/mutation';
-import { AuthModal } from '../../components/Modals/AuthModal';
+import {useStoreId} from '../../lib/zustand/auth';
+import {useToast} from 'react-native-toast-notifications';
+import {Community, State} from '../../lib/types';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useGetProfile} from '../../lib/mutation';
+import {AuthModal} from '../../components/Modals/AuthModal';
 
-type Props = {};
+
 const width = Dimensions.get('window').width;
 const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
 const validationSchema = yup.object().shape({
@@ -45,14 +44,14 @@ const validationSchema = yup.object().shape({
 
   communityId: yup.string().required('Community is required'),
 });
-const SignUp = (props: Props) => {
-  const { setId, getUser, setUser } = useStoreId();
+const SignUp = () => {
+  const { setId } = useStoreId();
   const [secure, setSecure] = useState(true);
   const [secure2, setSecure2] = useState(true);
   const toast = useToast();
   const router = useRouter();
-  const [error, setError] = useState('');
-  const { mutateAsync, isPending, isSuccess } = useGetProfile();
+  const [_, setError] = useState('');
+  const { isPending } = useGetProfile();
 
   const [states, setStates] = useState<any[]>([
     { statename: 'abuja', label: 'Abuja' },
@@ -89,7 +88,7 @@ const SignUp = (props: Props) => {
           .replace(/[#?\/\\%&]/g, '')
           .replace(/:/g, '');
         const response = await axios.post(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${formattedPassword}&communityId=${values.communityId}`
+          `https://test.omega12x.net/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${formattedPassword}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {
@@ -139,7 +138,7 @@ const SignUp = (props: Props) => {
   } = values;
   useEffect(() => {
     axios
-      .get('https://test.ngpoolsbetting.com.ng/api.aspx?api=states')
+      .get('https://test.omega12x.net/api.aspx?api=states')
       .then(({ data }) => {
         console.log('dfgfgfhdh', data);
 
@@ -158,6 +157,7 @@ const SignUp = (props: Props) => {
         setLoadingStates(false);
       })
       .catch((error) => {
+        console.log(error)
         setLoadingStates(false);
       });
   }, []);
@@ -167,7 +167,7 @@ const SignUp = (props: Props) => {
     if (state && state.length > 0) {
       axios
         .get(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=communities&statename=${state}`
+          `https://test.omega12x.net/api.aspx?api=communities&statename=${state}`
         )
         .then(({ data }) => {
           let newArray: Community[] = data?.map(
@@ -433,27 +433,5 @@ const styles2 = StyleSheet.create({
     minHeight: 50,
     alignItems: 'flex-start',
     justifyContent: 'center',
-  },
-});
-const styles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });

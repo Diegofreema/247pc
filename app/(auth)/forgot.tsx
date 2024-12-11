@@ -1,27 +1,26 @@
-import { ScrollView, Text, View, Dimensions } from 'react-native';
-import { Image } from 'expo-image';
-import React, { useState } from 'react';
+import {Dimensions, ScrollView, Text, View} from 'react-native';
+import {Image} from 'expo-image';
+import React from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
 
-import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
+import {colors} from '../../constants/Colors';
+import {useRouter} from 'expo-router';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
-import { useToast } from 'react-native-toast-notifications';
-import { useStoreId } from '../../lib/zustand/auth';
-import { MyButton } from '../../components/MyButton';
-type Props = {};
+import {useToast} from 'react-native-toast-notifications';
+import {MyButton} from '../../components/MyButton';
+
+
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
 });
-const Forgot = (props: Props) => {
-  const { setId } = useStoreId();
+const Forgot = () => {
   const router = useRouter();
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
@@ -32,7 +31,7 @@ const Forgot = (props: Props) => {
       validationSchema,
       onSubmit: async (values) => {
         const response = await axios.post(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=recoverpassword&emailaddress=${values.email}`
+          `https://test.omega12x.net/api.aspx?api=recoverpassword&emailaddress=${values.email}`
         );
 
         if (response.data === 'email does not exist') {

@@ -1,21 +1,16 @@
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import {Pressable, ScrollView, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Header from '../../../components/Header';
-import { Link, useFocusEffect, useRouter } from 'expo-router';
-import { useStoreId } from '../../../lib/zustand/auth';
+import {useRouter} from 'expo-router';
+import {useStoreId} from '../../../lib/zustand/auth';
 import axios from 'axios';
-import { LoggedUserType } from '../../../lib/types';
+import {LoggedUserType} from '../../../lib/types';
 import Container from '../../../components/Container';
-import {
-  AntDesign,
-  Entypo,
-  Foundation,
-  MaterialIcons,
-} from '@expo/vector-icons';
-import { useQueryClient } from '@tanstack/react-query';
-import { useWalletBalance } from '../../../lib/queries';
-import { DeleteModal } from '../../../components/DeleteModal';
-type Props = {};
+import {AntDesign, Entypo,} from '@expo/vector-icons';
+import {useQueryClient} from '@tanstack/react-query';
+import {DeleteModal} from '../../../components/DeleteModal';
+import {Contact} from '../../../components/Contact';
+
 
 const pages = [
   {
@@ -40,8 +35,8 @@ const pages = [
   },
 ];
 
-const Account = (props: Props) => {
-  const [loading, setLoading] = useState(false);
+const Account = () => {
+
   const [visible, setVisible] = useState(false);
   const [user, setUser] = useState<LoggedUserType>();
   const { id } = useStoreId();
@@ -50,7 +45,7 @@ const Account = (props: Props) => {
   useEffect(() => {
     const getProfile = async () => {
       const { data } = await axios.get(
-        `https://test.ngpoolsbetting.com.ng/api.aspx?api=userinfo&myuserid=${id}`
+        `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
       );
 
       return data;
@@ -78,7 +73,8 @@ const Account = (props: Props) => {
       <Container>
         <ScrollView
           style={{ flex: 1 }}
-          contentContainerStyle={{ gap: 20, marginTop: 20 }}
+          contentContainerStyle={{ gap: 20, marginTop: 20, paddingBottom: 50 }}
+          showsVerticalScrollIndicator={false}
         >
           {pages.map((page, index) => (
             <Pressable
@@ -121,6 +117,7 @@ const Account = (props: Props) => {
             </Text>
           </Pressable>
           <DeleteModal visible={visible} onClose={onClose} />
+          <Contact />
         </ScrollView>
       </Container>
     </View>
@@ -129,4 +126,4 @@ const Account = (props: Props) => {
 
 export default Account;
 
-const styles = StyleSheet.create({});
+

@@ -1,12 +1,12 @@
-import { usePathname, useRouter } from 'expo-router';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { colors } from '../constants/Colors';
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import {useRouter} from 'expo-router';
+import {Pressable, View} from 'react-native';
+import {colors} from '../constants/Colors';
+import {FontAwesome, MaterialIcons} from '@expo/vector-icons';
 
 type Props = {};
 
 export const FloatingNav = ({}: Props): JSX.Element => {
-  const pathname = usePathname();
+
   const router = useRouter();
 
   return (
@@ -39,7 +39,7 @@ export const FloatingNav = ({}: Props): JSX.Element => {
         <MaterialIcons name="category" color="white" size={25} />
       </Pressable>
       <Pressable
-        onPress={() => router.push('/(tabs)/')}
+        onPress={() => router.push('/')}
         style={{
           backgroundColor: colors.lightGreen,
           marginTop: -25,
@@ -70,4 +70,4 @@ export const FloatingNav = ({}: Props): JSX.Element => {
   );
 };
 
-const styles = StyleSheet.create({});
+

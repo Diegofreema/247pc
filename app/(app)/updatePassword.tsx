@@ -1,26 +1,22 @@
-import { Text, View, Dimensions, StyleSheet, ScrollView } from 'react-native';
-import { Image } from 'expo-image';
+import {Dimensions, ScrollView, Text, View} from 'react-native';
+import {Image} from 'expo-image';
 import React from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import { Button } from 'react-native-paper';
-import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
-
-import { useCommunities, useStates } from '../../lib/queries';
-import RNPickerSelect from 'react-native-picker-select';
+import {Button} from 'react-native-paper';
+import {colors} from '../../constants/Colors';
+import {useRouter} from 'expo-router';
 
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useToast } from 'react-native-toast-notifications';
-import { getProfile } from '../../lib/helpers';
+import {useStoreId} from '../../lib/zustand/auth';
+import {useToast} from 'react-native-toast-notifications';
 
-type Props = {};
+
 const width = Dimensions.get('window').width;
 
 const validationSchema = yup.object().shape({
@@ -34,8 +30,8 @@ const validationSchema = yup.object().shape({
     .required('New password is required'),
 });
 
-const UpdatePassword = (props: Props) => {
-  const { setId, id, getUser, setUser } = useStoreId();
+const UpdatePassword = () => {
+  const { id } = useStoreId();
   const toast = useToast();
 
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
@@ -47,7 +43,7 @@ const UpdatePassword = (props: Props) => {
       validationSchema,
       onSubmit: async (values) => {
         const response = await axios.post(
-          `https://test.ngpoolsbetting.com.ng/api.aspx?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
+          `https://test.omega12x.net/api.aspx?api=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
         );
 
         if (response.data === 'incorrect previous password') {
