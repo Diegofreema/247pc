@@ -1,26 +1,25 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import {Image} from 'expo-image';
-import React, {useEffect, useState} from 'react';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import React, { useEffect, useState } from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import {Button} from 'react-native-paper';
-import {colors} from '../../constants/Colors';
-import {useRouter} from 'expo-router';
-import {SelectList} from 'react-native-dropdown-select-list';
+import { Button } from 'react-native-paper';
+import { colors } from '../../constants/Colors';
+import { useRouter } from 'expo-router';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 import * as yup from 'yup';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import axios from 'axios';
-import {useStoreId} from '../../lib/zustand/auth';
-import {useToast} from 'react-native-toast-notifications';
-import {Community, State} from '../../lib/types';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useGetProfile} from '../../lib/mutation';
-import {AuthModal} from '../../components/Modals/AuthModal';
-
+import { useStoreId } from '../../lib/zustand/auth';
+import { useToast } from 'react-native-toast-notifications';
+import { Community, State } from '../../lib/types';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useGetProfile } from '../../lib/mutation';
+import { AuthModal } from '../../components/Modals/AuthModal';
 
 const width = Dimensions.get('window').width;
 const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
@@ -157,7 +156,7 @@ const SignUp = () => {
         setLoadingStates(false);
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         setLoadingStates(false);
       });
   }, []);
@@ -337,9 +336,10 @@ const SignUp = () => {
                   </View>
                 ) : (
                   <SelectList
-                    search={false}
+                    search
                     fontFamily="Poppins"
                     placeholder="Select your community"
+                    searchPlaceholder="Search by community name"
                     boxStyles={{
                       ...styles2.border,
                       justifyContent: 'flex-start',

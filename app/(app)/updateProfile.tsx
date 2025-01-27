@@ -77,6 +77,7 @@ const Update = () => {
         setUser(user);
         queryClient.invalidateQueries({ queryKey: ['profile'] });
         queryClient.invalidateQueries({ queryKey: ['fee'] });
+        queryClient.invalidateQueries({ queryKey: ['order'] });
 
         router.back();
       } else if (

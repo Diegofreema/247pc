@@ -1,12 +1,5 @@
-import { StyleSheet, View } from 'react-native';
-import {
-  ActivityIndicator,
-  Card,
-  TextInput,
-  Text,
-  Button,
-} from 'react-native-paper';
-import { useGetOrder } from '../lib/queries';
+import { View } from 'react-native';
+import { TextInput } from 'react-native-paper';
 
 type Props = {};
 
@@ -20,5 +13,3 @@ export const CheckOut = ({}: Props): JSX.Element => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
