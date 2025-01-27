@@ -30,10 +30,11 @@ const Forgot = () => {
       },
       validationSchema,
       onSubmit: async (values) => {
+        console.log(values);
         const response = await axios.post(
           `https://test.omega12x.net/api.aspx?api=recoverpassword&emailaddress=${values.email}`
         );
-
+        console.log(response.data);
         if (response.data === 'email does not exist') {
           toast.show('Email does not exist', {
             type: 'danger',

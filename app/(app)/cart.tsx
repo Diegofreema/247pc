@@ -18,20 +18,18 @@ import {
   useWishlist,
 } from '../../lib/queries';
 import { useStoreId } from '../../lib/zustand/auth';
-type Props = {};
 
-const cart = (props: Props) => {
+const cart = () => {
   const { id } = useStoreId();
   const { data: user } = useUser(id);
   const {
-    data: fee,
     isPending: feeIsPending,
     isPaused: feeIsPaused,
     isError: feeIsError,
   } = useFee(id, user?.productInCart, user?.communityId);
   const router = useRouter();
   const [reload, setReload] = useState(false);
-  const [loading, setLoading] = useState(false);
+
   const [toggleReload, setToggleReload] = useState(false);
 
   const handleRefetch = () => {
@@ -104,7 +102,7 @@ const cart = (props: Props) => {
 
   const {
     data,
-    isFetching,
+
     isPaused,
     isError,
     isPending,

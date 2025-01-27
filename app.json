@@ -2,11 +2,10 @@
   "expo": {
     "name": "247 Pharmacy",
     "slug": "247pharmacy",
-    "version": "1.0.6",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pharmacy",
-
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -17,8 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.diegodark.247pharmacy",
-
-      "runtimeVersion": "1.0.8"
+      "runtimeVersion": "1.0.9"
     },
     "android": {
       "adaptiveIcon": {
@@ -33,8 +31,8 @@
         "android.permission.ACCESS_NETWORK_STATE",
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 26,
-      "runtimeVersion": "1.0.8"
+      "versionCode": 27,
+      "runtimeVersion": "1.0.9"
     },
     "web": {
       "bundler": "metro",
@@ -43,7 +41,6 @@
     },
     "plugins": [
       "expo-router",
-
       [
         "expo-image-picker",
         {
@@ -66,9 +63,9 @@
             "enableShrinkResourcesInReleaseBuilds": true
           }
         }
-      ]
+      ],
+      "expo-font"
     ],
-
     "experiments": {
       "typedRoutes": true
     },

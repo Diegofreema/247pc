@@ -22,7 +22,7 @@ export default function Categories() {
   const [categories, setCategories] = useState(Cats);
   const [subCategories, setSubCategories] = useState(subCats);
   const [active, setActive] = useState(0);
-  const [reload, setReload] = useState(false);
+ 
   const router = useRouter();
   let scrollOffsetY = useRef(new Animated.Value(0)).current;
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);

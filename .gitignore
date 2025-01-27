@@ -42,3 +42,8 @@ expo-env.d.ts
 # @end expo-cli
 
 phamarcy-413516-d7ae79ef6dea.json
+
+android
+ios
+ios/
+android/

@@ -1,28 +1,27 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import {Image} from 'expo-image';
-import React, {useEffect, useState} from 'react';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import React, { useEffect, useState } from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
 
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import {ActivityIndicator} from 'react-native-paper';
-import {colors} from '../../constants/Colors';
-import {useRouter} from 'expo-router';
+import { ActivityIndicator } from 'react-native-paper';
+import { colors } from '../../constants/Colors';
+import { useRouter } from 'expo-router';
 
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import axios from 'axios';
-import {useStoreId} from '../../lib/zustand/auth';
-import {useToast} from 'react-native-toast-notifications';
-import {MyButton} from '../../components/MyButton';
-import {getProfile} from '../../lib/helpers';
-import {useQueryClient} from '@tanstack/react-query';
-import {SelectList} from 'react-native-dropdown-select-list';
-import {ErrorComponent} from '../../components/ErrorComponent';
-import {useGetCom, useGetState, useGetUpdateUser} from '../../lib/queries';
-
+import { useStoreId } from '../../lib/zustand/auth';
+import { useToast } from 'react-native-toast-notifications';
+import { MyButton } from '../../components/MyButton';
+import { getProfile } from '../../lib/helpers';
+import { useQueryClient } from '@tanstack/react-query';
+import { SelectList } from 'react-native-dropdown-select-list';
+import { ErrorComponent } from '../../components/ErrorComponent';
+import { useGetCom, useGetState, useGetUpdateUser } from '../../lib/queries';
 
 const width = Dimensions.get('window').width;
 
@@ -38,14 +37,7 @@ const validationSchema = yup.object().shape({
 });
 
 const Update = () => {
-  const {
-
-    id,
-    getId,
-
-    setUser,
-
-  } = useStoreId();
+  const { id, getId, setUser } = useStoreId();
   const queryClient = useQueryClient();
 
   const toast = useToast();
@@ -61,7 +53,6 @@ const Update = () => {
   } = useFormik({
     initialValues: {
       email: '',
-
       name: '',
       state: 'abuja',
       address: '',
@@ -85,6 +76,8 @@ const Update = () => {
         const user = await getProfile(id);
         setUser(user);
         queryClient.invalidateQueries({ queryKey: ['profile'] });
+        queryClient.invalidateQueries({ queryKey: ['fee'] });
+
         router.back();
       } else if (
         response.data === 'you may not change info while a delivery is en route'
@@ -100,7 +93,6 @@ const Update = () => {
       }
     },
   });
-  console.log(values);
 
   const { address, email, name, phoneNumber, state, communityId } = values;
   useEffect(() => {
@@ -190,9 +182,6 @@ const Update = () => {
   }
 
   const community = communities?.find((item) => item?.key === communityId);
-  console.log('🚀 ~ Update ~ communities:', communities);
-  console.log('🚀 ~ Update ~ communityId:', communityId);
-  console.log('🚀 ~ Update ~ community:', community);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
@@ -317,9 +306,10 @@ const Update = () => {
                 </View>
               ) : (
                 <SelectList
-                  search={false}
+                  search
                   fontFamily="Poppins"
                   placeholder="Select your community"
+                  searchPlaceholder="Search by community name"
                   boxStyles={{
                     ...styles2.border,
                     justifyContent: 'flex-start',

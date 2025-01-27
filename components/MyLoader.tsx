@@ -1,6 +1,5 @@
 import React from 'react';
 import ContentLoader, { Rect } from 'react-content-loader/native';
-import { View } from 'react-native';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 export const MyLoader = () => (

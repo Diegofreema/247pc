@@ -3,9 +3,9 @@ import {Pressable, View} from 'react-native';
 import {colors} from '../constants/Colors';
 import {FontAwesome, MaterialIcons} from '@expo/vector-icons';
 
-type Props = {};
 
-export const FloatingNav = ({}: Props): JSX.Element => {
+
+export const FloatingNav = () => {
 
   const router = useRouter();
 

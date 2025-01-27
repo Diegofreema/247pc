@@ -1,23 +1,22 @@
-import {Dimensions, Text, View} from 'react-native';
-import {Image} from 'expo-image';
-import React, {useState} from 'react';
+import { Image } from 'expo-image';
+import React, { useState } from 'react';
+import { Dimensions, Text, View } from 'react-native';
 
 import AuthHeader from '../../components/AuthHeader';
 
+import axios from 'axios';
+import { useRouter } from 'expo-router';
+import { useFormik } from 'formik';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useToast } from 'react-native-toast-notifications';
+import * as yup from 'yup';
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import {colors} from '../../constants/Colors';
-import {useRouter} from 'expo-router';
-import * as yup from 'yup';
-import {useFormik} from 'formik';
-import axios from 'axios';
-import {useToast} from 'react-native-toast-notifications';
-import {useStoreId} from '../../lib/zustand/auth';
-import {MyButton} from '../../components/MyButton';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useGetProfile} from '../../lib/mutation';
-import {AuthModal} from '../../components/Modals/AuthModal';
-
+import { AuthModal } from '../../components/Modals/AuthModal';
+import { MyButton } from '../../components/MyButton';
+import { colors } from '../../constants/Colors';
+import { useGetProfile } from '../../lib/mutation';
+import { useStoreId } from '../../lib/zustand/auth';
 
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
@@ -29,10 +28,10 @@ const validationSchema = yup.object().shape({
 });
 
 const index = () => {
-  const { setId, } = useStoreId();
+  const { setId } = useStoreId();
   const [secure, setSecure] = useState(true);
   const router = useRouter();
-  const { isPending, } = useGetProfile();
+  const { isPending } = useGetProfile();
 
   const toast = useToast();
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =

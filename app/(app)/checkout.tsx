@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import NavigationHeader from '../../components/NavigationHeader';
@@ -15,8 +15,8 @@ import {Paystack, paystackProps} from 'react-native-paystack-webview';
 import {useWallet} from '../../lib/mutation';
 import {ModalComponent} from '../../components/Modal';
 import {MyButton} from '../../components/MyButton';
-import {Link, router} from 'expo-router';
-import {getProfile} from '../../lib/helpers';
+import {router} from 'expo-router';
+import {getProfile, onReview} from '../../lib/helpers';
 
 
 const validationSchema = yup.object().shape({
@@ -188,19 +188,22 @@ const CheckOut = () => {
         )}
       </View>
 
-      <Link
-        href="/updateProfile"
-        style={{
-          fontFamily: 'Poppins',
-          fontSize: 12,
-          color: 'skyblue',
-          textDecorationStyle: 'solid',
-          alignItems: 'center',
-          textDecorationLine: 'underline',
-        }}
-      >
-        Change delivery address
-      </Link>
+
+          <TouchableOpacity onPress={() => router.push('/updateProfile')}>
+              <Text  style={{
+                  fontFamily: 'Poppins',
+                  fontSize: 12,
+                  color: 'skyblue',
+                  textDecorationStyle: 'solid',
+                  alignItems: 'center',
+                  textDecorationLine: 'underline',
+              }}>
+
+                  Change delivery address
+
+              </Text>
+          </TouchableOpacity>
+
       <View style={{ marginBottom: 40 }} />
       {isPending ? (
         <ActivityIndicator color="black" size={'large'} />
@@ -250,6 +253,7 @@ const CheckOut = () => {
                   animationType: 'slide-in',
                 });
                 const user = await getProfile(id);
+                await onReview()
                 setUser(user);
                 queryClient.invalidateQueries({ queryKey: ['user'] });
                 router.push('/order');

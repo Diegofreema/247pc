@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as StoreReview from 'expo-store-review';
 
 export const trimTitle = (title: string) => {
   const [firstWord, secondWord, thirdWord, fourthWord, ...remainingWords] =
@@ -348,3 +349,9 @@ export const subCats = [
     },
   ],
 ];
+
+export const onReview = async () => {
+  if (await StoreReview.hasAction()) {
+    await StoreReview.requestReview();
+  }
+};
