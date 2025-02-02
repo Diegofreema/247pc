@@ -26,7 +26,7 @@ const cart = () => {
     isPending: feeIsPending,
     isPaused: feeIsPaused,
     isError: feeIsError,
-  } = useFee(id, user?.productInCart, user?.communityId);
+  } = useFee(id, user?.productInCart!, user?.communityId!);
   const router = useRouter();
   const [reload, setReload] = useState(false);
 

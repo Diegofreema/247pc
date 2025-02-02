@@ -17,11 +17,16 @@ import axios from 'axios';
 import { useStoreId } from '../../lib/zustand/auth';
 import { useToast } from 'react-native-toast-notifications';
 import { MyButton } from '../../components/MyButton';
-import { getProfile } from '../../lib/helpers';
+import { getProfile, refetchDeliveryFee } from '../../lib/helpers';
 import { useQueryClient } from '@tanstack/react-query';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { ErrorComponent } from '../../components/ErrorComponent';
-import { useGetCom, useGetState, useGetUpdateUser } from '../../lib/queries';
+import {
+  useGetCom,
+  useGetState,
+  useGetUpdateUser,
+  useUser,
+} from '../../lib/queries';
 
 const width = Dimensions.get('window').width;
 
@@ -39,7 +44,11 @@ const validationSchema = yup.object().shape({
 const Update = () => {
   const { id, getId, setUser } = useStoreId();
   const queryClient = useQueryClient();
-
+  const {
+    data: userData,
+    isPending: isPendingUser,
+    isError: isErrorUser,
+  } = useUser(id);
   const toast = useToast();
   const [reload, setReload] = useState(false);
   const {
@@ -74,12 +83,18 @@ const Update = () => {
           animationType: 'slide-in',
         });
         const user = await getProfile(id);
+        await refetchDeliveryFee(
+          id,
+          userData?.productInCart!,
+          userData?.communityId!
+        );
         setUser(user);
         queryClient.invalidateQueries({ queryKey: ['profile'] });
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         queryClient.invalidateQueries({ queryKey: ['fee'] });
         queryClient.invalidateQueries({ queryKey: ['order'] });
 
-        router.back();
+        router.push('/cart');
       } else if (
         response.data === 'you may not change info while a delivery is en route'
       ) {
@@ -161,7 +176,8 @@ const Update = () => {
     isErrorCom ||
     isPaused ||
     isPausedState ||
-    isPausedCom
+    isPausedCom ||
+    isErrorUser
   ) {
     return <ErrorComponent refetch={handleRefetch} />;
   }
@@ -174,7 +190,7 @@ const Update = () => {
     );
   }
 
-  if (isPending) {
+  if (isPending || isPendingUser) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="black" />

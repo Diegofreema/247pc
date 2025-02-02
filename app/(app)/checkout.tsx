@@ -1,32 +1,38 @@
-import {TouchableOpacity, View} from 'react-native';
-import React, {useRef, useState} from 'react';
-import Container from '../../components/Container';
-import NavigationHeader from '../../components/NavigationHeader';
-import {ActivityIndicator, Button, Card, Text, TextInput,} from 'react-native-paper';
-import {useFormik} from 'formik';
-import * as yup from 'yup';
-import {useGetOrder} from '../../lib/queries';
-import {colors} from '../../constants/Colors';
+import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import {useStoreId} from '../../lib/zustand/auth';
-import {useToast} from 'react-native-toast-notifications';
-import {useQueryClient} from '@tanstack/react-query';
-import {Paystack, paystackProps} from 'react-native-paystack-webview';
-import {useWallet} from '../../lib/mutation';
-import {ModalComponent} from '../../components/Modal';
-import {MyButton} from '../../components/MyButton';
-import {router} from 'expo-router';
-import {getProfile, onReview} from '../../lib/helpers';
-
+import { router } from 'expo-router';
+import { useFormik } from 'formik';
+import React, { useRef, useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  Card,
+  Text,
+  TextInput,
+} from 'react-native-paper';
+import { Paystack, paystackProps } from 'react-native-paystack-webview';
+import { useToast } from 'react-native-toast-notifications';
+import * as yup from 'yup';
+import Container from '../../components/Container';
+import { ModalComponent } from '../../components/Modal';
+import { MyButton } from '../../components/MyButton';
+import NavigationHeader from '../../components/NavigationHeader';
+import { colors } from '../../constants/Colors';
+import { useRefetchFee } from '../../hooks/useRefetchFee';
+import { getProfile, onReview } from '../../lib/helpers';
+import { useWallet } from '../../lib/mutation';
+import { useGetOrder } from '../../lib/queries';
+import { useStoreId } from '../../lib/zustand/auth';
 
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
 });
 
-
 const CheckOut = () => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const { id, user, setUser } = useStoreId();
+  const isPendingFee = useRefetchFee();
   const { show } = useToast();
   const queryClient = useQueryClient();
   const { mutateAsync: onWalletPay, isPending: walletLoading } = useWallet();
@@ -35,44 +41,37 @@ const CheckOut = () => {
   const [salesRef, setSalesRef] = useState('');
   const [totalCost, setTotalCost] = useState('');
 
-  const {
-    handleChange,
-    handleSubmit,
-    values,
-    errors,
-    touched,
-    isSubmitting,
+  const { handleChange, handleSubmit, values, errors, touched, isSubmitting } =
+    useFormik({
+      initialValues: {
+        coupon: '',
+      },
+      validationSchema,
+      onSubmit: async (values) => {
+        const { data } = await axios.post(
+          `https://test.omega12x.net/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
+        );
+        if (data === 'Invalid code!') {
+          return show('Invalid code!', {
+            type: 'danger',
+            placement: 'bottom',
+            duration: 4000,
+            animationType: 'slide-in',
+          });
+        }
 
-  } = useFormik({
-    initialValues: {
-      coupon: '',
-    },
-    validationSchema,
-    onSubmit: async (values) => {
-      const { data } = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
-      );
-      if (data === 'Invalid code!') {
-        return show('Invalid code!', {
-          type: 'danger',
-          placement: 'bottom',
-          duration: 4000,
-          animationType: 'slide-in',
-        });
-      }
+        if (data === 'Free delivery has been applied!') {
+          queryClient.invalidateQueries({ queryKey: ['order'] });
 
-      if (data === 'Free delivery has been applied!') {
-        queryClient.invalidateQueries({ queryKey: ['order'] });
-
-        return show('Free delivery has been applied', {
-          type: 'success',
-          placement: 'bottom',
-          duration: 4000,
-          animationType: 'slide-in',
-        });
-      }
-    },
-  });
+          return show('Free delivery has been applied', {
+            type: 'success',
+            placement: 'bottom',
+            duration: 4000,
+            animationType: 'slide-in',
+          });
+        }
+      },
+    });
   const payWithCard = async () => {
     setIsPaying(true);
     try {
@@ -98,13 +97,7 @@ const CheckOut = () => {
     refetch();
   };
 
-  const {
-    data,
-    isPaused,
-    isPending,
-    isError,
-    refetch,
-  } = useGetOrder();
+  const { data, isPaused, isPending, isError, refetch } = useGetOrder();
 
   if (isPaused) {
     return (
@@ -188,24 +181,23 @@ const CheckOut = () => {
         )}
       </View>
 
-
-          <TouchableOpacity onPress={() => router.push('/updateProfile')}>
-              <Text  style={{
-                  fontFamily: 'Poppins',
-                  fontSize: 12,
-                  color: 'skyblue',
-                  textDecorationStyle: 'solid',
-                  alignItems: 'center',
-                  textDecorationLine: 'underline',
-              }}>
-
-                  Change delivery address
-
-              </Text>
-          </TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push('/updateProfile')}>
+        <Text
+          style={{
+            fontFamily: 'Poppins',
+            fontSize: 12,
+            color: 'skyblue',
+            textDecorationStyle: 'solid',
+            alignItems: 'center',
+            textDecorationLine: 'underline',
+          }}
+        >
+          Change delivery address
+        </Text>
+      </TouchableOpacity>
 
       <View style={{ marginBottom: 40 }} />
-      {isPending ? (
+      {isPending || isPendingFee ? (
         <ActivityIndicator color="black" size={'large'} />
       ) : (
         <Card
@@ -230,7 +222,7 @@ const CheckOut = () => {
               'bank_transfer',
             ]}
             onCancel={(e) => {
-                console.log(e)
+              console.log(e);
               show('Payment cancelled', {
                 type: 'success',
                 placement: 'bottom',
@@ -253,7 +245,7 @@ const CheckOut = () => {
                   animationType: 'slide-in',
                 });
                 const user = await getProfile(id);
-                await onReview()
+                await onReview();
                 setUser(user);
                 queryClient.invalidateQueries({ queryKey: ['user'] });
                 router.push('/order');
@@ -432,5 +424,3 @@ const CheckOut = () => {
 };
 
 export default CheckOut;
-
-

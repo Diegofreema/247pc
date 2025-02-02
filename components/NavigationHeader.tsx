@@ -1,23 +1,11 @@
-import { View, Pressable, Linking } from 'react-native';
-import { useFocusEffect, usePathname, useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
+import { Pressable, View } from 'react-native';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Text } from 'react-native-paper';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
-import { useStoreId } from '../lib/zustand/auth';
+import React from 'react';
+import { Text } from 'react-native-paper';
 import { useUser } from '../lib/queries';
-import { colors } from '../constants/Colors';
-import { EventRegister } from 'react-native-event-listeners';
-import Animated, {
-  BounceIn,
-  BounceOut,
-  FadeInUp,
-  FadeOutUp,
-  SlideInDown,
-  SlideInUp,
-  SlideOutUp,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import { useStoreId } from '../lib/zustand/auth';
 
 type Props = {
   title?: string;
@@ -48,8 +36,6 @@ const NavigationHeader = ({ title, back, white }: Props) => {
   const router = useRouter();
   const { id } = useStoreId();
   const pathname = usePathname();
-  const [showMenu, setShowMenu] = useState(false);
-  const menuRef = useRef<View>(null);
 
   const { data: user, isLoading, isFetching, isPending, refetch } = useUser(id);
   // const loading = isPending;

@@ -2,7 +2,7 @@
   "expo": {
     "name": "247 Pharmacy",
     "slug": "247pharmacy",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pharmacy",
@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.diegodark.247pharmacy",
-      "runtimeVersion": "1.0.9"
+      "runtimeVersion": "1.1.0"
     },
     "android": {
       "adaptiveIcon": {

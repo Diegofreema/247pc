@@ -355,3 +355,13 @@ export const onReview = async () => {
     await StoreReview.requestReview();
   }
 };
+
+export const refetchDeliveryFee = async (
+  id: string,
+  productInCart: string,
+  communityId: string
+) => {
+  return await axios.post(
+    `https://test.omega12x.net/api.aspx?api=cartpageload&productincart=${productInCart}&myuserid=${id}&communityId=${communityId}`
+  );
+};

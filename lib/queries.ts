@@ -1,4 +1,4 @@
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import axios from 'axios';
 import {
@@ -15,7 +15,8 @@ import {
   SubProps,
   WishlistType,
 } from './types';
-import {useStoreId} from './zustand/auth';
+import { useStoreId } from './zustand/auth';
+import { refetchDeliveryFee } from './helpers';
 
 // export const useSpecial = () => {
 //   const { id, user } = useStoreId();
@@ -132,7 +133,6 @@ export const useStates = () => {
   });
 };
 export const useUser = (id: any) => {
-
   return useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -147,14 +147,13 @@ export const useUser = (id: any) => {
     retry: 5,
   });
 };
-export const useFee = (id: any, productInCart: any, communityId: any) => {
+export const useFee = (id: any, productInCart: string, communityId: string) => {
   const queryClient = useQueryClient();
   return useQuery({
-    queryKey: ['fee'],
+    queryKey: ['fee', productInCart, communityId],
+
     queryFn: async () => {
-      const res = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=cartpageload&productincart=${productInCart}&myuserid=${id}&communityId=${communityId}`
-      );
+      const res = await refetchDeliveryFee(id, productInCart, communityId);
       queryClient.invalidateQueries({ queryKey: ['order'] });
       return res;
     },
@@ -367,7 +366,7 @@ export const useGetOrder = () => {
   });
 };
 export const useSearch = () => {
-  const {  user } = useStoreId();
+  const { user } = useStoreId();
   return useQuery({
     queryKey: ['search', user?.statename],
     queryFn: async () => {
@@ -529,7 +528,6 @@ export const useGetProfile = (id: string) => {
   return useQuery({
     queryKey: ['profile', id],
     queryFn: async () => {
-
       return await getProfile();
     },
   });
