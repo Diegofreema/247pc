@@ -7328,6 +7328,11 @@ react-native-modal@^13.0.1:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
+react-native-otp-entry@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/react-native-otp-entry/-/react-native-otp-entry-1.8.3.tgz#64f26cf83d3b90f9f068b8ca05aaf4b8d56b8886"
+  integrity sha512-cpEXmbaBkMEeQNGeGL54T9RAtHWVggddNgpg9hLr9/5bCL2S/voO3J+60TPfsHk3cmI9+rMxTNH3jbNnhpmZZA==
+
 react-native-paper@^5.11.1:
   version "5.12.5"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.12.5.tgz#e255c47f7bf2deb2dd90eaf3831473ef33e400b8"

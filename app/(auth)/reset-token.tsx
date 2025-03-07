@@ -1,16 +1,124 @@
-import React from 'react';
-import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { Image } from 'expo-image';
+import React, { useEffect, useRef, useState } from 'react';
+import { OtpInput, OtpInputRef } from 'react-native-otp-entry';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+
 import { useToken } from '../../lib/zustand/useToken';
 import AuthHeader from '../../components/AuthHeader';
-import { Image } from 'expo-image';
+import Container from '../../components/Container';
+import { MyButton } from '../../components/MyButton';
+import { colors } from '../../constants/Colors';
+import { useToast } from 'react-native-toast-notifications';
+import axios from 'axios';
+import { api } from '../../lib/contants';
+import { generateFiveRandomNumber } from '../../lib/helpers';
+import { router, useLocalSearchParams } from 'expo-router';
 
+const { width } = Dimensions.get('window');
+const size = width / 5 - 20;
 const ResetToken = () => {
   const token = useToken((state) => state.details.token);
+  const [value, setValue] = useState('');
+  const { email } = useLocalSearchParams<{ email: string }>();
   const removeToken = useToken((state) => state.removeToken);
   const setToken = useToken((state) => state.setToken);
+  const [countdown, setCountdown] = useState(60);
+  const [canResend, setCanResend] = useState(false);
   const { width } = useWindowDimensions();
+  const toast = useToast();
+  const otpRef = useRef<OtpInputRef | null>(null);
   console.log(token);
 
+  const submitToken = async () => {
+    if (token !== value) {
+      toast.show('Token does not match, please try again', {
+        type: 'success ',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+      otpRef.current?.clear();
+      setValue('');
+      return;
+    }
+    toast.show('Success', {
+      type: 'success ',
+      placement: 'bottom',
+      duration: 4000,
+      animationType: 'slide-in',
+    });
+    otpRef.current?.clear();
+    setValue('');
+    removeToken();
+    router.replace('/reset-password');
+  };
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    } else {
+      setCanResend(true);
+    }
+    return () => clearInterval(interval);
+  }, [countdown]);
+
+  const handleResendToken = async () => {
+    if (!email) {
+      toast.show('Missing email', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+      router.back();
+      return;
+    }
+    setCountdown(60);
+    setCanResend(false);
+    const tok = generateFiveRandomNumber();
+    setToken(tok);
+
+    try {
+      const response = await axios.post(
+        `${api}=reset247pharmacypassword&emailaddress=${email}&passcode=${tok}`
+      );
+      if (response.data === 'invalid email') {
+        toast.show('Email does not exist', {
+          type: 'danger',
+          placement: 'bottom',
+          duration: 4000,
+
+          animationType: 'slide-in',
+        });
+        return;
+      }
+      if (response.data) {
+        toast.show('New token has been sent to your email', {
+          type: 'success',
+          placement: 'bottom',
+          duration: 4000,
+          animationType: 'slide-in',
+        });
+      }
+    } catch (error) {
+      toast.show('Failed to send token', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+
+        animationType: 'slide-in',
+      });
+    }
+  };
   return (
     <View style={{ backgroundColor: 'white', flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -28,9 +136,78 @@ const ResetToken = () => {
             </Text>
           </View>
         </View>
+        <Container style={{ marginTop: 30 }}>
+          <OtpInput
+            ref={otpRef}
+            numberOfDigits={5}
+            focusColor="green"
+            autoFocus
+            hideStick={false}
+            placeholder="******"
+            blurOnFilled={true}
+            type="numeric"
+            secureTextEntry
+            focusStickBlinkingDuration={500}
+            onFocus={() => console.log('Focused')}
+            onBlur={() => console.log('Blurred')}
+            onTextChange={(text) => setValue(text)}
+            onFilled={(text) => console.log(`OTP is ${text}`)}
+            textInputProps={{
+              accessibilityLabel: 'One-Time Token',
+            }}
+            theme={{
+              containerStyle: styles.container,
+              pinCodeContainerStyle: styles.pinCodeContainer,
+              pinCodeTextStyle: styles.pinCodeText,
+              focusStickStyle: styles.focusStick,
+              focusedPinCodeContainerStyle: styles.activePinCodeContainer,
+              placeholderTextStyle: styles.placeholderText,
+              filledPinCodeContainerStyle: styles.filledPinCodeContainer,
+              disabledPinCodeContainerStyle: styles.disabledPinCodeContainer,
+            }}
+          />
+          <Text
+            onPress={handleResendToken}
+            disabled={!canResend}
+            style={{
+              fontFamily: 'Poppins',
+              color: canResend ? colors.lightGreen : 'gray',
+              textAlign: 'right',
+            }}
+          >
+            {canResend ? 'Resend Token' : `Resend in ${countdown}s`}
+          </Text>
+          <MyButton
+            text="Submit"
+            onPress={submitToken}
+            buttonColor={colors.lightGreen}
+            textColor="white"
+            disabled={value.length < 5}
+            style={{ marginTop: 15 }}
+          />
+        </Container>
       </ScrollView>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 20,
+  },
+  pinCodeContainer: {
+    borderRadius: 100,
+    height: size,
+    width: size,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pinCodeText: {},
+  focusStick: {},
+  activePinCodeContainer: {},
+  placeholderText: {},
+  filledPinCodeContainer: {},
+  disabledPinCodeContainer: {},
+});
 export default ResetToken;

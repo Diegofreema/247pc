@@ -18,7 +18,9 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 import { ErrorComponent } from '../../../components/ErrorComponent';
+import { Loader } from '../../../components/Loader';
 import { TopHeader } from '../../../components/TopHeader';
+import { api } from '../../../lib/contants';
 import {
   Id,
   useGetProfile,
@@ -26,8 +28,6 @@ import {
   useNewArrival,
 } from '../../../lib/queries';
 import { useStoreId } from '../../../lib/zustand/auth';
-import { Loader } from '../../../components/Loader';
-import { api } from '../../../lib/contants';
 
 const { height } = Dimensions.get('window');
 export const checkTextLength = (text: string) => {
@@ -39,7 +39,7 @@ export const checkTextLength = (text: string) => {
 };
 
 export default function TabOneScreen() {
-  const { id, getId } = useStoreId();
+  const { id } = useStoreId();
   const opacity = useSharedValue(0);
   const height = useSharedValue(0);
   const router = useRouter();
@@ -49,9 +49,6 @@ export default function TabOneScreen() {
   const [error, setError] = useState(false);
   const [isPendingSpecial, setIsPendingSpecial] = useState(false);
 
-  useEffect(() => {
-    getId();
-  }, []);
   const refetchSpecial = async () => {
     try {
       const response = await axios.get(

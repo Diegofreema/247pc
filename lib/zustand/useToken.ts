@@ -10,6 +10,7 @@ interface AuthStore {
   setToken: (token: string) => void;
   setId: (id: string) => void;
   removeToken: () => void;
+  removeId: () => void;
 }
 
 export const useToken = create<AuthStore>()(
@@ -26,7 +27,10 @@ export const useToken = create<AuthStore>()(
         set((state) => ({ details: { token: state.details.token, id } }));
       },
       removeToken: async () => {
-        set({ details: { id: '', token: '' } });
+        set((state) => ({ details: { id: state.details.id, token: '' } }));
+      },
+      removeId: async () => {
+        set((state) => ({ details: { id: '', token: state.details.token } }));
       },
     }),
     { name: 'token', storage: createJSONStorage(() => AsyncStorage) }

@@ -37,7 +37,6 @@ const Forgot = () => {
       validationSchema,
       onSubmit: async (values) => {
         setToken(generateFiveRandomNumber());
-        console.log({ token });
 
         const response = await axios.post(
           `${api}=reset247pharmacypassword&emailaddress=${values.email}&passcode=${token}`
@@ -62,7 +61,7 @@ const Forgot = () => {
             animationType: 'slide-in',
           });
           setId(response.data);
-          router.push('/reset-token');
+          router.push(`/reset-token?email=${values.email}`);
         }
       },
     });

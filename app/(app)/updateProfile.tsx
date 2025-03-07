@@ -1,33 +1,33 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
 import AuthHeader from '../../components/AuthHeader';
 
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { ActivityIndicator } from 'react-native-paper';
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import { ActivityIndicator } from 'react-native-paper';
 import { colors } from '../../constants/Colors';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
-import axios from 'axios';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useToast } from 'react-native-toast-notifications';
-import { MyButton } from '../../components/MyButton';
-import { getProfile, refetchDeliveryFee } from '../../lib/helpers';
 import { useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { useFormik } from 'formik';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useToast } from 'react-native-toast-notifications';
+import * as yup from 'yup';
 import { ErrorComponent } from '../../components/ErrorComponent';
+import { MyButton } from '../../components/MyButton';
+import { api } from '../../lib/contants';
+import { getProfile, refetchDeliveryFee } from '../../lib/helpers';
 import {
   useGetCom,
   useGetState,
   useGetUpdateUser,
   useUser,
 } from '../../lib/queries';
-import { api } from '../../lib/contants';
+import { useStoreId } from '../../lib/zustand/auth';
 
 const width = Dimensions.get('window').width;
 
@@ -43,7 +43,7 @@ const validationSchema = yup.object().shape({
 });
 
 const Update = () => {
-  const { id, getId, setUser } = useStoreId();
+  const { id, setUser } = useStoreId();
   const queryClient = useQueryClient();
   const { page } = useLocalSearchParams<{ page: string }>();
   const {
@@ -117,9 +117,6 @@ const Update = () => {
   });
 
   const { address, email, name, phoneNumber, state, communityId } = values;
-  useEffect(() => {
-    getId();
-  }, []);
 
   const { data, isError, isPending, isPaused, refetch } = useGetUpdateUser(id);
   useEffect(() => {

@@ -1,73 +1,88 @@
-import { Dimensions, ScrollView, Text, View } from 'react-native';
 import { Image } from 'expo-image';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { Dimensions, ScrollView, Text, View } from 'react-native';
 
 import AuthHeader from '../../components/AuthHeader';
 
+import { useRouter } from 'expo-router';
+import { Button } from 'react-native-paper';
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
-import { Button } from 'react-native-paper';
 import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
 
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import axios from 'axios';
-import { useStoreId } from '../../lib/zustand/auth';
+import { useFormik } from 'formik';
 import { useToast } from 'react-native-toast-notifications';
+import * as yup from 'yup';
 import { api } from '../../lib/contants';
+import { passwordRegExp } from '../../lib/helpers';
+import { useToken } from '../../lib/zustand/useToken';
 
 const width = Dimensions.get('window').width;
 
 const validationSchema = yup.object().shape({
-  oldPassword: yup
+  password: yup
     .string()
-    .min(5, 'Old password must be at least 5 characters')
-    .required('Old password is required'),
-  newPassword: yup
+    .matches(
+      passwordRegExp,
+      'Password must include at least one capital letter, one number, one lower case letter, and one special character and at least 5 characters long'
+    ),
+  confirmPassword: yup
     .string()
-    .min(5, 'New password must be at least 5 characters')
-    .required('New password is required'),
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required'),
 });
 
 const UpdatePassword = () => {
-  const { id } = useStoreId();
+  const id = useToken((state) => state.details.id);
+  const removeId = useToken((state) => state.removeId);
+  const [securePassword1, setSecurePassword1] = useState(true);
+  const [securePassword2, setSecurePassword2] = useState(true);
+  const toggle1 = useCallback(() => setSecurePassword1((prev) => !prev), []);
+  const toggle2 = useCallback(() => setSecurePassword2((prev) => !prev), []);
   const toast = useToast();
 
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
     useFormik({
       initialValues: {
-        oldPassword: '',
-        newPassword: '',
+        password: '',
+        confirmPassword: '',
       },
       validationSchema,
       onSubmit: async (values) => {
-        const response = await axios.post(
-          `${api}=updatepassword&myuserid=${id}&oldpasword=${values.oldPassword}&pasword=${values.newPassword}`
-        );
+        const formattedPassword = values.password
+          .replace(/[#?\/\\%&]/g, '')
+          .replace(/:/g, '');
+        try {
+          const response = await axios.post(
+            `${api}=reset247pharmacypassword2&pasword=${formattedPassword}&myuserid=${id}
+`
+          );
+          //   console.log('response: ' + JSON.stringify(response));
 
-        if (response.data === 'incorrect previous password') {
-          toast.show('Incorrect previous password', {
-            type: 'danger ',
+          if (response.data.result === 'updated') {
+            toast.show('Success, kindly login', {
+              type: 'success',
+              placement: 'bottom',
+              duration: 4000,
+              animationType: 'slide-in',
+            });
+            removeId();
+            router.replace('/login');
+            return;
+          }
+        } catch (error) {
+          toast.show('Something went wrong', {
+            type: 'danger',
             placement: 'bottom',
             duration: 4000,
             animationType: 'slide-in',
           });
-          return;
-        }
-        if (response.data === 'saved') {
-          toast.show('Password changed successfully', {
-            type: 'success',
-            placement: 'bottom',
-            duration: 4000,
-            animationType: 'slide-in',
-          });
-          router.back();
         }
       },
     });
 
-  const { newPassword, oldPassword } = values;
+  const { password, confirmPassword } = values;
   const router = useRouter();
 
   return (
@@ -87,7 +102,7 @@ const UpdatePassword = () => {
           />
           <View style={{ marginTop: 20, marginBottom: 10 }}>
             <Text style={{ fontSize: 20, fontFamily: 'PoppinsBold' }}>
-              Change password
+              Reset password
             </Text>
           </View>
         </View>
@@ -95,31 +110,35 @@ const UpdatePassword = () => {
           <View style={{ gap: 10 }}>
             <>
               <InputComponent
-                label="Old Password"
-                placeholder="Old password"
+                label="Password"
+                placeholder="Enter your password"
                 keyboardType="default"
-                onChangeText={handleChange('oldPassword')}
-                value={oldPassword}
-                secureTextEntry
+                onChangeText={handleChange('password')}
+                value={password}
+                secureTextEntry={securePassword1}
+                toggleSecureEntry={toggle1}
+                password
               />
-              {touched.oldPassword && errors.oldPassword && (
+              {touched.password && errors.password && (
                 <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.oldPassword}
+                  {errors.password}
                 </Text>
               )}
             </>
             <>
               <InputComponent
-                label="New Password"
-                placeholder="New Password"
+                label="Confirm Password"
+                placeholder="Confirm Password"
                 keyboardType="default"
-                onChangeText={handleChange('newPassword')}
-                value={newPassword}
-                secureTextEntry
+                onChangeText={handleChange('confirmPassword')}
+                password
+                value={confirmPassword}
+                secureTextEntry={securePassword2}
+                toggleSecureEntry={toggle2}
               />
-              {touched.newPassword && errors.newPassword && (
+              {touched.confirmPassword && errors.confirmPassword && (
                 <Text style={{ color: 'red', fontWeight: 'bold' }}>
-                  {errors.newPassword}
+                  {errors.confirmPassword}
                 </Text>
               )}
             </>
@@ -132,7 +151,7 @@ const UpdatePassword = () => {
               textColor={'white'}
               labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
             >
-              Update
+              Reset
             </Button>
           </View>
         </Container>

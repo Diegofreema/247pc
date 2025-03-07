@@ -1,13 +1,10 @@
 import { Redirect, Stack } from 'expo-router';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { useStoreId } from '../../lib/zustand/auth';
 
 export default function AuthLayout() {
-  const { id, getId } = useStoreId();
-  useEffect(() => {
-    getId();
-  }, []);
+  const { id } = useStoreId();
+
   if (id !== '') {
     return <Redirect href={'/'} />;
   }

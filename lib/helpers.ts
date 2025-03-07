@@ -2,6 +2,8 @@ import axios from 'axios';
 import * as StoreReview from 'expo-store-review';
 import { api } from './contants';
 
+export const passwordRegExp =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
 export const trimTitle = (title: string) => {
   const [firstWord, secondWord, thirdWord, fourthWord, ...remainingWords] =
     title.split(' ');

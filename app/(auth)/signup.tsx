@@ -21,9 +21,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useGetProfile } from '../../lib/mutation';
 import { AuthModal } from '../../components/Modals/AuthModal';
 import { api } from '../../lib/contants';
+import { passwordRegExp } from '../../lib/helpers';
 
 const width = Dimensions.get('window').width;
-const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
+
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
