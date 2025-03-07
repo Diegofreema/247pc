@@ -17,7 +17,8 @@ import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
 import { useGetProfile } from '../../lib/mutation';
 import { useStoreId } from '../../lib/zustand/auth';
-import {getProfile} from "../../lib/helpers";
+import { getProfile } from '../../lib/helpers';
+import { api } from '../../lib/contants';
 
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
@@ -48,7 +49,7 @@ const index = () => {
           .replace(/:/g, '');
         try {
           const response = await axios.post(
-            `https://test.omega12x.net/api.aspx?api=userlogin&emailaddress=${values?.email.toLowerCase()}&pasword=${formattedPassword}`
+            `${api}=userlogin&emailaddress=${values?.email.toLowerCase()}&pasword=${formattedPassword}`
           );
           console.log(response.data, 'response.data');
           if (response.data === '{result: "failed"}') {

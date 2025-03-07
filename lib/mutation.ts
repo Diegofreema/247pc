@@ -1,11 +1,12 @@
-import {useMutation, useQueryClient} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import {useToast} from 'react-native-toast-notifications';
-import {useStoreId} from './zustand/auth';
-import {useModalState} from './zustand/modalState';
-import {colors} from '../constants/Colors';
-import {router, useRouter} from 'expo-router';
-import {getProfile} from './helpers';
+import { useToast } from 'react-native-toast-notifications';
+import { useStoreId } from './zustand/auth';
+import { useModalState } from './zustand/modalState';
+import { colors } from '../constants/Colors';
+import { router, useRouter } from 'expo-router';
+import { getProfile } from './helpers';
+import { api } from './contants';
 
 export const useAddToWishlist = () => {
   const queryClient = useQueryClient();
@@ -15,7 +16,7 @@ export const useAddToWishlist = () => {
     mutationKey: ['wishlist'],
     mutationFn: async (productId?: string) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
+        `${api}=addtowishlist&productid=${productId}&myuserid=${id}`
       );
 
       return response.data;
@@ -45,8 +46,8 @@ export const useRemoveFromWishlist = (id: string, userId: string) => {
   const { show } = useToast();
   return useMutation({
     mutationFn: async () => {
-    const response =  await axios.post(
-          `https://test.omega12x.net/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
+      const response = await axios.post(
+        `${api}=removewishlist&productid=${id}&myuserid=${userId}`
       );
 
       return response.data;
@@ -69,8 +70,8 @@ export const useRemoveFromWishlist = (id: string, userId: string) => {
         animationType: 'slide-in',
       });
     },
-  })
-}
+  });
+};
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
   const { show } = useToast();
@@ -86,7 +87,7 @@ export const useAddToCart = () => {
     }) => {
       try {
         const response = await axios.post(
-          `https://test.omega12x.net/api.aspx?api=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
+          `${api}=addtocart&productid=${productId}&myuserid=${id}&qty=${qty}&statename=${user?.statename}`
         );
 
         console.log('sfdsfdg', response.data);
@@ -96,7 +97,7 @@ export const useAddToCart = () => {
       }
     },
     onSuccess: async (data) => {
-      console.log("Success")
+      console.log('Success');
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       queryClient.invalidateQueries({ queryKey: ['product'] });
       queryClient.invalidateQueries({ queryKey: ['user'] });
@@ -126,11 +127,11 @@ export const useRemoveFromCart = () => {
   const loadData = async () => {
     try {
       const res = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
+        `${api}=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
       );
 
       queryClient.invalidateQueries({ queryKey: ['order'] });
-     await queryClient.invalidateQueries({ queryKey: ['cart'] });
+      await queryClient.invalidateQueries({ queryKey: ['cart'] });
     } catch (error) {
       console.log(error);
     }
@@ -139,7 +140,7 @@ export const useRemoveFromCart = () => {
     mutationKey: ['removeFromCart'],
     mutationFn: async ({ salesId }: { salesId: string }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=removefromcart&saleid=${salesId}`
+        `${api}=removefromcart&saleid=${salesId}`
       );
 
       return response.data;
@@ -175,7 +176,6 @@ type PaystackType = {
   salesref: string;
 };
 export const usePayStack = () => {
-
   const { show } = useToast();
   const { user, id } = useStoreId();
   return useMutation({
@@ -188,7 +188,7 @@ export const usePayStack = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
+        `${api}=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
       );
 
       return response.data as PaystackType;
@@ -222,7 +222,7 @@ export const useWallet = () => {
       couponCode: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
+        `${api}=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
       );
 
       return response.data;
@@ -274,7 +274,7 @@ export const useJoinUs = () => {
       address: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
+        `${api}=pharmacyregistration&pharmacyname=$${pharmacyName}&statename=${stateName}&addres=${address}&emailaddress=${email}&phone=${phoneNumber}`
       );
       console.log(response.data);
       return response.data;
@@ -330,7 +330,7 @@ export const useComment = () => {
       comment: string;
     }) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=ratedeliveredprod&myuserid=${id}&productid=${productId}&fullname=${user?.customername}&ratestar=${rating}&rateinfo=${comment}`
+        `${api}=ratedeliveredprod&myuserid=${id}&productid=${productId}&fullname=${user?.customername}&ratestar=${rating}&rateinfo=${comment}`
       );
       console.log(response.data);
       return response.data;
@@ -368,7 +368,6 @@ export const useComment = () => {
   });
 };
 export const useGetProfile = () => {
-
   const { id } = useStoreId();
   const router = useRouter();
   return useMutation({

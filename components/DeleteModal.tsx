@@ -1,11 +1,12 @@
-import {Modal, StyleSheet, Text, View} from 'react-native';
-import {MyButton} from './MyButton';
-import {colors} from '../constants/Colors';
+import { Modal, StyleSheet, Text, View } from 'react-native';
+import { MyButton } from './MyButton';
+import { colors } from '../constants/Colors';
 import axios from 'axios';
-import {useStoreId} from '../lib/zustand/auth';
-import {useState} from 'react';
-import {useRouter} from 'expo-router';
-import {useToast} from 'react-native-toast-notifications';
+import { useStoreId } from '../lib/zustand/auth';
+import { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useToast } from 'react-native-toast-notifications';
+import { api } from '../lib/contants';
 
 type Props = {
   visible: boolean;
@@ -20,9 +21,7 @@ export const DeleteModal = ({ visible, onClose }: Props): JSX.Element => {
   const handleDeleteProfile = async () => {
     setDeleting(true);
     try {
-      await axios.post(
-        `https://test.omega12x.net/api.aspx?api=deleteuser&myuserid=${id}`
-      );
+      await axios.post(`${api}=deleteuser&myuserid=${id}`);
       removeId();
       removeUser();
       toast.show('Profile deleted successfully', {

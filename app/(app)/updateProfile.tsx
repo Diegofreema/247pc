@@ -8,7 +8,7 @@ import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
 import { ActivityIndicator } from 'react-native-paper';
 import { colors } from '../../constants/Colors';
-import {useLocalSearchParams, useRouter} from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
@@ -27,6 +27,7 @@ import {
   useGetUpdateUser,
   useUser,
 } from '../../lib/queries';
+import { api } from '../../lib/contants';
 
 const width = Dimensions.get('window').width;
 
@@ -44,7 +45,7 @@ const validationSchema = yup.object().shape({
 const Update = () => {
   const { id, getId, setUser } = useStoreId();
   const queryClient = useQueryClient();
-  const { page } = useLocalSearchParams<{page: string}>()
+  const { page } = useLocalSearchParams<{ page: string }>();
   const {
     data: userData,
     isPending: isPendingUser,
@@ -72,7 +73,7 @@ const Update = () => {
     validationSchema,
     onSubmit: async (values) => {
       const response = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
+        `${api}=accountupdate&statename=${values.state}&fullname=${values.name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&communityId=${values.communityId}&myuserid=${id}`
       );
 
       if (response.data === 'saved') {
@@ -94,13 +95,16 @@ const Update = () => {
         queryClient.invalidateQueries({ queryKey: ['fee'] });
         queryClient.invalidateQueries({ queryKey: ['order'] });
 
-        if(page){
+        if (page) {
           router.push('/cart');
-        }else {
-          router.back()
+        } else {
+          router.back();
         }
       } else if (
-        response.data === 'you may not change infor while a delivery is en route') {toast.show('You can not change info while a delivery is en route', {
+        response.data ===
+        'you may not change infor while a delivery is en route'
+      ) {
+        toast.show('You can not change info while a delivery is en route', {
           type: 'danger ',
           placement: 'bottom',
           duration: 4000,
@@ -140,7 +144,8 @@ const Update = () => {
     data: communities,
     isError: isErrorCom,
     isPending: isPendingCom,
-    refetch: refetchCom, isPaused: isPausedCom,
+    refetch: refetchCom,
+    isPaused: isPausedCom,
   } = useGetCom(state);
   // useEffect(() => {
   //   setLoadingCommunities(true);

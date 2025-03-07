@@ -1,16 +1,16 @@
-import {Pressable, ScrollView, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
-import {useRouter} from 'expo-router';
-import {useStoreId} from '../../../lib/zustand/auth';
+import { useRouter } from 'expo-router';
+import { useStoreId } from '../../../lib/zustand/auth';
 import axios from 'axios';
-import {LoggedUserType} from '../../../lib/types';
+import { LoggedUserType } from '../../../lib/types';
 import Container from '../../../components/Container';
-import {AntDesign, Entypo,} from '@expo/vector-icons';
-import {useQueryClient} from '@tanstack/react-query';
-import {DeleteModal} from '../../../components/DeleteModal';
-import {Contact} from '../../../components/Contact';
-
+import { AntDesign, Entypo } from '@expo/vector-icons';
+import { useQueryClient } from '@tanstack/react-query';
+import { DeleteModal } from '../../../components/DeleteModal';
+import { Contact } from '../../../components/Contact';
+import { api } from '../../../lib/contants';
 
 const pages = [
   {
@@ -36,7 +36,6 @@ const pages = [
 ];
 
 const Account = () => {
-
   const [visible, setVisible] = useState(false);
   const [user, setUser] = useState<LoggedUserType>();
   const { id } = useStoreId();
@@ -44,9 +43,7 @@ const Account = () => {
   const queryClient = useQueryClient();
   useEffect(() => {
     const getProfile = async () => {
-      const { data } = await axios.get(
-        `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
-      );
+      const { data } = await axios.get(`${api}=userinfo&myuserid=${id}`);
 
       return data;
     };
@@ -125,5 +122,3 @@ const Account = () => {
 };
 
 export default Account;
-
-

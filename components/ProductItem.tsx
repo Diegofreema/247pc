@@ -1,11 +1,11 @@
-import {useRouter} from 'expo-router';
-import {Pressable, StyleSheet, Text} from 'react-native';
-import {Image} from 'expo-image';
+import { useRouter } from 'expo-router';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import { Image } from 'expo-image';
 
-import {Searched, WishlistType} from '../lib/types';
+import { Searched, WishlistType } from '../lib/types';
 import axios from 'axios';
-import {useStoreId} from '../lib/zustand/auth';
-
+import { useStoreId } from '../lib/zustand/auth';
+import { api } from '../lib/contants';
 
 type Prop = {
   scroll?: () => void;
@@ -19,9 +19,7 @@ export const ProductItem = (
   const { scroll } = item;
   const handlePress = () => {
     axios
-      .post(
-        `https://test.omega12x.net/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
-      )
+      .post(`${api}=addtoviewed&productid=${item?.id}&myuserid=${id}`)
       .then((res) => {
         console.log(res.data);
       })

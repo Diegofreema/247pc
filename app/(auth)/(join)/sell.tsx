@@ -1,18 +1,18 @@
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Container from '../../../components/Container';
-import {Image} from 'expo-image';
+import { Image } from 'expo-image';
 import NavigationHeader from '../../../components/NavigationHeader';
 import * as yup from 'yup';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import axios from 'axios';
-import {State} from '../../../lib/types';
-import {SelectList} from 'react-native-dropdown-select-list';
+import { State } from '../../../lib/types';
+import { SelectList } from 'react-native-dropdown-select-list';
 import InputComponent from '../../../components/InputComponent';
-import {MyButton} from '../../../components/MyButton';
-import {colors} from '../../../constants/Colors';
-import {useJoinUs} from '../../../lib/mutation';
-
+import { MyButton } from '../../../components/MyButton';
+import { colors } from '../../../constants/Colors';
+import { useJoinUs } from '../../../lib/mutation';
+import { api } from '../../../lib/contants';
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name of pharmacy is required'),
@@ -32,34 +32,33 @@ const sell = () => {
   const { mutateAsync, isPending } = useJoinUs();
   const [loadingStates, setLoadingStates] = useState(false);
   const [_, setError] = useState('');
-  const { values, errors, handleChange, handleSubmit, touched, } =
-    useFormik({
-      initialValues: {
-        name: '',
-        email: '',
-        phoneNumber: '',
-        address: '',
-        state: '',
-      },
-      validationSchema,
-      onSubmit: async (values) => {
-        await mutateAsync({
-          email: values.email,
-          pharmacyName: values.name,
-          stateName: values.state,
-          phoneNumber: values.phoneNumber,
-          address: values.address,
-        });
+  const { values, errors, handleChange, handleSubmit, touched } = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      phoneNumber: '',
+      address: '',
+      state: '',
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      await mutateAsync({
+        email: values.email,
+        pharmacyName: values.name,
+        stateName: values.state,
+        phoneNumber: values.phoneNumber,
+        address: values.address,
+      });
 
-        // if (response === 'saved') {
-        //   resetForm();
-        // }
-      },
-    });
+      // if (response === 'saved') {
+      //   resetForm();
+      // }
+    },
+  });
 
   useEffect(() => {
     axios
-      .get('https://test.omega12x.net/api.aspx?api=states')
+      .get(`${api}=states`)
       .then(({ data }) => {
         setLoadingStates(true);
         let newArray: State[] = data?.map((item: { statename: string }) => {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as StoreReview from 'expo-store-review';
+import { api } from './contants';
 
 export const trimTitle = (title: string) => {
   const [firstWord, secondWord, thirdWord, fourthWord, ...remainingWords] =
@@ -11,9 +12,7 @@ export const trimTitle = (title: string) => {
 };
 
 export const getProfile = async (id: any) => {
-  const { data } = await axios.get(
-    `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
-  );
+  const { data } = await axios.get(`${api}=userinfo&myuserid=${id}`);
 
   return data;
 };
@@ -362,6 +361,14 @@ export const refetchDeliveryFee = async (
   communityId: string
 ) => {
   return await axios.post(
-    `https://test.omega12x.net/api.aspx?api=cartpageload&productincart=${productInCart}&myuserid=${id}&communityId=${communityId}`
+    `${api}=cartpageload&productincart=${productInCart}&myuserid=${id}&communityId=${communityId}`
   );
+};
+
+export const generateFiveRandomNumber = () => {
+  let token = '';
+  for (let i = 0; i < 5; i++) {
+    token += Math.floor(Math.random() * 10);
+  }
+  return token;
 };

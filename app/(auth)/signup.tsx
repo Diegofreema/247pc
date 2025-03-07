@@ -20,6 +20,7 @@ import { Community, State } from '../../lib/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useGetProfile } from '../../lib/mutation';
 import { AuthModal } from '../../components/Modals/AuthModal';
+import { api } from '../../lib/contants';
 
 const width = Dimensions.get('window').width;
 const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
@@ -87,7 +88,7 @@ const SignUp = () => {
           .replace(/[#?\/\\%&]/g, '')
           .replace(/:/g, '');
         const response = await axios.post(
-          `https://test.omega12x.net/api.aspx?api=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${formattedPassword}&communityId=${values.communityId}`
+          `${api}=createaccount&statename=${values.state}&fullname=${name}&phone=${values.phoneNumber}&addres=${values.address}&emailaddress=${values.email}&pasword=${formattedPassword}&communityId=${values.communityId}`
         );
 
         if (response.data === 'failed') {
@@ -137,7 +138,7 @@ const SignUp = () => {
   } = values;
   useEffect(() => {
     axios
-      .get('https://test.omega12x.net/api.aspx?api=states')
+      .get(`${api}=states`)
       .then(({ data }) => {
         console.log('dfgfgfhdh', data);
 
@@ -165,9 +166,7 @@ const SignUp = () => {
     setLoadingCommunities(true);
     if (state && state.length > 0) {
       axios
-        .get(
-          `https://test.omega12x.net/api.aspx?api=communities&statename=${state}`
-        )
+        .get(`${api}=communities&statename=${state}`)
         .then(({ data }) => {
           let newArray: Community[] = data?.map(
             (item: { communityname: string; id: string }) => {

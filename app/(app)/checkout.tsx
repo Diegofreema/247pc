@@ -24,6 +24,7 @@ import { getProfile, onReview } from '../../lib/helpers';
 import { useWallet } from '../../lib/mutation';
 import { useGetOrder } from '../../lib/queries';
 import { useStoreId } from '../../lib/zustand/auth';
+import { api } from '../../lib/contants';
 
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
@@ -49,7 +50,7 @@ const CheckOut = () => {
       validationSchema,
       onSubmit: async (values) => {
         const { data } = await axios.post(
-          `https://test.omega12x.net/api.aspx?api=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
+          `${api}=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
         );
         if (data === 'Invalid code!') {
           return show('Invalid code!', {
@@ -76,7 +77,7 @@ const CheckOut = () => {
     setIsPaying(true);
     try {
       const { data } = await axios.post(
-        `https://test.omega12x.net/api.aspx?api=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
+        `${api}=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
       console.log(data);
 
@@ -181,7 +182,9 @@ const CheckOut = () => {
         )}
       </View>
 
-      <TouchableOpacity onPress={() => router.push('/updateProfile?page=checkout')}>
+      <TouchableOpacity
+        onPress={() => router.push('/updateProfile?page=checkout')}
+      >
         <Text
           style={{
             fontFamily: 'Poppins',

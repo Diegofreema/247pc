@@ -1,18 +1,18 @@
-import {FlatList, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useLocalSearchParams} from 'expo-router';
-import {useStoreId} from '../../../lib/zustand/auth';
-import {useSpecialInfo} from '../../../lib/queries';
-import {ActivityIndicator} from 'react-native-paper';
+import { FlatList, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
+import { useStoreId } from '../../../lib/zustand/auth';
+import { useSpecialInfo } from '../../../lib/queries';
+import { ActivityIndicator } from 'react-native-paper';
 import Container from '../../../components/Container';
 import NavigationHeader from '../../../components/NavigationHeader';
 import axios from 'axios';
-import {WishlistType} from '../../../lib/types';
-import {MyButton} from '../../../components/MyButton';
-import {colors} from '../../../constants/Colors';
-import {FloatingNav} from '../../../components/FloatingNav';
-import {ProductItem} from '../../../components/ProductItem';
-
+import { WishlistType } from '../../../lib/types';
+import { MyButton } from '../../../components/MyButton';
+import { colors } from '../../../constants/Colors';
+import { FloatingNav } from '../../../components/FloatingNav';
+import { ProductItem } from '../../../components/ProductItem';
+import { api } from '../../../lib/contants';
 
 const Special = () => {
   const { specialId } = useLocalSearchParams();
@@ -27,9 +27,7 @@ const Special = () => {
     setLoading(true);
     if (data && data[0]?.productlist) {
       axios
-        .get(
-          `https://test.omega12x.net/api.aspx?api=specialofferproducts&productlist=${data[0]?.productlist}`
-        )
+        .get(`${api}=specialofferproducts&productlist=${data[0]?.productlist}`)
         .then(({ data }) => {
           setProducts(data);
         })
@@ -123,5 +121,3 @@ const Special = () => {
 };
 
 export default Special;
-
-

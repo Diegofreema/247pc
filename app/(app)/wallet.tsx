@@ -1,21 +1,20 @@
-import {FlatList, Text, View} from 'react-native';
-import React, {useRef, useState} from 'react';
-import {useWallet, useWalletBalance} from '../../lib/queries';
+import { FlatList, Text, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { useWallet, useWalletBalance } from '../../lib/queries';
 import Container from '../../components/Container';
 import NavigationHeader from '../../components/NavigationHeader';
-import {FontAwesome, FontAwesome5} from '@expo/vector-icons';
-import {ActivityIndicator, Button} from 'react-native-paper';
-import {colors} from '../../constants/Colors';
-import {useFormik} from 'formik';
-import {Paystack, paystackProps} from 'react-native-paystack-webview';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { ActivityIndicator, Button } from 'react-native-paper';
+import { colors } from '../../constants/Colors';
+import { useFormik } from 'formik';
+import { Paystack, paystackProps } from 'react-native-paystack-webview';
 import * as yup from 'yup';
 import axios from 'axios';
-import {useStoreId} from '../../lib/zustand/auth';
-import {useToast} from 'react-native-toast-notifications';
+import { useStoreId } from '../../lib/zustand/auth';
+import { useToast } from 'react-native-toast-notifications';
 import InputComponent from '../../components/InputComponent';
-import {MyButton} from '../../components/MyButton';
-import {useRouter} from 'expo-router';
-
+import { MyButton } from '../../components/MyButton';
+import { useRouter } from 'expo-router';
 
 const validationSchema = yup.object().shape({
   amount: yup.string().required('Amount is required'),
@@ -48,11 +47,9 @@ const Wallet = () => {
   const { show } = useToast();
   const router = useRouter();
   const {
-
     values,
     handleChange,
     handleSubmit,
-
 
     resetForm,
   } = useFormik({
@@ -65,7 +62,7 @@ const Wallet = () => {
 
       try {
         const response = await axios.post(
-          `https://test.omega12x.net/api.aspx?api=buywalletcredit&myuserid=${id}&amount=${values.amount}`
+          `${api}=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
         console.log(response.data);
@@ -136,9 +133,18 @@ const Wallet = () => {
         <NavigationHeader title="Wallet" back />
         <View style={{ marginTop: 20 }} />
         <Paystack
-          paystackKey={'pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe'} billingEmail={user?.email as string}
+          paystackKey={'pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe'}
+          billingEmail={user?.email as string}
           amount={finalAmount}
-          channels={['card', 'bank', 'ussd', 'mobile_money', 'qr', 'bank_transfer']}  onCancel={() => {
+          channels={[
+            'card',
+            'bank',
+            'ussd',
+            'mobile_money',
+            'qr',
+            'bank_transfer',
+          ]}
+          onCancel={() => {
             show('Payment cancelled', {
               type: 'success',
               placement: 'bottom',
@@ -290,7 +296,7 @@ const Wallet = () => {
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, ) => item}
+          keyExtractor={(item) => item}
           data={data}
           renderItem={({ item }) => (
             <Text
@@ -333,5 +339,3 @@ const Wallet = () => {
 };
 
 export default Wallet;
-
-

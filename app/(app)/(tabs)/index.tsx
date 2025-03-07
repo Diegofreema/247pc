@@ -10,20 +10,26 @@ import {
   View,
 } from 'react-native';
 
-import {Text} from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
 import axios from 'axios';
-import {Image} from 'expo-image';
-import {useFocusEffect, useRouter} from 'expo-router';
-import {useCallback, useEffect, useRef, useState} from 'react';
-import {useSharedValue, withTiming,} from 'react-native-reanimated';
-import {ErrorComponent} from '../../../components/ErrorComponent';
-import {TopHeader} from '../../../components/TopHeader';
-import {Id, useGetProfile, useGetRecentlyViewed, useNewArrival,} from '../../../lib/queries';
-import {useStoreId} from '../../../lib/zustand/auth';
-import {Loader} from "../../../components/Loader";
+import { Image } from 'expo-image';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSharedValue, withTiming } from 'react-native-reanimated';
+import { ErrorComponent } from '../../../components/ErrorComponent';
+import { TopHeader } from '../../../components/TopHeader';
+import {
+  Id,
+  useGetProfile,
+  useGetRecentlyViewed,
+  useNewArrival,
+} from '../../../lib/queries';
+import { useStoreId } from '../../../lib/zustand/auth';
+import { Loader } from '../../../components/Loader';
+import { api } from '../../../lib/contants';
 
-const {height} = Dimensions.get('window')
+const { height } = Dimensions.get('window');
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -32,15 +38,13 @@ export const checkTextLength = (text: string) => {
   return text;
 };
 
-
 export default function TabOneScreen() {
   const { id, getId } = useStoreId();
   const opacity = useSharedValue(0);
   const height = useSharedValue(0);
   const router = useRouter();
-  const {width} = useWindowDimensions()
+  const { width } = useWindowDimensions();
   const [special, setSpecial] = useState<Id[]>([]);
-
 
   const [error, setError] = useState(false);
   const [isPendingSpecial, setIsPendingSpecial] = useState(false);
@@ -51,7 +55,7 @@ export default function TabOneScreen() {
   const refetchSpecial = async () => {
     try {
       const response = await axios.get(
-        `https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+        `${api}=specialoffers&statename=${user?.statename?.toLowerCase()}`
       );
 
       setSpecial(response?.data);
@@ -81,7 +85,7 @@ export default function TabOneScreen() {
       try {
         setIsPendingSpecial(true);
         const response = await axios.get(
-          `https://test.omega12x.net/api.aspx?api=specialoffers&statename=${user?.statename?.toLowerCase()}`
+          `${api}=specialoffers&statename=${user?.statename?.toLowerCase()}`
         );
 
         setSpecial(response?.data);
@@ -171,9 +175,7 @@ export default function TabOneScreen() {
     isPending ||
     isPendingRecentlyViewed
   ) {
-    return (
-     <Loader />
-    );
+    return <Loader />;
   }
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const y = event?.nativeEvent?.contentOffset?.y;
@@ -222,7 +224,7 @@ export default function TabOneScreen() {
               return (
                 <Pressable
                   onPress={() => router.push(`/special/${item?.id}`)}
-                  style={[styles.imageContainer, {width}]}
+                  style={[styles.imageContainer, { width }]}
                   key={item?.id}
                 >
                   <Image
@@ -297,7 +299,7 @@ export default function TabOneScreen() {
                     const handlePress = () => {
                       axios
                         .post(
-                          `https://test.omega12x.net/api.aspx?api=addtoviewed&productid=${item?.id}&myuserid=${id}`
+                          `${api}=addtoviewed&productid=${item?.id}&myuserid=${id}`
                         )
                         .then((res) => {
                           console.log(res.data);
@@ -550,7 +552,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     height: height * 0.25,
     overflow: 'hidden',
-
   },
   top: {
     position: 'absolute',
