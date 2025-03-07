@@ -51,7 +51,7 @@ const SignUp = () => {
   const [secure2, setSecure2] = useState(true);
   const toast = useToast();
   const router = useRouter();
-  const [_, setError] = useState('');
+  const [, setError] = useState('');
   const { isPending } = useGetProfile();
 
   const [states, setStates] = useState<any[]>([

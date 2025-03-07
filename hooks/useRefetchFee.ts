@@ -35,7 +35,14 @@ export const useRefetchFee = () => {
     if (isFocused) {
       fetchData();
     } // Call the function when the screen is focused
-  }, [id, data?.productInCart, data?.communityId, isFocused]); // Dependencies to re-run the effect if they change
+  }, [
+    id,
+    data?.productInCart,
+    data?.communityId,
+    isFocused,
+    data,
+    queryClient,
+  ]); // Dependencies to re-run the effect if they change
 
   return isPending || isRefetching || isLoading || isFetching || loading;
 };

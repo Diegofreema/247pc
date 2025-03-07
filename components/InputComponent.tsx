@@ -1,8 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { Text } from 'react-native';
 
 import { TextInput } from 'react-native-paper';
-import { FontAwesome } from '@expo/vector-icons';
 
 type Props = {
   label?: string;
@@ -73,5 +72,3 @@ const InputComponent = ({
 };
 
 export default InputComponent;
-
-const styles = StyleSheet.create({});

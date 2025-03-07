@@ -1,4 +1,3 @@
-import { useGetFullOrder } from './queries';
 export type User = {
   name: string;
   email: string;

@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
 type Props = {
@@ -130,5 +130,3 @@ export const NumberedText = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

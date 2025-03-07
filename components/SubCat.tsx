@@ -1,15 +1,8 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Pressable,
-  useWindowDimensions,
-} from 'react-native';
-import { SubProps } from '../lib/types';
-import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { Pressable, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import { colors } from '../constants/Colors';
+import { SubProps } from '../lib/types';
 type Props = {
   chief?: boolean;
   index: number;

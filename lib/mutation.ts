@@ -126,7 +126,7 @@ export const useRemoveFromCart = () => {
   const { show } = useToast();
   const loadData = async () => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${api}=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
       );
 

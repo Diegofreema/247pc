@@ -1,8 +1,7 @@
+import { Image } from 'expo-image';
 import { StyleSheet } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
-import { useRouter } from 'expo-router';
 import { useImageModalState } from '../lib/zustand/imageModal';
-import { Image } from 'expo-image';
 
 type Props = {
   image: string;
@@ -10,7 +9,6 @@ type Props = {
 
 export const ImageModal = ({ image }: Props): JSX.Element => {
   const { isOpen, onClose } = useImageModalState();
-  const router = useRouter();
 
   return (
     <Portal>

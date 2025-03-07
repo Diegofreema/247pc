@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -15,5 +15,3 @@ export const AuthModal = ({ isPending }: Props): JSX.Element => {
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({});

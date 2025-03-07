@@ -24,14 +24,14 @@ const validationSchema = yup.object().shape({
   state: yup.string().required('State is required'),
 });
 const { width } = Dimensions.get('window');
-const sell = () => {
+const Sell = () => {
   const [states, setStates] = useState<State[]>([
     { statename: 'abuja', label: 'Abuja' },
     { statename: 'imo', label: 'Imo' },
   ]);
   const { mutateAsync, isPending } = useJoinUs();
   const [loadingStates, setLoadingStates] = useState(false);
-  const [_, setError] = useState('');
+  const [, setError] = useState('');
   const { values, errors, handleChange, handleSubmit, touched } = useFormik({
     initialValues: {
       name: '',
@@ -212,7 +212,7 @@ const sell = () => {
   );
 };
 
-export default sell;
+export default Sell;
 
 const styles2 = StyleSheet.create({
   border: {

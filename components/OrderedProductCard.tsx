@@ -1,8 +1,7 @@
-import { StyleSheet, View, Text } from 'react-native';
-import { Order } from '../lib/types';
 import { Image } from 'expo-image';
+import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../constants/Colors';
-import { MyButton } from './MyButton';
+import { Order } from '../lib/types';
 
 export const OrderedProductCard = ({
   id,

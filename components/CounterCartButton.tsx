@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { ActivityIndicator, Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
-import { colors } from '../constants/Colors';
 import { usePathname } from 'expo-router';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Button } from 'react-native-paper';
+import { colors } from '../constants/Colors';
 
 type Props = {
   qty: number;
@@ -101,5 +101,3 @@ const CounterCartButton = ({
 };
 
 export default CounterCartButton;
-
-const styles = StyleSheet.create({});

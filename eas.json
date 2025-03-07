@@ -18,13 +18,15 @@
       },
       "channel": "preview",
       "env": {
-        "EXPO_PUBLIC_PAYSTACK_KEY": "pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe"
+        "EXPO_PUBLIC_PAYSTACK_KEY": "pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe",
+        "EXPO_PUBLIC_BASE_URL=https": "https://247pharmacyapi.netpro.software/api.aspx?api"
       }
     },
     "production": {
       "channel": "production",
       "env": {
-        "EXPO_PUBLIC_PAYSTACK_KEY": "pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe"
+        "EXPO_PUBLIC_PAYSTACK_KEY": "pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe",
+        "EXPO_PUBLIC_BASE_URL=https": "https://247pharmacyapi.netpro.software/api.aspx?api"
       },
       "autoIncrement": true
     }

@@ -1,14 +1,13 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React from 'react';
-import Container from '../../../components/Container';
-import NavigationHeader from '../../../components/NavigationHeader';
 import { useLocalSearchParams } from 'expo-router';
-import { useNewCat } from '../../../lib/queries';
+import React from 'react';
+import { FlatList, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { ProductItem } from '../../../components/ProductItem';
-import { FlashList } from '@shopify/flash-list';
-import { FloatingNav } from '../../../components/FloatingNav';
+import Container from '../../../components/Container';
 import { ErrorComponent } from '../../../components/ErrorComponent';
+import { FloatingNav } from '../../../components/FloatingNav';
+import NavigationHeader from '../../../components/NavigationHeader';
+import { ProductItem } from '../../../components/ProductItem';
+import { useNewCat } from '../../../lib/queries';
 type Props = {};
 
 const Chief = (props: Props) => {
@@ -65,5 +64,3 @@ const Chief = (props: Props) => {
 };
 
 export default Chief;
-
-const styles = StyleSheet.create({});

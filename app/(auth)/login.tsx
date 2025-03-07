@@ -29,7 +29,7 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
-const index = () => {
+const Index = () => {
   const { setId, setUser } = useStoreId();
   const [secure, setSecure] = useState(true);
   const router = useRouter();
@@ -185,4 +185,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

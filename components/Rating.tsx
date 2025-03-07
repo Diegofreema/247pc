@@ -1,6 +1,6 @@
-import { View, Text } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { Text, View } from 'react-native';
 type Props = {
   rating: number;
 };

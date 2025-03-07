@@ -6,7 +6,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { SearchHeader } from '../../components/SearchHeader';
 import Container from '../../components/Container';
 import { useSearch } from '../../lib/queries';
@@ -16,16 +16,14 @@ import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import InputComponent from '../../components/InputComponent';
-import type {ErrorBoundaryProps} from "expo-router";
-import {ErrorComponent} from "../../components/ErrorComponent";
+import type { ErrorBoundaryProps } from 'expo-router';
+import { ErrorComponent } from '../../components/ErrorComponent';
 
-export function ErrorBoundary({  retry }: ErrorBoundaryProps) {
-  return (
-      <ErrorComponent refetch={retry} />
-  );
+export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
+  return <ErrorComponent refetch={retry} />;
 }
 const itemsPerPage = 10;
-const search = () => {
+const SearchScreen = () => {
   const [page, setPage] = useState(1);
   const { data, isPending, isError, isPaused, refetch } = useSearch();
   const [showFilter, setShowFilter] = useState(false);
@@ -65,10 +63,7 @@ const search = () => {
       setProducts(data);
     }
   }, [value, data]);
-  useEffect(() => {
-    handleSort();
-  }, [selectedPriceFilter]);
-  const handleSort = () => {
+  const handleSort = useCallback(() => {
     if (!products) return;
     let filteredDataCopy = [...products];
 
@@ -83,9 +78,12 @@ const search = () => {
       );
     }
 
-
     setProducts(filteredDataCopy);
-  };
+  }, [products, selectedPriceFilter]);
+  useEffect(() => {
+    handleSort();
+  }, [selectedPriceFilter, handleSort]);
+
   const filterByPriceLowToHigh = () => {
     if (!products) return;
     setSelectedPriceFilter('lowToHigh');
@@ -109,7 +107,6 @@ const search = () => {
     setProducts(data);
   };
 
-
   const handleNext = () => {
     if (!products) return;
     setPage(page + 1);
@@ -132,7 +129,6 @@ const search = () => {
     }
     setSelectedPriceFilter('');
     setProducts(filteredDataCopy);
-
 
     setShowFilter(false);
     setPage(1);
@@ -218,7 +214,6 @@ const search = () => {
     );
   }
 
-
   const resetFilter = () => {
     setProducts(data);
     setSelectedCat(['']);
@@ -256,7 +251,6 @@ const search = () => {
 
   const totalPages = Math.ceil(products?.length! / itemsPerPage);
 
-
   // Calculate the start and end index based on the current page
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -280,10 +274,9 @@ const search = () => {
               flex: 1,
               flexDirection: 'row',
             }}
-
           >
             <Pressable
-              style={[styles.filterButton, {backgroundColor: 'white'}]}
+              style={[styles.filterButton, { backgroundColor: 'white' }]}
               onPress={resetFilter}
             >
               <Text
@@ -298,7 +291,7 @@ const search = () => {
             </Pressable>
             <Pressable
               onPress={() => setShowFilter(true)}
-              style={[styles.filterButton, {backgroundColor: "white"}]}
+              style={[styles.filterButton, { backgroundColor: 'white' }]}
             >
               <Text
                 style={{
@@ -311,58 +304,56 @@ const search = () => {
               </Text>
             </Pressable>
 
-              <Pressable
-                onPress={filterByPriceLowToHigh}
-                style={[
-                  styles.filterButton,
-                  {
-                    backgroundColor:
-                      selectedPriceFilter === 'lowToHigh'
-                        ? colors.lightGreen
-                        : 'white',
-                  },
-                ]}
+            <Pressable
+              onPress={filterByPriceLowToHigh}
+              style={[
+                styles.filterButton,
+                {
+                  backgroundColor:
+                    selectedPriceFilter === 'lowToHigh'
+                      ? colors.lightGreen
+                      : 'white',
+                },
+              ]}
+            >
+              <Text
+                style={{
+                  color:
+                    selectedPriceFilter === 'lowToHigh' ? 'white' : 'black',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 9,
+                  flexWrap: 'nowrap',
+                  flexShrink: 1,
+                  flex: 1,
+                }}
               >
-                <Text
-                  style={{
-                    color:
-                      selectedPriceFilter === 'lowToHigh' ? 'white' : 'black',
-                    fontFamily: 'PoppinsMedium',
-                    fontSize: 9,
-                    flexWrap: 'nowrap',
-                    flexShrink: 1,
-                    flex: 1
-                  }}
-
-                >
-                  Low to High
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={filterByPriceHighToLow}
-                style={[
-                  styles.filterButton,
-                  {
-                    backgroundColor:
-                      selectedPriceFilter === 'highToLow'
-                        ? colors.lightGreen
-                        : 'white',
-                  },
-                ]}
+                Low to High
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={filterByPriceHighToLow}
+              style={[
+                styles.filterButton,
+                {
+                  backgroundColor:
+                    selectedPriceFilter === 'highToLow'
+                      ? colors.lightGreen
+                      : 'white',
+                },
+              ]}
+            >
+              <Text
+                style={{
+                  color:
+                    selectedPriceFilter === 'highToLow' ? 'white' : 'black',
+                  fontFamily: 'PoppinsMedium',
+                  fontSize: 9,
+                  flexWrap: 'nowrap',
+                }}
               >
-                <Text
-                  style={{
-                    color:
-                      selectedPriceFilter === 'highToLow' ? 'white' : 'black',
-                    fontFamily: 'PoppinsMedium',
-                    fontSize: 9,
-                    flexWrap: 'nowrap'
-                  }}
-                >
-                  High to Low
-                </Text>
-              </Pressable>
-
+                High to Low
+              </Text>
+            </Pressable>
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
             {showFilter && (
@@ -616,7 +607,7 @@ const search = () => {
   );
 };
 
-export default search;
+export default SearchScreen;
 
 const styles = StyleSheet.create({
   modal: {

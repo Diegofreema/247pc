@@ -253,6 +253,8 @@ const CheckOut = () => {
                 queryClient.invalidateQueries({ queryKey: ['user'] });
                 router.push('/order');
               } catch (error) {
+                console.log(error);
+
                 show('Something went wrong', {
                   type: 'error',
                   placement: 'bottom',

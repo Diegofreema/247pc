@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { useStoreId } from '../lib/zustand/auth';
-import { Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
+import { colors } from '../constants/Colors';
 import { useAddToCart } from '../lib/mutation';
 import { MyButton } from './MyButton';
-import { colors } from '../constants/Colors';
 
 type Props = {
   productId: string;
@@ -13,7 +12,6 @@ type Props = {
 };
 
 export const AddToCartButton = ({ productId, count }: Props): JSX.Element => {
-  const { user, id } = useStoreId();
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
   const [qty, setQty] = useState(1);
   const onIncrease = () => {
@@ -67,5 +65,3 @@ export const AddToCartButton = ({ productId, count }: Props): JSX.Element => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

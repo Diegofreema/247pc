@@ -1,18 +1,16 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { useState } from 'react';
-import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 
-import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
-import { MyButton } from './MyButton';
 import { colors } from '../constants/Colors';
+import { MyButton } from './MyButton';
 
 type Props = {
   refetch: () => void;
 };
 
 export const ErrorComponent = ({ refetch }: Props): JSX.Element => {
-  const [retry, setRetry] = useState(false);
+  const [, setRetry] = useState(false);
 
   const handleRetry = () => {
     refetch();
@@ -59,5 +57,3 @@ export const ErrorComponent = ({ refetch }: Props): JSX.Element => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

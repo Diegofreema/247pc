@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { ActivityIndicator, Button } from 'react-native-paper';
 import CartItem from '../../components/CartItem';
 import Container from '../../components/Container';
@@ -19,7 +19,7 @@ import {
 } from '../../lib/queries';
 import { useStoreId } from '../../lib/zustand/auth';
 
-const cart = () => {
+const CartScreen = () => {
   const { id } = useStoreId();
   const { data: user } = useUser(id);
   const {
@@ -41,12 +41,10 @@ const cart = () => {
     setToggleReload(!toggleReload);
   };
 
-
   const {
     data: order,
     isPaused: isPausedOrder,
-    isPending: loadingOrder,
-    isFetching: isFetchingOrder,
+
     isError: isErrorOrder,
     isLoading: isLoadingOrder,
   } = useGetOrder();
@@ -186,15 +184,14 @@ const cart = () => {
               keyExtractor={(item, index) => item.productid + index}
               renderItem={({ item, index }) => {
                 return (
-                    <CartItem
-                      wishList={wishList}
-                      index={index + Math.random() * 400}
-                      {...item}
-                      removeFromCart={removeFromCart}
-                      removeFromCartPending={removeFromCartPending}
-                      reloadData={reloadData}
-                    />
-
+                  <CartItem
+                    wishList={wishList}
+                    index={index + Math.random() * 400}
+                    {...item}
+                    removeFromCart={removeFromCart}
+                    removeFromCartPending={removeFromCartPending}
+                    reloadData={reloadData}
+                  />
                 );
               }}
               ListFooterComponent={() => {
@@ -263,6 +260,4 @@ const cart = () => {
   );
 };
 
-export default cart;
-
-const styles = StyleSheet.create({});
+export default CartScreen;

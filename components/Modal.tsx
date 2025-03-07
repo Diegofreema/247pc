@@ -1,14 +1,11 @@
-import { StyleSheet, View } from 'react-native';
-import { Button, Modal, Portal, Text } from 'react-native-paper';
-import { useModalState } from '../lib/zustand/modalState';
-import { useRouter } from 'expo-router';
-import { colors } from '../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
-import Animated from 'react-native-reanimated';
+import { useRouter } from 'expo-router';
+import { StyleSheet } from 'react-native';
+import { Button, Modal, Portal, Text } from 'react-native-paper';
+import { colors } from '../constants/Colors';
+import { useModalState } from '../lib/zustand/modalState';
 
-type Props = {};
-
-export const ModalComponent = ({}: Props): JSX.Element => {
+export const ModalComponent = (): JSX.Element => {
   const { isOpen, onClose } = useModalState();
   const router = useRouter();
   const handleNav = () => {

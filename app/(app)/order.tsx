@@ -1,17 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import Container from '../../components/Container';
-import NavigationHeader from '../../components/NavigationHeader';
-import { useGetFullOrder } from '../../lib/queries';
-import { MyButton } from '../../components/MyButton';
-import { colors } from '../../constants/Colors';
+import { FlatList, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { FlatList } from 'react-native';
-import { Order } from '../../lib/types';
+import Container from '../../components/Container';
+import { MyButton } from '../../components/MyButton';
+import NavigationHeader from '../../components/NavigationHeader';
 import { OrderCard } from '../../components/OrderCard';
+import { colors } from '../../constants/Colors';
+import { useGetFullOrder } from '../../lib/queries';
+import { Order } from '../../lib/types';
 type Props = {};
 
-const order = (props: Props) => {
+const OrderScreen = (props: Props) => {
   const { data, isPending, isPaused, isError, refetch } = useGetFullOrder();
 
   const [reload, setReload] = useState(false);
@@ -108,15 +107,4 @@ const order = (props: Props) => {
   );
 };
 
-export default order;
-
-const styles = StyleSheet.create({
-  label: { color: 'black', fontWeight: 'bold', fontSize: 16, marginBottom: 10 },
-  message: {
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 6,
-    color: 'black',
-    backgroundColor: 'white',
-  },
-});
+export default OrderScreen;

@@ -1,4 +1,3 @@
-import { StyleSheet, View, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 
@@ -40,5 +39,3 @@ export const MyButton = ({
     </Button>
   );
 };
-
-const styles = StyleSheet.create({});

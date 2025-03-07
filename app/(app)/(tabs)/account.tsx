@@ -56,7 +56,7 @@ const Account = () => {
     };
 
     getUser();
-  }, []);
+  }, [id, queryClient]);
 
   const router = useRouter();
   const onClose = () => {

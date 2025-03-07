@@ -1,17 +1,15 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import NavigationHeader from '../../../components/NavigationHeader';
 import Container from '../../../components/Container';
 import Wishlist from '../../../components/Wishlist';
-import {ErrorComponent} from '../../../components/ErrorComponent';
-import {useWishlist} from "../../../lib/queries";
-import {Loader} from "../../../components/Loader";
+import { ErrorComponent } from '../../../components/ErrorComponent';
+import { useWishlist } from '../../../lib/queries';
+import { Loader } from '../../../components/Loader';
 
-
-const wishlist = () => {
-
-  const {data, isPending, isError, refetch, isRefetching, isRefetchError,} = useWishlist()
-
+const WishlistScreen = () => {
+  const { data, isPending, isError, refetch, isRefetching, isRefetchError } =
+    useWishlist();
 
   const handleRefetch = async () => {
     await refetch();
@@ -20,9 +18,9 @@ const wishlist = () => {
   if (isError || isRefetchError) {
     return <ErrorComponent refetch={handleRefetch} />;
   }
-if (isPending) {
-  return <Loader />
-}
+  if (isPending) {
+    return <Loader />;
+  }
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
@@ -35,36 +33,34 @@ if (isPending) {
             alignItems: 'center',
           }}
         >
-
-            <View style={{ flex: 1, width: '100%' }}>
-              <FlatList
-                contentContainerStyle={{ paddingBottom: 70 }}
-                showsVerticalScrollIndicator={false}
-                data={data}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <Wishlist
-                    id={item?.id}
-                    title={item?.product}
-                    price={item?.sellingprice}
-                    category={item?.category}
-                  />
-                )}
-                onRefresh={handleRefetch}
-                refreshing={isRefetching}
-                ListEmptyComponent={
-                  <Text style={styles.empty}>Wishlist is currently empty</Text>
-                }
-              />
-            </View>
-
+          <View style={{ flex: 1, width: '100%' }}>
+            <FlatList
+              contentContainerStyle={{ paddingBottom: 70 }}
+              showsVerticalScrollIndicator={false}
+              data={data}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <Wishlist
+                  id={item?.id}
+                  title={item?.product}
+                  price={item?.sellingprice}
+                  category={item?.category}
+                />
+              )}
+              onRefresh={handleRefetch}
+              refreshing={isRefetching}
+              ListEmptyComponent={
+                <Text style={styles.empty}>Wishlist is currently empty</Text>
+              }
+            />
+          </View>
         </View>
       </Container>
     </View>
   );
 };
 
-export default wishlist;
+export default WishlistScreen;
 
 const styles = StyleSheet.create({
   empty: {

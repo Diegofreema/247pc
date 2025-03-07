@@ -42,7 +42,7 @@ const Carousel = (special: Id[]) => {
     return () => {
       clearInterval(timer);
     };
-  }, [currentIndex]);
+  }, [currentIndex, special?.length, width]);
 
   return (
     <View>

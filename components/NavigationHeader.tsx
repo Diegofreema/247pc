@@ -13,31 +13,12 @@ type Props = {
   white?: boolean;
 };
 
-const links = [
-  {
-    name: 'Home',
-    href: '/(tabs)/',
-  },
-  {
-    name: 'Categories',
-    href: '/(tabs)/categories',
-  },
-  {
-    name: 'Wishlist',
-    href: '/(tabs)/wishlist',
-  },
-  {
-    name: 'Account',
-    href: '/(tabs)/account',
-  },
-];
-
 const NavigationHeader = ({ title, back, white }: Props) => {
   const router = useRouter();
   const { id } = useStoreId();
   const pathname = usePathname();
 
-  const { data: user, isLoading, isFetching, isPending, refetch } = useUser(id);
+  const { data: user } = useUser(id);
   // const loading = isPending;
   // useEffect(() => {
   //   refetch();
@@ -53,7 +34,7 @@ const NavigationHeader = ({ title, back, white }: Props) => {
     >
       {back && (
         <Pressable
-          onPress={({}) => router.back()}
+          onPress={() => router.back()}
           style={({ pressed }) => [pressed && { opacity: 0.5 }, { padding: 3 }]}
         >
           <AntDesign name="arrowleft" size={24} color="black" />

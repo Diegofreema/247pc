@@ -1,10 +1,9 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
-import { useRouter } from 'expo-router';
-import { ActivityIndicator, Button, Text } from 'react-native-paper';
-import { FontAwesome } from '@expo/vector-icons';
-import { useStoreId } from '../lib/zustand/auth';
+import { Button, Text } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
+import { useStoreId } from '../lib/zustand/auth';
 
 type Props = {
   name?: string;

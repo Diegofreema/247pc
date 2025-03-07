@@ -1,9 +1,7 @@
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
-type Props = {};
-
-export const CheckOut = ({}: Props): JSX.Element => {
+export const CheckOut = (): JSX.Element => {
   return (
     <View>
       <TextInput

@@ -57,6 +57,8 @@ export default function TabOneScreen() {
 
       setSpecial(response?.data);
     } catch (error) {
+      console.log(error);
+
       setError(true);
     }
   };
@@ -87,6 +89,8 @@ export default function TabOneScreen() {
 
         setSpecial(response?.data);
       } catch (error) {
+        console.log(error);
+
         setError(true);
       } finally {
         setIsPendingSpecial(false);
@@ -132,7 +136,7 @@ export default function TabOneScreen() {
       return () => {
         clearInterval(timer);
       };
-    }, [currentIndex])
+    }, [currentIndex, special])
   );
   const {
     data: newArrival,
@@ -142,7 +146,7 @@ export default function TabOneScreen() {
     refetch: refetchNew,
   } = useNewArrival();
 
-  const [_, setReload] = useState(false);
+  const [, setReload] = useState(false);
 
   const handleRefetch = () => {
     // setError(false);

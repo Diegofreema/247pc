@@ -110,6 +110,8 @@ const ResetToken = () => {
         });
       }
     } catch (error) {
+      console.log(error);
+
       toast.show('Failed to send token', {
         type: 'danger',
         placement: 'bottom',

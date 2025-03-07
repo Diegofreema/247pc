@@ -122,7 +122,7 @@ const CartItem = ({
       >
         {!wished && (
           <Button
-            loading={isPending && productid == clickedIndex}
+            loading={isPending && productid === clickedIndex}
             onPress={() => {
               setClickedIndex(productid);
               mutateAsync(productid);
@@ -143,7 +143,7 @@ const CartItem = ({
         )}
         <Button
           onPress={() => handleRemoveFromCart(saleid)}
-          loading={removeFromCartPending && saleid == selectedIndex}
+          loading={removeFromCartPending && saleid === selectedIndex}
           icon="delete"
           buttonColor={colors.danger}
           textColor={'white'}

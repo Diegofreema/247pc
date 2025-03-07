@@ -128,7 +128,7 @@ const Update = () => {
       phoneNumber: data?.phone,
       communityId: data?.communityId,
     });
-  }, [data]);
+  }, [data, setValues]);
   const {
     data: states,
     isError: isErrorState,

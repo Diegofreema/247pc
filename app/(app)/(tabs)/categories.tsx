@@ -19,19 +19,20 @@ import { TopHeader } from '../../../components/TopHeader';
 import { Cats, subCats } from '../../../lib/helpers';
 
 export default function Categories() {
-  const [categories, setCategories] = useState(Cats);
-  const [subCategories, setSubCategories] = useState(subCats);
+  const [categories] = useState(Cats);
+
   const [active, setActive] = useState(0);
- 
+
   const router = useRouter();
   let scrollOffsetY = useRef(new Animated.Value(0)).current;
-  const itemRef = useRef<Array<TouchableOpacity | null>>([]);
+  const itemRef = useRef<TouchableOpacity[]>([]);
   const scrollRef = useRef<ScrollView>(null);
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   let items = subCats?.[active];
 
   const handleClick = (index: number) => {
-    const selectedItem = itemRef.current[index];
+    if (!itemRef?.current) return;
+    const selectedItem = itemRef?.current[index];
     setActive(index);
 
     if (selectedItem) {
@@ -77,7 +78,10 @@ export default function Categories() {
             <TouchableOpacity
               onPress={() => handleClick(index)}
               key={index}
-              ref={(el) => (itemRef.current[index] = el)}
+              ref={(el) => {
+                if (!itemRef?.current?.[index]) return;
+                itemRef.current[index] = el!;
+              }}
               style={[
                 active === index ? styles.active : styles.normal,
                 { zIndex: 1, paddingBottom: 4 },

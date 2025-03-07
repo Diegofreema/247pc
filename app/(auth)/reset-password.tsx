@@ -72,6 +72,8 @@ const UpdatePassword = () => {
             return;
           }
         } catch (error) {
+          console.log(error);
+
           toast.show('Something went wrong', {
             type: 'danger',
             placement: 'bottom',

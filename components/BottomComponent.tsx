@@ -1,13 +1,9 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
-type Props = {};
-
-export const BottomComponent = ({}: Props): JSX.Element => {
+export const BottomComponent = (): JSX.Element => {
   return (
     <View>
       <Text> BottomComponent</Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

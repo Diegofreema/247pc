@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentLoader, { Rect } from 'react-content-loader/native';
 import { Dimensions } from 'react-native';
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 export const MyLoader = () => (
   <ContentLoader
     animate={true}

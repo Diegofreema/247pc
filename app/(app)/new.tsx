@@ -1,17 +1,17 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
 import React, { useState } from 'react';
-import { useCat } from '../../lib/queries';
+import { FlatList, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { SubCat } from '../../components/SubCat';
-import NavigationHeader from '../../components/NavigationHeader';
 import Container from '../../components/Container';
-import { MyButton } from '../../components/MyButton';
-import { colors } from '../../constants/Colors';
 import { FloatingNav } from '../../components/FloatingNav';
+import { MyButton } from '../../components/MyButton';
+import NavigationHeader from '../../components/NavigationHeader';
+import { SubCat } from '../../components/SubCat';
+import { colors } from '../../constants/Colors';
+import { useCat } from '../../lib/queries';
 
 type Props = {};
 
-const newCat = (props: Props) => {
+const NewCat = (props: Props) => {
   const { data, isPending, isFetching, isError, isPaused, refetch } = useCat();
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
@@ -105,6 +105,4 @@ const newCat = (props: Props) => {
   );
 };
 
-export default newCat;
-
-const styles = StyleSheet.create({});
+export default NewCat;

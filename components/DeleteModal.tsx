@@ -33,6 +33,7 @@ export const DeleteModal = ({ visible, onClose }: Props): JSX.Element => {
       router.replace('/login');
       onClose();
     } catch (error) {
+      console.log(error);
     } finally {
       setDeleting(false);
     }

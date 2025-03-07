@@ -1,15 +1,13 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import Container from '../../../components/Container';
-import NavigationHeader from '../../../components/NavigationHeader';
-import { useProductCat } from '../../../lib/queries';
+import React, { useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { ProductItem } from '../../../components/ProductItem';
-import { MyButton } from '../../../components/MyButton';
-import { colors } from '../../../constants/Colors';
-import { FloatingNav } from '../../../components/FloatingNav';
+import Container from '../../../components/Container';
 import { ErrorComponent } from '../../../components/ErrorComponent';
+import { FloatingNav } from '../../../components/FloatingNav';
+import NavigationHeader from '../../../components/NavigationHeader';
+import { ProductItem } from '../../../components/ProductItem';
+import { useProductCat } from '../../../lib/queries';
 // import { FlashList } from '@shopify/flash-list';
 type Props = {};
 
@@ -84,5 +82,3 @@ const Cat = (props: Props) => {
 };
 
 export default Cat;
-
-const styles = StyleSheet.create({});

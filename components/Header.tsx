@@ -1,17 +1,15 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Searchbar, Text } from 'react-native-paper';
-import { TextInput } from 'react-native-paper';
-import { usePathname, useRouter } from 'expo-router';
-import Profile from './Profile';
 import { FontAwesome } from '@expo/vector-icons';
+import { useState } from 'react';
+import { Text } from 'react-native-paper';
 import { colors } from '../constants/Colors';
+import { useWalletBalance } from '../lib/queries';
 import { LoggedUserType } from '../lib/types';
 import { useStoreId } from '../lib/zustand/auth';
-import { useUser, useWalletBalance } from '../lib/queries';
 import { MyButton } from './MyButton';
-import { useState } from 'react';
 import NavigationHeader from './NavigationHeader';
+import Profile from './Profile';
 
 type Props = {
   user?: LoggedUserType;
@@ -19,7 +17,7 @@ type Props = {
 };
 
 const Header = ({ user }: Props) => {
-  const { id, user: profile } = useStoreId();
+  const { user: profile } = useStoreId();
 
   const {
     data: walletBalance,
@@ -121,5 +119,3 @@ const Header = ({ user }: Props) => {
 };
 
 export default Header;
-
-const styles = StyleSheet.create({});

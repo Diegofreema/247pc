@@ -1,9 +1,8 @@
-import { StyleSheet, View, Text } from 'react-native';
-import { Order } from '../lib/types';
-import { RatingForm } from './RatingForm';
-import { useState } from 'react';
-import { OrderedProductCard } from './OrderedProductCard';
+import { View } from 'react-native';
 import { Divider } from 'react-native-paper';
+import { Order } from '../lib/types';
+import { OrderedProductCard } from './OrderedProductCard';
+import { RatingForm } from './RatingForm';
 
 export const OrderCard = (item: Order): JSX.Element => {
   return (
@@ -16,5 +15,3 @@ export const OrderCard = (item: Order): JSX.Element => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

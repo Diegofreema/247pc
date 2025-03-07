@@ -1,11 +1,10 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
-import { MyButton } from './MyButton';
-import { useState } from 'react';
-import Rating from './Rating';
 import { colors } from '../constants/Colors';
 import { useComment } from '../lib/mutation';
+import { MyButton } from './MyButton';
 
 type Props = {
   productId: string;

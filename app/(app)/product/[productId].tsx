@@ -122,6 +122,8 @@ const ProductDetail = () => {
         animationType: 'slide-in',
       });
     } catch (error) {
+      console.log(error);
+
       show('Something went wrong adding to wishlist', {
         type: 'danger',
         placement: 'bottom',
@@ -140,6 +142,8 @@ const ProductDetail = () => {
       );
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
     } catch (error) {
+      console.log(error);
+
       show('Something went wrong', {
         type: 'danger',
         animationType: 'slide-in',

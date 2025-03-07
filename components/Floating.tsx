@@ -1,10 +1,8 @@
-import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { colors } from '../constants/Colors';
 import { useRouter } from 'expo-router';
+import { Pressable, Text } from 'react-native';
+import { colors } from '../constants/Colors';
 
-type Props = {};
-
-export const Floating = ({}: Props): JSX.Element => {
+export const Floating = (): JSX.Element => {
   const router = useRouter();
   return (
     <Pressable
@@ -34,5 +32,3 @@ export const Floating = ({}: Props): JSX.Element => {
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({});

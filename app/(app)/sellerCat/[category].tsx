@@ -1,20 +1,20 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useSellerCat } from '../../../lib/queries';
-import Container from '../../../components/Container';
-import NavigationHeader from '../../../components/NavigationHeader';
+import { FlatList, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { ProductItem } from '../../../components/ProductItem';
-import { MyButton } from '../../../components/MyButton';
-import { colors } from '../../../constants/Colors';
+import Container from '../../../components/Container';
 import { FloatingNav } from '../../../components/FloatingNav';
+import { MyButton } from '../../../components/MyButton';
+import NavigationHeader from '../../../components/NavigationHeader';
+import { ProductItem } from '../../../components/ProductItem';
+import { colors } from '../../../constants/Colors';
+import { useSellerCat } from '../../../lib/queries';
 
 type Props = {};
 
 const SellerCat = (props: Props) => {
   const { category, id } = useLocalSearchParams();
-  const router = useRouter();
+
   const { data, isPending, isFetching, isError, isPaused, refetch } =
     useSellerCat(category as string, id as string);
   const [reload, setReload] = useState(false);
@@ -93,21 +93,3 @@ const SellerCat = (props: Props) => {
 };
 
 export default SellerCat;
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    borderRadius: 6,
-    height: 300,
-    shadowColor: '#000',
-
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 3,
-  },
-});
