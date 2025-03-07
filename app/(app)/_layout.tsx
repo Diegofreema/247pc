@@ -1,29 +1,25 @@
-import { Redirect, Stack } from 'expo-router';
-import { useStoreId } from '../../lib/zustand/auth';
-import { useEffect } from 'react';
-import { getProfile } from '../../lib/helpers';
-import { useQueryClient } from '@tanstack/react-query';
-import { StatusBar } from 'expo-status-bar';
+import {type ErrorBoundaryProps, Redirect, Stack} from 'expo-router';
+import {useStoreId} from '../../lib/zustand/auth';
+import {StatusBar} from 'expo-status-bar';
+import {useGetProfile} from "../../lib/queries";
+import {Loader} from "../../components/Loader";
+import {ErrorComponent} from "../../components/ErrorComponent";
 
+export function ErrorBoundary({  retry }: ErrorBoundaryProps) {
+    return (
+        <ErrorComponent refetch={retry} />
+    );
+}
 export default function AppLayoutNav() {
-  const { id, getId, setUser } = useStoreId();
-  console.log('🚀 ~ AppLayoutNav ~ id:', id);
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['user'] });
-    console.log('Querying');
-  }, []);
-  useEffect(() => {
-    getId();
-    const getData = async () => {
-      const user = await getProfile(id);
-      setUser(user);
-    };
-    getData();
-  }, []);
+  const { id } = useStoreId();
 
+ const {isPending} = useGetProfile(id)
   if (id === '') {
     return <Redirect href={'/login'} />;
+  }
+
+  if (isPending) {
+    return <Loader />
   }
   return (
     <>

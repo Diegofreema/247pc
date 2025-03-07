@@ -47,7 +47,7 @@ export const useCart = () => {
 export const useGetCart = () => {
   const { id } = useStoreId();
   return useQuery({
-    queryKey: ['cartList'],
+    queryKey: ['cart', id],
     queryFn: async () => {
       const response = await axios.get(
         `https://test.omega12x.net/api.aspx?api=cartlist&myuserid=${id}`
@@ -64,8 +64,6 @@ export const useGetCart = () => {
 
       return data;
     },
-    refetchOnWindowFocus: true,
-    refetchOnMount: 'always',
   });
 };
 
@@ -373,10 +371,9 @@ export const useSearch = () => {
       const response = await axios.get(
         `https://test.omega12x.net/api.aspx?api=allproduct&statename=${user?.statename}`
       );
-      console.log('🚀 ~ useSearch ~ response:', response);
-
       let data = [];
-      if (response.data.length > 0) {
+      console.log({data: response.data})
+      if (Array.isArray(response.data)) {
         data = response.data;
       }
 
@@ -518,11 +515,12 @@ export const useGetCom = (state: string) => {
   });
 };
 export const useGetProfile = (id: string) => {
+  const {setUser} = useStoreId()
   const getProfile = async () => {
     const { data } = await axios.get(
       `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
     );
-
+    setUser(data)
     return data;
   };
   return useQuery({

@@ -2,36 +2,13 @@ import {FontAwesome} from '@expo/vector-icons';
 import {useRouter} from 'expo-router';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {useStoreId} from '../lib/zustand/auth';
-import {useQueryClient} from '@tanstack/react-query';
-import {useEffect, useState} from 'react';
-import axios from 'axios';
-import {LoggedUserType} from '../lib/types';
 
-type Props = {};
 
-export const TopHeader = ({}: Props): JSX.Element => {
-  const [user, setUser] = useState<LoggedUserType>();
-  const { id } = useStoreId();
+export const TopHeader = () => {
 
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    const getProfile = async () => {
-      const { data } = await axios.get(
-        `https://test.omega12x.net/api.aspx?api=userinfo&myuserid=${id}`
-      );
+  const { user } = useStoreId();
+  console.log({user})
 
-      return data;
-    };
-    const getUser = async () => {
-      const data = await queryClient.fetchQuery({
-        queryKey: ['profile'],
-        queryFn: getProfile,
-      });
-      setUser(data);
-    };
-
-    getUser();
-  }, []);
   const router = useRouter();
 
   return (

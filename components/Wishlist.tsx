@@ -1,51 +1,33 @@
 import {Pressable, StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {Text} from 'react-native-paper';
 import {Image} from 'expo-image';
 import {trimTitle} from '../lib/helpers';
 import {Link} from 'expo-router';
 import {MyButton} from './MyButton';
 import {colors} from '../constants/Colors';
-import axios from 'axios';
 import {useStoreId} from '../lib/zustand/auth';
-import {useToast} from 'react-native-toast-notifications';
+import {useRemoveFromWishlist} from "../lib/mutation";
 
 type Props = {
   id?: string;
   title?: string;
   price?: string;
   category: string;
-  refetch: () => void;
 };
 
-const Wishlist = ({ id, category, price, title, refetch }: Props) => {
+const Wishlist = ({ id, category, price, title }: Props) => {
   const { id: userId } = useStoreId();
-  const [removing, setRemoving] = useState(false);
-  const toast = useToast();
-  const removeFromWishList = async () => {
-    setRemoving(true);
-    try {
-      await axios.post(
-        `https://test.omega12x.net/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
-      );
-      refetch();
-    } catch (error) {
-      toast.show('Something went wrong', {
-        type: 'danger',
-        animationType: 'slide-in',
-        placement: 'bottom',
-      });
-    } finally {
-      setRemoving(false);
-    }
-  };
+
+  const {mutateAsync, isPending} = useRemoveFromWishlist(id!, userId);
+
+
   return (
     <View
       style={{
         minHeight: 150,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
+        justifyContent: 'center', backgroundColor: 'white',
       }}
     >
       <Link href={`/product/${id}`} asChild>
@@ -113,8 +95,8 @@ const Wishlist = ({ id, category, price, title, refetch }: Props) => {
       </Link>
       <View style={{ marginBottom: 15 }}>
         <MyButton
-          disabled={removing}
-          onPress={removeFromWishList}
+          disabled={isPending}
+          onPress={mutateAsync}
           text="Remove from wishlist"
           buttonColor={colors.danger}
         />

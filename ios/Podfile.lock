@@ -30,7 +30,7 @@ PODS:
     - SDWebImageAVIFCoder (~> 0.11.0)
     - SDWebImageSVGCoder (~> 1.7.0)
     - SDWebImageWebPCoder (~> 0.14.6)
-  - ExpoImagePicker (15.0.7):
+  - ExpoImagePicker (15.1.0):
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
@@ -86,7 +86,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - EXStructuredHeaders (3.8.0)
-  - EXUpdates (0.25.27):
+  - EXUpdates (0.25.28):
     - DoubleConversion
     - EASClient
     - EXManifests
@@ -1704,7 +1704,7 @@ SPEC CHECKSUMS:
   ExpoHaptics: 5a3a88971af384255baf2504f38b41189cec6984
   ExpoHead: a79e263b73039b41940c220dd67b83572e7cac09
   ExpoImage: 42162e3d264ce07a62766d6bd26bd299fe4c6faa
-  ExpoImagePicker: 12a420923383ae38dccb069847218f27a3b87816
+  ExpoImagePicker: 1e696c26a3e5c01a0ab1b99897db3da59c04a141
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: 831ece8311a489418746925820bbffdda587d6f4
   ExpoStoreReview: 15f9a636b62ff00bb21cbe9a9fe22f0239da4481
@@ -1712,7 +1712,7 @@ SPEC CHECKSUMS:
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
   EXSplashScreen: 3cad09949c2ca6730cbb2801b8c51cb87692425a
   EXStructuredHeaders: cb8d1f698e144f4c5547b4c4963e1552f5d2b457
-  EXUpdates: a1c1a6fd9f36b8cd91033e639640522e54706994
+  EXUpdates: 52c797a4b71b25315353041c29571cd65ecc7141
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
@@ -1789,4 +1789,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5f983869906d804b44be0483805f60987e596251
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

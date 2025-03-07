@@ -181,7 +181,7 @@ const CheckOut = () => {
         )}
       </View>
 
-      <TouchableOpacity onPress={() => router.push('/updateProfile')}>
+      <TouchableOpacity onPress={() => router.push('/updateProfile?page=checkout')}>
         <Text
           style={{
             fontFamily: 'Poppins',

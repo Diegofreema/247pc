@@ -7,16 +7,6 @@ import {colors} from '../constants/Colors';
 import {router, useRouter} from 'expo-router';
 import {getProfile} from './helpers';
 
-// export const useNewUser = () => {
-//   return useMutation({
-//     mutationKey: ['user'],
-//     mutationFn: async (values: User) => {
-//       console.log(values);
-
-//       return response.data;
-//     },
-//   });
-// };
 export const useAddToWishlist = () => {
   const queryClient = useQueryClient();
   const { show } = useToast();
@@ -24,7 +14,6 @@ export const useAddToWishlist = () => {
   return useMutation({
     mutationKey: ['wishlist'],
     mutationFn: async (productId?: string) => {
-      console.log(productId, id);
       const response = await axios.post(
         `https://test.omega12x.net/api.aspx?api=addtowishlist&productid=${productId}&myuserid=${id}`
       );
@@ -51,6 +40,37 @@ export const useAddToWishlist = () => {
     },
   });
 };
+export const useRemoveFromWishlist = (id: string, userId: string) => {
+  const queryClient = useQueryClient();
+  const { show } = useToast();
+  return useMutation({
+    mutationFn: async () => {
+    const response =  await axios.post(
+          `https://test.omega12x.net/api.aspx?api=removewishlist&productid=${id}&myuserid=${userId}`
+      );
+
+      return response.data;
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+      show('Removed from wishlist', {
+        type: 'success',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    },
+
+    onError: async () => {
+      show('Something went wrong', {
+        type: 'danger',
+        placement: 'bottom',
+        duration: 4000,
+        animationType: 'slide-in',
+      });
+    },
+  })
+}
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
   const { show } = useToast();
@@ -76,8 +96,8 @@ export const useAddToCart = () => {
       }
     },
     onSuccess: async (data) => {
-      console.log('🚀 ~ useAddToCart ~ data:', data);
-      queryClient.invalidateQueries({ queryKey: ['cartList'] });
+      console.log("Success")
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
       queryClient.invalidateQueries({ queryKey: ['product'] });
       queryClient.invalidateQueries({ queryKey: ['user'] });
       show('Added to cart', {
@@ -108,10 +128,9 @@ export const useRemoveFromCart = () => {
       const res = await axios.post(
         `https://test.omega12x.net/api.aspx?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
       );
-      console.log(res.data);
-      console.log('saving......');
 
       queryClient.invalidateQueries({ queryKey: ['order'] });
+     await queryClient.invalidateQueries({ queryKey: ['cart'] });
     } catch (error) {
       console.log(error);
     }

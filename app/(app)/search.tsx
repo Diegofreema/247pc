@@ -16,7 +16,14 @@ import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import InputComponent from '../../components/InputComponent';
+import type {ErrorBoundaryProps} from "expo-router";
+import {ErrorComponent} from "../../components/ErrorComponent";
 
+export function ErrorBoundary({  retry }: ErrorBoundaryProps) {
+  return (
+      <ErrorComponent refetch={retry} />
+  );
+}
 const itemsPerPage = 10;
 const search = () => {
   const [page, setPage] = useState(1);
@@ -75,7 +82,7 @@ const search = () => {
         (a, b) => +b.sellingprice - +a.sellingprice
       );
     }
-    console.log('calling');
+
 
     setProducts(filteredDataCopy);
   };
@@ -101,7 +108,7 @@ const search = () => {
     });
     setProducts(data);
   };
-  // console.log(products, 'products');
+
 
   const handleNext = () => {
     if (!products) return;
@@ -125,7 +132,7 @@ const search = () => {
     }
     setSelectedPriceFilter('');
     setProducts(filteredDataCopy);
-    console.log(filteredDataCopy, 'filteredDataCopy');
+
 
     setShowFilter(false);
     setPage(1);
@@ -210,7 +217,7 @@ const search = () => {
       </View>
     );
   }
-  console.log(data[0], 'data');
+
 
   const resetFilter = () => {
     setProducts(data);
@@ -233,22 +240,22 @@ const search = () => {
   };
 
   const handleSelectedPhar = (phar: string) => {
-    if (selectedPharmacy.includes(phar)) {
-      setSelectedPharmacy(selectedPharmacy.filter((item) => item !== phar));
+    if (selectedPharmacy?.includes(phar)) {
+      setSelectedPharmacy(selectedPharmacy?.filter((item) => item !== phar));
     } else {
       setSelectedPharmacy([...selectedPharmacy, phar]);
     }
   };
+
   const cat = data?.map(({ category }) => category);
   const pharmacy = data?.map(({ Dealer }) => Dealer);
   const uniquePhar = new Set(pharmacy);
   const uniqueItem = new Set(cat);
   const uniquePharmacy = [...uniquePhar];
   const uniqueCat = [...uniqueItem];
-  console.log(price);
+
   const totalPages = Math.ceil(products?.length! / itemsPerPage);
-  console.log(uniquePharmacy?.length);
-  console.log(uniqueCat?.length);
+
 
   // Calculate the start and end index based on the current page
   const startIndex = (page - 1) * itemsPerPage;
@@ -257,6 +264,7 @@ const search = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <SearchHeader value={value} onChangeText={setValue} />
+      {/*<MyButton onPress={() => {throw new Error('App not working')}} text={'Throw error'} textColor={'red'} />*/}
       <Container>
         <ScrollView
           style={{
@@ -266,27 +274,16 @@ const search = () => {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal
+          <View
             style={{
               gap: 5,
+              flex: 1,
+              flexDirection: 'row',
             }}
-            contentContainerStyle={{
-              gap: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+
           >
             <Pressable
-              style={{
-                flex: 1,
-                borderWidth: 1,
-                borderColor: 'black',
-                padding: 11,
-                borderRadius: 8,
-                alignItems: 'center',
-              }}
+              style={[styles.filterButton, {backgroundColor: 'white'}]}
               onPress={resetFilter}
             >
               <Text
@@ -301,14 +298,7 @@ const search = () => {
             </Pressable>
             <Pressable
               onPress={() => setShowFilter(true)}
-              style={{
-                flex: 1,
-                borderWidth: 1,
-                borderColor: 'black',
-                padding: 11,
-                alignItems: 'center',
-                borderRadius: 8,
-              }}
+              style={[styles.filterButton, {backgroundColor: "white"}]}
             >
               <Text
                 style={{
@@ -320,7 +310,7 @@ const search = () => {
                 Filter
               </Text>
             </Pressable>
-            <View style={{ flexDirection: 'row', gap: 5 }}>
+
               <Pressable
                 onPress={filterByPriceLowToHigh}
                 style={[
@@ -339,7 +329,11 @@ const search = () => {
                       selectedPriceFilter === 'lowToHigh' ? 'white' : 'black',
                     fontFamily: 'PoppinsMedium',
                     fontSize: 9,
+                    flexWrap: 'nowrap',
+                    flexShrink: 1,
+                    flex: 1
                   }}
+
                 >
                   Low to High
                 </Text>
@@ -362,13 +356,14 @@ const search = () => {
                       selectedPriceFilter === 'highToLow' ? 'white' : 'black',
                     fontFamily: 'PoppinsMedium',
                     fontSize: 9,
+                    flexWrap: 'nowrap'
                   }}
                 >
                   High to Low
                 </Text>
               </Pressable>
-            </View>
-          </ScrollView>
+
+          </View>
           <ScrollView showsVerticalScrollIndicator={false}>
             {showFilter && (
               <View style={styles.modal}>
@@ -575,7 +570,7 @@ const search = () => {
               alignItems: 'center',
             }}
             ListFooterComponent={() =>
-              data?.length && (
+              data?.length > 0 && (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -659,7 +654,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'black',
-    width: 100,
+    flex: 1,
     alignItems: 'center',
   },
   activeItem: {

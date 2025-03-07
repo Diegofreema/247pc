@@ -1,87 +1,28 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import NavigationHeader from '../../../components/NavigationHeader';
 import Container from '../../../components/Container';
 import Wishlist from '../../../components/Wishlist';
-import {useStoreId} from '../../../lib/zustand/auth';
-import {useFocusEffect} from 'expo-router';
-import {ActivityIndicator} from 'react-native-paper';
-import {WishlistType} from '../../../lib/types';
-import axios from 'axios';
 import {ErrorComponent} from '../../../components/ErrorComponent';
+import {useWishlist} from "../../../lib/queries";
+import {Loader} from "../../../components/Loader";
 
 
 const wishlist = () => {
-  const { id, user } = useStoreId();
-  const [reload, setReload] = useState(false);
-  const [loading, setLoading] = useState(false);
-  console.log('🚀 ~ wishlist ~ loading:', loading);
-  const [wishlist, setWishlist] = useState<WishlistType[]>([]);
-  console.log('🚀 ~ wishlist ~ wishlist:', wishlist);
-  const [isError, setIsError] = useState(false);
+
+  const {data, isPending, isError, refetch, isRefetching, isRefetchError,} = useWishlist()
 
 
-  const refetch = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `https://test.omega12x.net/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
-      );
-      let data = [];
-      if (Object.prototype.toString.call(response.data) === '[object Object]') {
-        data.push(response.data);
-      } else if (
-        Object.prototype.toString.call(response.data) === '[object Array]'
-      ) {
-        data = [...response.data];
-      }
-
-      setWishlist(data);
-    } catch (error) {
-      setIsError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useFocusEffect(
-    useCallback(() => {
-      const getWishList = async () => {
-        setLoading(true);
-        try {
-          const response = await axios.get(
-            `https://test.omega12x.net/api.aspx?api=wishlist&statename=${user?.statename}&myuserid=${id}`
-          );
-          let data = [];
-          if (
-            Object.prototype.toString.call(response.data) === '[object Object]'
-          ) {
-            data.push(response.data);
-          } else if (
-            Object.prototype.toString.call(response.data) === '[object Array]'
-          ) {
-            data = [...response.data];
-          }
-
-          setWishlist(data);
-        } catch (error) {
-          setIsError(true);
-        } finally {
-          setLoading(false);
-        }
-      };
-      getWishList();
-    }, [])
-  );
-
-  const handleRefetch = () => {
-    setReload(!reload);
-    refetch();
+  const handleRefetch = async () => {
+    await refetch();
   };
 
-  if (isError) {
+  if (isError || isRefetchError) {
     return <ErrorComponent refetch={handleRefetch} />;
   }
-
+if (isPending) {
+  return <Loader />
+}
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
@@ -94,14 +35,12 @@ const wishlist = () => {
             alignItems: 'center',
           }}
         >
-          {loading ? (
-            <ActivityIndicator animating color="#000" size="large" />
-          ) : (
+
             <View style={{ flex: 1, width: '100%' }}>
               <FlatList
                 contentContainerStyle={{ paddingBottom: 70 }}
                 showsVerticalScrollIndicator={false}
-                data={wishlist}
+                data={data}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <Wishlist
@@ -109,17 +48,16 @@ const wishlist = () => {
                     title={item?.product}
                     price={item?.sellingprice}
                     category={item?.category}
-                    refetch={refetch}
                   />
                 )}
                 onRefresh={handleRefetch}
-                refreshing={loading}
+                refreshing={isRefetching}
                 ListEmptyComponent={
                   <Text style={styles.empty}>Wishlist is currently empty</Text>
                 }
               />
             </View>
-          )}
+
         </View>
       </Container>
     </View>

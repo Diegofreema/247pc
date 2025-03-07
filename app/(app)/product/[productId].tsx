@@ -52,7 +52,6 @@ const ProductDetail = () => {
   const [qty, setQty] = useState(1);
   const {
     data,
-
     isPending,
     error,
     isPaused: isProductPaused,
@@ -252,11 +251,9 @@ const ProductDetail = () => {
                     { paddingVertical: 5 },
                   ]}
                   onPress={() =>
-                    router.push({
-                      pathname: `/seller/${data?.sellerid}`,
-                      params: { seller: data?.seller },
-                    })
+                    router.push(`/seller/${data?.sellerid}&seller=${data?.seller}`)
                   }
+
                 >
                   <Text
                     style={{

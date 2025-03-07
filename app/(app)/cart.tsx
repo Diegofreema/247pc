@@ -40,47 +40,7 @@ const cart = () => {
   const reloadData = async () => {
     setToggleReload(!toggleReload);
   };
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const loadData = async () => {
-  //     try {
-  //       const res = await axios.post(
-  //         `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
-  //       );
-  //       console.log(res.data);
-  //       console.log('saving......');
 
-  //       queryClient.invalidateQueries({ queryKey: ['order'] });
-  //     } catch (error) {
-  //       console.log(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   loadData();
-  // }, []);
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setLoading(true);
-  //     const loadData = async () => {
-  //       try {
-  //         const res = await axios.post(
-  //           `${api}?api=cartpageload&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}`
-  //         );
-  //         console.log(res.data);
-  //         queryClient.invalidateQueries({ queryKey: ['order'] });
-  //         console.log('saving......, useFocus');
-  //       } catch (error) {
-  //         console.log(error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-
-  //     loadData();
-  //   }, [])
-  // );
 
   const {
     data: order,
@@ -102,7 +62,6 @@ const cart = () => {
 
   const {
     data,
-
     isPaused,
     isError,
     isPending,
@@ -227,7 +186,6 @@ const cart = () => {
               keyExtractor={(item, index) => item.productid + index}
               renderItem={({ item, index }) => {
                 return (
-                  <>
                     <CartItem
                       wishList={wishList}
                       index={index + Math.random() * 400}
@@ -236,7 +194,7 @@ const cart = () => {
                       removeFromCartPending={removeFromCartPending}
                       reloadData={reloadData}
                     />
-                  </>
+
                 );
               }}
               ListFooterComponent={() => {

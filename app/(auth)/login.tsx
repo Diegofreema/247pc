@@ -17,6 +17,7 @@ import { MyButton } from '../../components/MyButton';
 import { colors } from '../../constants/Colors';
 import { useGetProfile } from '../../lib/mutation';
 import { useStoreId } from '../../lib/zustand/auth';
+import {getProfile} from "../../lib/helpers";
 
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
@@ -28,7 +29,7 @@ const validationSchema = yup.object().shape({
 });
 
 const index = () => {
-  const { setId } = useStoreId();
+  const { setId, setUser } = useStoreId();
   const [secure, setSecure] = useState(true);
   const router = useRouter();
   const { isPending } = useGetProfile();
@@ -70,8 +71,9 @@ const index = () => {
             return;
           }
 
-          setId(response.data);
-
+          setId(response?.data);
+          const user = await getProfile(response?.data);
+          setUser(user);
           toast.show('Welcome back!!!', {
             type: 'success',
             placement: 'bottom',

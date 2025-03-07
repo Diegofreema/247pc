@@ -8,7 +8,7 @@ import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
 import { ActivityIndicator } from 'react-native-paper';
 import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
+import {useLocalSearchParams, useRouter} from 'expo-router';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as yup from 'yup';
@@ -44,6 +44,7 @@ const validationSchema = yup.object().shape({
 const Update = () => {
   const { id, getId, setUser } = useStoreId();
   const queryClient = useQueryClient();
+  const { page } = useLocalSearchParams<{page: string}>()
   const {
     data: userData,
     isPending: isPendingUser,
@@ -66,7 +67,6 @@ const Update = () => {
       state: 'abuja',
       address: '',
       phoneNumber: '',
-
       communityId: '',
     },
     validationSchema,
@@ -94,11 +94,13 @@ const Update = () => {
         queryClient.invalidateQueries({ queryKey: ['fee'] });
         queryClient.invalidateQueries({ queryKey: ['order'] });
 
-        router.push('/cart');
+        if(page){
+          router.push('/cart');
+        }else {
+          router.back()
+        }
       } else if (
-        response.data === 'you may not change info while a delivery is en route'
-      ) {
-        toast.show('You may not change info while a delivery is en route', {
+        response.data === 'you may not change infor while a delivery is en route') {toast.show('You can not change info while a delivery is en route', {
           type: 'danger ',
           placement: 'bottom',
           duration: 4000,
@@ -138,8 +140,7 @@ const Update = () => {
     data: communities,
     isError: isErrorCom,
     isPending: isPendingCom,
-    refetch: refetchCom,
-    isPaused: isPausedCom,
+    refetch: refetchCom, isPaused: isPausedCom,
   } = useGetCom(state);
   // useEffect(() => {
   //   setLoadingCommunities(true);
@@ -294,7 +295,7 @@ const Update = () => {
                   setSelected={handleChange('state')}
                   data={states}
                   save="value"
-                  placeholder="Select your state"
+                  placeholder="State of residence"
                   defaultOption={{
                     key: state,
                     value: state,
@@ -325,8 +326,8 @@ const Update = () => {
                 <SelectList
                   search
                   fontFamily="Poppins"
-                  placeholder="Select your community"
-                  searchPlaceholder="Search by community name"
+                  placeholder="Select delivery location"
+                  searchPlaceholder="Search delivery location"
                   boxStyles={{
                     ...styles2.border,
                     justifyContent: 'flex-start',

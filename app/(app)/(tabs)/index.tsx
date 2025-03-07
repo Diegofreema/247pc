@@ -6,10 +6,11 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
+  useWindowDimensions,
   View,
 } from 'react-native';
 
-import {ActivityIndicator, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 
 import axios from 'axios';
 import {Image} from 'expo-image';
@@ -20,7 +21,9 @@ import {ErrorComponent} from '../../../components/ErrorComponent';
 import {TopHeader} from '../../../components/TopHeader';
 import {Id, useGetProfile, useGetRecentlyViewed, useNewArrival,} from '../../../lib/queries';
 import {useStoreId} from '../../../lib/zustand/auth';
+import {Loader} from "../../../components/Loader";
 
+const {height} = Dimensions.get('window')
 export const checkTextLength = (text: string) => {
   if (text.length > 30) {
     return text.substring(0, 30) + '...';
@@ -29,13 +32,13 @@ export const checkTextLength = (text: string) => {
   return text;
 };
 
-const width = Dimensions.get('window').width;
+
 export default function TabOneScreen() {
   const { id, getId } = useStoreId();
   const opacity = useSharedValue(0);
   const height = useSharedValue(0);
   const router = useRouter();
-
+  const {width} = useWindowDimensions()
   const [special, setSpecial] = useState<Id[]>([]);
 
 
@@ -169,16 +172,7 @@ export default function TabOneScreen() {
     isPendingRecentlyViewed
   ) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <ActivityIndicator color="black" size={'large'} animating />
-      </View>
+     <Loader />
     );
   }
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -228,13 +222,13 @@ export default function TabOneScreen() {
               return (
                 <Pressable
                   onPress={() => router.push(`/special/${item?.id}`)}
-                  style={styles.imageContainer}
+                  style={[styles.imageContainer, {width}]}
                   key={item?.id}
                 >
                   <Image
                     source={`https://247pharmacy.net/Uploads/specialoffer-${item?.id}.jpg`}
                     style={styles.image}
-                    contentFit="contain"
+                    contentFit="cover"
                     placeholder={require('../../../assets/images/place.jpg')}
                     placeholderContentFit="cover"
                   />
@@ -322,7 +316,7 @@ export default function TabOneScreen() {
                             {
                               alignItems: 'center',
                               justifyContent: 'center',
-
+                              width: width * 0.45,
                               marginBottom: 10,
                             },
                           ]}
@@ -517,7 +511,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   newArrival: {
-    width: width * 0.45,
     height: 300,
     overflow: 'hidden',
     marginBottom: 10,
@@ -555,10 +548,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   imageContainer: {
-    height: 200,
+    height: height * 0.25,
     overflow: 'hidden',
-    width: width,
-    borderRadius: 6,
+
   },
   top: {
     position: 'absolute',

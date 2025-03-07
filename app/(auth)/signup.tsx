@@ -311,7 +311,7 @@ const SignUp = () => {
                     setSelected={handleChange('state')}
                     data={states}
                     save="key"
-                    placeholder="Select your state"
+                    placeholder="State of residence"
                   />
                 )}
                 {touched.state && errors.state && (
@@ -338,8 +338,8 @@ const SignUp = () => {
                   <SelectList
                     search
                     fontFamily="Poppins"
-                    placeholder="Select your community"
-                    searchPlaceholder="Search by community name"
+                    placeholder="Select delivery location"
+                    searchPlaceholder="Search delivery location"
                     boxStyles={{
                       ...styles2.border,
                       justifyContent: 'flex-start',
