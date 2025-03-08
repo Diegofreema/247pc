@@ -11,6 +11,7 @@
     "prebuild": "npx expo prebuild",
     "clean": "npx expo prebuild --clean",
     "build:prod": "eas build --profile production",
+    "build:preview": "eas build --profile preview",
     "lint": "eslint ."
   },
   "jest": {

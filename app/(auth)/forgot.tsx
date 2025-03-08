@@ -38,11 +38,13 @@ const Forgot = () => {
       onSubmit: async (values) => {
         setToken(generateFiveRandomNumber());
 
-        const response = await axios.post(
+        const { data } = await axios.post(
           `${api}=reset247pharmacypassword&emailaddress=${values.email}&passcode=${token}`
         );
 
-        if (response.data === 'invalid email') {
+        console.log(data.result);
+
+        if (data.result === 'invalid email') {
           toast.show('Email does not exist', {
             type: 'danger',
             placement: 'bottom',
@@ -52,15 +54,14 @@ const Forgot = () => {
           });
           return;
         }
-
-        if (response.data) {
+        if (data.result) {
           toast.show('Please check your email, a token has been sent to you', {
             type: 'success ',
             placement: 'bottom',
             duration: 4000,
             animationType: 'slide-in',
           });
-          setId(response.data);
+          setId(data.result);
           router.push(`/reset-token?email=${values.email}`);
         }
       },

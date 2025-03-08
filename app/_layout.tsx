@@ -9,16 +9,17 @@ import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import * as Updates from 'expo-updates';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ErrorComponent } from '../components/ErrorComponent';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+// export { type ErrorBoundaryProps } from 'expo-router';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+export function ErrorBoundary({ retry }: { retry: () => void }) {
+  return <ErrorComponent refetch={retry} />;
+}
+
 SplashScreen.preventAutoHideAsync();
 
-  const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 export default function RootLayout() {
   const pathname = usePathname();
   console.log(pathname);
