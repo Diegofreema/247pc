@@ -114,8 +114,8 @@ android {
         applicationId 'hgdg_hds66_hhshd_74747jjjjf.r'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 26
-        versionName "1.0.6"
+        versionCode 27
+        versionName "1.0.9"
     }
     signingConfigs {
         debug {

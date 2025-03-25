@@ -1,43 +1,35 @@
-import { Image } from 'expo-image';
-import React, { useEffect, useRef, useState } from 'react';
-import { OtpInput, OtpInputRef } from 'react-native-otp-entry';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-
-import { useToken } from '../../lib/zustand/useToken';
+import {Image} from 'expo-image';
+import React, {useEffect, useRef, useState} from 'react';
+import {OtpInput, OtpInputRef} from 'react-native-otp-entry';
+import {Dimensions, ScrollView, StyleSheet, Text, useWindowDimensions, View,} from 'react-native';
 import AuthHeader from '../../components/AuthHeader';
 import Container from '../../components/Container';
-import { MyButton } from '../../components/MyButton';
-import { colors } from '../../constants/Colors';
-import { useToast } from 'react-native-toast-notifications';
+import {MyButton} from '../../components/MyButton';
+import {colors} from '../../constants/Colors';
+import {useToast} from 'react-native-toast-notifications';
 import axios from 'axios';
-import { api } from '../../lib/contants';
-import { generateFiveRandomNumber } from '../../lib/helpers';
-import { router, useLocalSearchParams } from 'expo-router';
+import {api} from '../../lib/contants';
+import {generateFiveRandomNumber} from '../../lib/helpers';
+import {router, useLocalSearchParams} from 'expo-router';
 
 const { width } = Dimensions.get('window');
 const size = width / 5 - 20;
 const ResetToken = () => {
-  const token = useToken((state) => state.details.token);
   const [value, setValue] = useState('');
-  const { email } = useLocalSearchParams<{ email: string }>();
-  const removeToken = useToken((state) => state.removeToken);
-  const setToken = useToken((state) => state.setToken);
+  const { email, id, token } = useLocalSearchParams<{
+    email: string;
+    id: string;
+    token: string;
+  }>();
+  const [localToken, setLocalToken] = useState(token);
   const [countdown, setCountdown] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const { width } = useWindowDimensions();
   const toast = useToast();
   const otpRef = useRef<OtpInputRef | null>(null);
-  console.log(token);
 
   const submitToken = async () => {
-    if (token !== value) {
+    if (localToken !== value) {
       toast.show('Token does not match, please try again', {
         type: 'success ',
         placement: 'bottom',
@@ -56,8 +48,8 @@ const ResetToken = () => {
     });
     otpRef.current?.clear();
     setValue('');
-    removeToken();
-    router.replace('/reset-password');
+
+    router.replace(`/reset-password?id=${id}`);
   };
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -85,7 +77,7 @@ const ResetToken = () => {
     setCountdown(60);
     setCanResend(false);
     const tok = generateFiveRandomNumber();
-    setToken(tok);
+    setLocalToken(tok);
 
     try {
       const response = await axios.post(

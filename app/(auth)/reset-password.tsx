@@ -4,7 +4,7 @@ import { Dimensions, ScrollView, Text, View } from 'react-native';
 
 import AuthHeader from '../../components/AuthHeader';
 
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
@@ -34,7 +34,7 @@ const validationSchema = yup.object().shape({
 });
 
 const UpdatePassword = () => {
-  const id = useToken((state) => state.details.id);
+  const { id } = useLocalSearchParams<{ id: string }>();
   const removeId = useToken((state) => state.removeId);
   const [securePassword1, setSecurePassword1] = useState(true);
   const [securePassword2, setSecurePassword2] = useState(true);

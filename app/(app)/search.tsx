@@ -1,23 +1,16 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Pressable,
-  ScrollView,
-  FlatList,
-} from 'react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { SearchHeader } from '../../components/SearchHeader';
+import {FlatList, Pressable, ScrollView, StyleSheet, Text, View,} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {SearchHeader} from '../../components/SearchHeader';
 import Container from '../../components/Container';
-import { useSearch } from '../../lib/queries';
-import { ActivityIndicator } from 'react-native-paper';
-import { ProductItem } from '../../components/ProductItem';
-import { MyButton } from '../../components/MyButton';
-import { colors } from '../../constants/Colors';
-import { FontAwesome } from '@expo/vector-icons';
+import {useSearch} from '../../lib/queries';
+import {ActivityIndicator} from 'react-native-paper';
+import {ProductItem} from '../../components/ProductItem';
+import {MyButton} from '../../components/MyButton';
+import {colors} from '../../constants/Colors';
+import {FontAwesome} from '@expo/vector-icons';
 import InputComponent from '../../components/InputComponent';
-import type { ErrorBoundaryProps } from 'expo-router';
-import { ErrorComponent } from '../../components/ErrorComponent';
+import type {ErrorBoundaryProps} from 'expo-router';
+import {ErrorComponent} from '../../components/ErrorComponent';
 
 export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
   return <ErrorComponent refetch={retry} />;
@@ -44,11 +37,7 @@ const SearchScreen = () => {
 
   const [products, setProducts] = useState(data);
   const [value, setValue] = useState('');
-  useEffect(() => {
-    if (data?.length) {
-      setProducts(data);
-    }
-  }, [data]);
+
 
   useEffect(() => {
     if (value.length > 2) {
@@ -63,26 +52,8 @@ const SearchScreen = () => {
       setProducts(data);
     }
   }, [value, data]);
-  const handleSort = useCallback(() => {
-    if (!products) return;
-    let filteredDataCopy = [...products];
 
-    // Apply price filter
-    if (selectedPriceFilter === 'lowToHigh') {
-      filteredDataCopy = filteredDataCopy.sort(
-        (a, b) => +a.sellingprice - +b.sellingprice
-      );
-    } else if (selectedPriceFilter === 'highToLow') {
-      filteredDataCopy = filteredDataCopy.sort(
-        (a, b) => +b.sellingprice - +a.sellingprice
-      );
-    }
 
-    setProducts(filteredDataCopy);
-  }, [products, selectedPriceFilter]);
-  useEffect(() => {
-    handleSort();
-  }, [selectedPriceFilter, handleSort]);
 
   const filterByPriceLowToHigh = () => {
     if (!products) return;

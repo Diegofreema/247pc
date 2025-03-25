@@ -187,7 +187,7 @@ export const usePayStack = () => {
       productInCart: string;
       couponCode: string;
     }) => {
-      const response = await axios.post(
+      const response = await axios.get(
         `${api}=cartpaycard&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}`
       );
 
@@ -221,7 +221,7 @@ export const useWallet = () => {
       productInCart: string;
       couponCode: string;
     }) => {
-      const response = await axios.post(
+      const response = await axios.get(
         `${api}=cartpaywallet&productincart=${productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${couponCode}&fullname=${user?.customername}&addres=${user?.addres}&emailaddress=${user?.email}`
       );
 

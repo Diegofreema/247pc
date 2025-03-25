@@ -15,12 +15,14 @@ import { useToast } from 'react-native-toast-notifications';
 import InputComponent from '../../components/InputComponent';
 import { MyButton } from '../../components/MyButton';
 import { useRouter } from 'expo-router';
+import {api} from "../../lib/contants";
+import {ErrorComponent} from "../../components/ErrorComponent";
 
 const validationSchema = yup.object().shape({
-  amount: yup.string().required('Amount is required'),
+  amount: yup.string().required('Amount should be at least ₦300'),
 });
 
-const api = process.env.EXPO_PUBLIC_PAYSTACK_KEY!;
+
 const Wallet = () => {
   const {
     data,
@@ -31,7 +33,7 @@ const Wallet = () => {
     isRefetching,
     isPending,
   } = useWallet();
-  console.log('🚀 ~ Wal ~ data:', data);
+
   const {
     data: walletBalance,
     isFetching: walletBalanceIsFetching,
@@ -42,30 +44,32 @@ const Wallet = () => {
   } = useWalletBalance();
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const [reference, setReference] = useState('');
-  const [loading, setLoading] = useState(false);
+
   const { id, user } = useStoreId();
+
+    console.log({id})
   const { show } = useToast();
   const router = useRouter();
   const {
     values,
     handleChange,
     handleSubmit,
-
     resetForm,
+      isSubmitting,
+      errors,
+      touched
   } = useFormik({
     initialValues: {
       amount: '',
     },
     validationSchema,
     onSubmit: async (values) => {
-      setLoading(true);
-
       try {
-        const response = await axios.post(
+        const response = await axios.get(
           `${api}=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
-        console.log(response.data);
+        console.log(response);
         console.log(values.amount);
         if (response.data) {
           setReference(response.data);
@@ -80,8 +84,6 @@ const Wallet = () => {
         }
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     },
   });
@@ -105,14 +107,7 @@ const Wallet = () => {
 
   if (isError || walletBalanceIsError) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Something went wrong</Text>
-        <MyButton
-          buttonColor={colors.lightGreen}
-          onPress={handleRefetch}
-          text="Retry"
-        />
-      </View>
+     <ErrorComponent refetch={refetch} />
     );
   }
   const { amount } = values;
@@ -254,20 +249,29 @@ const Wallet = () => {
                   value={amount}
                 />
               </View>
+                {touched.amount && errors.amount && (
+                    <Text style={{ color: 'red', fontWeight: 'bold', marginTop: 20 }}>
+                        {errors.amount}
+                    </Text>
+                )}
             </View>
             <Button
               onPress={() => handleSubmit()}
-              loading={loading}
+              loading={isSubmitting}
               style={{
                 margin: 20,
                 borderRadius: 5,
                 height: 50,
                 justifyContent: 'center',
                 alignItems: 'center',
+
               }}
+
               icon={'card'}
-              buttonColor={colors.lightGreen}
-              textColor="white"
+              // buttonColor={colors.lightGreen}
+              rippleColor={'white'}
+
+              textColor={colors.lightGreen}
               labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
             >
               Pay with Card

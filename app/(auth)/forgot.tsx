@@ -1,5 +1,5 @@
-import { Dimensions, ScrollView, Text, View } from 'react-native';
-import { Image } from 'expo-image';
+import {Dimensions, ScrollView, Text, View} from 'react-native';
+import {Image} from 'expo-image';
 import React from 'react';
 
 import AuthHeader from '../../components/AuthHeader';
@@ -7,16 +7,15 @@ import AuthHeader from '../../components/AuthHeader';
 import Container from '../../components/Container';
 import InputComponent from '../../components/InputComponent';
 
-import { colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
+import {colors} from '../../constants/Colors';
+import {useRouter} from 'expo-router';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
-import { useToast } from 'react-native-toast-notifications';
-import { MyButton } from '../../components/MyButton';
-import { api } from '../../lib/contants';
-import { generateFiveRandomNumber } from '../../lib/helpers';
-import { useToken } from '../../lib/zustand/useToken';
+import {useToast} from 'react-native-toast-notifications';
+import {MyButton} from '../../components/MyButton';
+import {api} from '../../lib/contants';
+import {generateFiveRandomNumber} from '../../lib/helpers';
 
 const width = Dimensions.get('window').width;
 const validationSchema = yup.object().shape({
@@ -25,9 +24,6 @@ const validationSchema = yup.object().shape({
 const Forgot = () => {
   const router = useRouter();
   const toast = useToast();
-  const setToken = useToken((state) => state.setToken);
-  const setId = useToken((state) => state.setId);
-  const token = useToken((state) => state.details.token);
 
   const { values, isSubmitting, errors, handleChange, handleSubmit, touched } =
     useFormik({
@@ -36,7 +32,7 @@ const Forgot = () => {
       },
       validationSchema,
       onSubmit: async (values) => {
-        setToken(generateFiveRandomNumber());
+        const token = generateFiveRandomNumber();
 
         const { data } = await axios.post(
           `${api}=reset247pharmacypassword&emailaddress=${values.email}&passcode=${token}`
@@ -61,8 +57,10 @@ const Forgot = () => {
             duration: 4000,
             animationType: 'slide-in',
           });
-          setId(data.result);
-          router.push(`/reset-token?email=${values.email}`);
+
+          router.push(
+            `/reset-token?email=${values.email}&token=${token}&id=${data.result}`
+          );
         }
       },
     });

@@ -49,7 +49,7 @@ const CheckOut = () => {
       },
       validationSchema,
       onSubmit: async (values) => {
-        const { data } = await axios.post(
+        const { data } = await axios.get(
           `${api}=addcoupon&myuserid=${id}&couponCode=${values.coupon}`
         );
         if (data === 'Invalid code!') {
@@ -76,7 +76,7 @@ const CheckOut = () => {
   const payWithCard = async () => {
     setIsPaying(true);
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.get(
         `${api}=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
       console.log(data);
