@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as StoreReview from 'expo-store-review';
 import { api } from './contants';
-
+import * as WebBrowser from 'expo-web-browser';
 export const passwordRegExp =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
 export const trimTitle = (title: string) => {
@@ -373,4 +373,28 @@ export const generateFiveRandomNumber = () => {
     token += Math.floor(Math.random() * 10);
   }
   return token;
+};
+
+type Props = {
+  name: string;
+  amount: number;
+  email: string;
+  phoneNumber: string;
+  reference: string;
+};
+export const goToWebsiteForCheckout = async ({
+  name,
+  amount,
+  email,
+  phoneNumber,
+  reference,
+}: Props) => {
+  console.log(
+    `https://blog.247pharmacy.net/users/checkoutmobile/${encodeURIComponent(
+      name
+    )}/${amount}/${email}/${phoneNumber}/${reference}`
+  );
+  await WebBrowser.openBrowserAsync(
+    `https://blog.247pharmacy.net/users/checkoutmobile/${name}/${amount}/${email}/${phoneNumber}/${reference}`
+  );
 };

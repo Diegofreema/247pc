@@ -1,9 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import { useFormik } from 'formik';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+
 import {
   ActivityIndicator,
   Button,
@@ -20,7 +21,11 @@ import { MyButton } from '../../components/MyButton';
 import NavigationHeader from '../../components/NavigationHeader';
 import { colors } from '../../constants/Colors';
 import { useRefetchFee } from '../../hooks/useRefetchFee';
-import { getProfile, onReview } from '../../lib/helpers';
+import {
+  getProfile,
+  goToWebsiteForCheckout,
+  onReview,
+} from '../../lib/helpers';
 import { useWallet } from '../../lib/mutation';
 import { useGetOrder } from '../../lib/queries';
 import { useStoreId } from '../../lib/zustand/auth';
@@ -34,6 +39,7 @@ const CheckOut = () => {
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
   const { id, user, setUser } = useStoreId();
   const isPendingFee = useRefetchFee();
+  const router = useRouter();
   const { show } = useToast();
   const queryClient = useQueryClient();
   const { mutateAsync: onWalletPay, isPending: walletLoading } = useWallet();
@@ -73,18 +79,25 @@ const CheckOut = () => {
         }
       },
     });
+
   const payWithCard = async () => {
     setIsPaying(true);
     try {
       const { data } = await axios.get(
         `${api}=cartpaycard&productincart=${user?.productInCart}&myuserid=${id}&communityId=${user?.communityId}&couponCode=${values?.coupon}`
       );
-      console.log(data);
 
       if (data?.salesref) {
-        setSalesRef(data.salesref);
-        setTotalCost(data?.totalcost);
-        paystackWebViewRef?.current?.startTransaction();
+        // setSalesRef(data.salesref);
+        // setTotalCost(data?.totalcost);
+        // paystackWebViewRef?.current?.startTransaction();
+        await goToWebsiteForCheckout({
+          name: user?.customername!,
+          email: user?.email!,
+          phoneNumber: user?.phone!,
+          amount: data?.totalcost!,
+          reference: data?.salesref!,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -92,6 +105,7 @@ const CheckOut = () => {
       setIsPaying(false);
     }
   };
+
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {
     setReload(!reload);
@@ -100,6 +114,13 @@ const CheckOut = () => {
 
   const { data, isPaused, isPending, isError, refetch } = useGetOrder();
 
+  useEffect(() => {
+    refetch();
+    if (isPending || isError) return;
+    if (!data?.items) {
+      router.replace('/order');
+    }
+  }, [refetch, data, router, isPending, isError]);
   if (isPaused) {
     return (
       <View
@@ -224,8 +245,7 @@ const CheckOut = () => {
               'qr',
               'bank_transfer',
             ]}
-            onCancel={(e) => {
-              console.log(e);
+            onCancel={() => {
               show('Payment cancelled', {
                 type: 'success',
                 placement: 'bottom',
