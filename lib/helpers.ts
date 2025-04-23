@@ -1,7 +1,7 @@
 import axios from 'axios';
+import * as Linking from 'expo-linking';
 import * as StoreReview from 'expo-store-review';
 import { api } from './contants';
-import * as WebBrowser from 'expo-web-browser';
 export const passwordRegExp =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
 export const trimTitle = (title: string) => {
@@ -394,7 +394,7 @@ export const goToWebsiteForCheckout = async ({
       name
     )}/${amount}/${email}/${phoneNumber}/${reference}`
   );
-  await WebBrowser.openBrowserAsync(
+  await Linking.openURL(
     `https://blog.247pharmacy.net/users/checkoutmobile/${name}/${amount}/${email}/${phoneNumber}/${reference}`
   );
 };

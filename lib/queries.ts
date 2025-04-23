@@ -133,6 +133,7 @@ export const useUser = (id: any) => {
     },
     refetchOnWindowFocus: true,
     refetchOnMount: 'always',
+
     retry: 5,
   });
 };
@@ -344,10 +345,13 @@ export const useGetOrder = () => {
   return useQuery({
     queryKey: ['order', id],
     queryFn: async () => {
-      const { data } = await axios.get(`${api}=ordersummary&myuserid=${id} `);
+      const { data } = await axios.get(`${api}=ordersummary&myuserid=${id}`);
+      console.log('dklmff ');
 
       return data as OrderType;
     },
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
   });
 };
 export const useSearch = () => {

@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query';
 export const useRefetchFee = () => {
   const { id } = useStoreId();
   const isFocused = useIsFocused();
-  console.log({ isFocused });
+
   const queryClient = useQueryClient();
   const { data, isPending, isFetching, isRefetching, isLoading } = useUser(id);
   const [loading, setLoading] = useState(false);

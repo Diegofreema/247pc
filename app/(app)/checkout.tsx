@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { router, useRouter } from 'expo-router';
+import { Redirect, router, useFocusEffect, useRouter } from 'expo-router';
 import { useFormik } from 'formik';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import {
@@ -114,13 +114,13 @@ const CheckOut = () => {
 
   const { data, isPaused, isPending, isError, refetch } = useGetOrder();
 
-  useEffect(() => {
-    refetch();
-    if (isPending || isError) return;
-    if (!data?.items) {
-      router.replace('/order');
-    }
-  }, [refetch, data, router, isPending, isError]);
+  // useEffect(() => {
+  //   refetch();
+  //   if (isPending || isError) return;
+  //   if (!data?.items) {
+  //     router.replace('/order');
+  //   }
+  // }, [refetch, data, router, isPending, isError]);
   if (isPaused) {
     return (
       <View
@@ -163,7 +163,9 @@ const CheckOut = () => {
       </View>
     );
   }
-
+  if (!data?.items) {
+    return <Redirect href={'/order'} />;
+  }
   const amount = parseInt(totalCost);
 
   return (

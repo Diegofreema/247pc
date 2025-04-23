@@ -1,15 +1,26 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, usePathname } from 'expo-router';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { ToastProvider } from 'react-native-toast-notifications';
-import { Platform, SafeAreaView, StatusBar } from 'react-native';
+import {
+  AppState,
+  AppStateStatus,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import * as Updates from 'expo-updates';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ErrorComponent } from '../components/ErrorComponent';
+import { useStoreId } from '../lib/zustand/auth';
 
 // export { type ErrorBoundaryProps } from 'expo-router';
 
@@ -81,6 +92,36 @@ const MyTheme = {
 };
 
 function RootLayoutNav() {
+  const queryClient = useQueryClient();
+  const { id } = useStoreId();
+  const appState = useRef(AppState.currentState);
+  const handleAppStateChange = useCallback(
+    (nextAppState: AppStateStatus) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        // App has come to the foreground
+        queryClient.invalidateQueries({ queryKey: ['order', id] });
+        queryClient.invalidateQueries({ queryKey: ['fee'] });
+        queryClient.invalidateQueries({ queryKey: ['user'] });
+        console.log('App is in foreground');
+      }
+      appState.current = nextAppState;
+    },
+    [queryClient, id]
+  );
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [handleAppStateChange]);
+
   return (
     <ThemeProvider value={MyTheme}>
       <StatusBar barStyle={'light-content'} backgroundColor={'black'} />

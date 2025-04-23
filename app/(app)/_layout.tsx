@@ -1,25 +1,23 @@
-import {type ErrorBoundaryProps, Redirect, Stack} from 'expo-router';
-import {useStoreId} from '../../lib/zustand/auth';
-import {StatusBar} from 'expo-status-bar';
-import {useGetProfile} from "../../lib/queries";
-import {Loader} from "../../components/Loader";
-import {ErrorComponent} from "../../components/ErrorComponent";
+import { type ErrorBoundaryProps, Redirect, Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { ErrorComponent } from '../../components/ErrorComponent';
+import { Loader } from '../../components/Loader';
+import { useGetProfile } from '../../lib/queries';
+import { useStoreId } from '../../lib/zustand/auth';
 
-export function ErrorBoundary({  retry }: ErrorBoundaryProps) {
-    return (
-        <ErrorComponent refetch={retry} />
-    );
+export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
+  return <ErrorComponent refetch={retry} />;
 }
 export default function AppLayoutNav() {
   const { id } = useStoreId();
 
- const {isPending} = useGetProfile(id)
+  const { isPending } = useGetProfile(id);
   if (id === '') {
     return <Redirect href={'/login'} />;
   }
 
   if (isPending) {
-    return <Loader />
+    return <Loader />;
   }
   return (
     <>
