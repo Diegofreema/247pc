@@ -114,13 +114,12 @@ const CheckOut = () => {
 
   const { data, isPaused, isPending, isError, refetch } = useGetOrder();
 
-  // useEffect(() => {
-  //   refetch();
-  //   if (isPending || isError) return;
-  //   if (!data?.items) {
-  //     router.replace('/order');
-  //   }
-  // }, [refetch, data, router, isPending, isError]);
+  useEffect(() => {
+    if (isPending || isError) return;
+    if (!data?.items) {
+      router.replace('/order');
+    }
+  }, [data?.items, router, isPending, isError]);
   if (isPaused) {
     return (
       <View
@@ -163,9 +162,7 @@ const CheckOut = () => {
       </View>
     );
   }
-  if (!data?.items) {
-    return <Redirect href={'/order'} />;
-  }
+
   const amount = parseInt(totalCost);
 
   return (

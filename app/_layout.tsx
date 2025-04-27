@@ -105,6 +105,8 @@ function RootLayoutNav() {
         queryClient.invalidateQueries({ queryKey: ['order', id] });
         queryClient.invalidateQueries({ queryKey: ['fee'] });
         queryClient.invalidateQueries({ queryKey: ['user'] });
+        queryClient.invalidateQueries({ queryKey: ['cart', id] });
+        queryClient.invalidateQueries({ queryKey: ['walletBalance', id] });
         console.log('App is in foreground');
       }
       appState.current = nextAppState;

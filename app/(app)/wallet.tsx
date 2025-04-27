@@ -15,13 +15,13 @@ import { useToast } from 'react-native-toast-notifications';
 import InputComponent from '../../components/InputComponent';
 import { MyButton } from '../../components/MyButton';
 import { useRouter } from 'expo-router';
-import {api} from "../../lib/contants";
-import {ErrorComponent} from "../../components/ErrorComponent";
+import { api } from '../../lib/contants';
+import { ErrorComponent } from '../../components/ErrorComponent';
+import { goToWebsiteForCheckout } from '../../lib/helpers';
 
 const validationSchema = yup.object().shape({
   amount: yup.string().required('Amount should be at least ₦300'),
 });
-
 
 const Wallet = () => {
   const {
@@ -47,7 +47,7 @@ const Wallet = () => {
 
   const { id, user } = useStoreId();
 
-    console.log({id})
+  console.log({ id });
   const { show } = useToast();
   const router = useRouter();
   const {
@@ -55,9 +55,9 @@ const Wallet = () => {
     handleChange,
     handleSubmit,
     resetForm,
-      isSubmitting,
-      errors,
-      touched
+    isSubmitting,
+    errors,
+    touched,
   } = useFormik({
     initialValues: {
       amount: '',
@@ -69,11 +69,16 @@ const Wallet = () => {
           `${api}=buywalletcredit&myuserid=${id}&amount=${values.amount}`
         );
 
-        console.log(response);
-        console.log(values.amount);
         if (response.data) {
           setReference(response.data);
-          paystackWebViewRef?.current?.startTransaction();
+          await goToWebsiteForCheckout({
+            name: user?.customername!,
+            amount: +values.amount!,
+            email: user?.email!,
+            phoneNumber: user?.phone!,
+            reference: response.data,
+          });
+          // paystackWebViewRef?.current?.startTransaction();
         } else {
           show('Please make sure you buy at least ₦300 worth of credit', {
             type: 'danger',
@@ -106,9 +111,7 @@ const Wallet = () => {
   }
 
   if (isError || walletBalanceIsError) {
-    return (
-     <ErrorComponent refetch={refetch} />
-    );
+    return <ErrorComponent refetch={refetch} />;
   }
   const { amount } = values;
 
@@ -249,11 +252,13 @@ const Wallet = () => {
                   value={amount}
                 />
               </View>
-                {touched.amount && errors.amount && (
-                    <Text style={{ color: 'red', fontWeight: 'bold', marginTop: 20 }}>
-                        {errors.amount}
-                    </Text>
-                )}
+              {touched.amount && errors.amount && (
+                <Text
+                  style={{ color: 'red', fontWeight: 'bold', marginTop: 20 }}
+                >
+                  {errors.amount}
+                </Text>
+              )}
             </View>
             <Button
               onPress={() => handleSubmit()}
@@ -264,13 +269,10 @@ const Wallet = () => {
                 height: 50,
                 justifyContent: 'center',
                 alignItems: 'center',
-
               }}
-
               icon={'card'}
               // buttonColor={colors.lightGreen}
               rippleColor={'white'}
-
               textColor={colors.lightGreen}
               labelStyle={{ fontFamily: 'PoppinsMedium', fontSize: 12 }}
             >
