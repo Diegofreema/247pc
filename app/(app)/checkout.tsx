@@ -1,8 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { Redirect, router, useFocusEffect, useRouter } from 'expo-router';
+
+import { useRouter } from 'expo-router';
 import { useFormik } from 'formik';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import {
@@ -12,7 +13,6 @@ import {
   Text,
   TextInput,
 } from 'react-native-paper';
-import { Paystack, paystackProps } from 'react-native-paystack-webview';
 import { useToast } from 'react-native-toast-notifications';
 import * as yup from 'yup';
 import Container from '../../components/Container';
@@ -21,23 +21,19 @@ import { MyButton } from '../../components/MyButton';
 import NavigationHeader from '../../components/NavigationHeader';
 import { colors } from '../../constants/Colors';
 import { useRefetchFee } from '../../hooks/useRefetchFee';
-import {
-  getProfile,
-  goToWebsiteForCheckout,
-  onReview,
-} from '../../lib/helpers';
+import { api } from '../../lib/contants';
+import { goToWebsiteForCheckout } from '../../lib/helpers';
 import { useWallet } from '../../lib/mutation';
 import { useGetOrder } from '../../lib/queries';
 import { useStoreId } from '../../lib/zustand/auth';
-import { api } from '../../lib/contants';
 
 const validationSchema = yup.object().shape({
   coupon: yup.string().required('Coupon code is required'),
 });
 
 const CheckOut = () => {
-  const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
-  const { id, user, setUser } = useStoreId();
+  // const paystackWebViewRef = useRef<paystackProps.PayStackRef | null>(null);
+  const { id, user } = useStoreId();
   const isPendingFee = useRefetchFee();
   const router = useRouter();
   const { show } = useToast();
@@ -45,8 +41,8 @@ const CheckOut = () => {
   const { mutateAsync: onWalletPay, isPending: walletLoading } = useWallet();
 
   const [paying, setIsPaying] = useState(false);
-  const [salesRef, setSalesRef] = useState('');
-  const [totalCost, setTotalCost] = useState('');
+  // const [salesRef, setSalesRef] = useState('');
+  // const [totalCost, setTotalCost] = useState('');
 
   const { handleChange, handleSubmit, values, errors, touched, isSubmitting } =
     useFormik({
@@ -163,7 +159,7 @@ const CheckOut = () => {
     );
   }
 
-  const amount = parseInt(totalCost);
+  // const amount = parseInt(totalCost);
 
   return (
     <Container>
@@ -231,7 +227,7 @@ const CheckOut = () => {
             shadowColor: 'transparent',
           }}
         >
-          <Paystack
+          {/* <Paystack
             paystackKey="pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe"
             billingEmail={user?.email as string}
             amount={amount}
@@ -284,7 +280,7 @@ const CheckOut = () => {
             }}
             // @ts-ignore
             ref={paystackWebViewRef}
-          />
+          /> */}
 
           <Card.Content>
             <View

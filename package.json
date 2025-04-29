@@ -48,6 +48,7 @@
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-event-listeners": "^1.0.7",
     "react-native-gesture-handler": "~2.16.1",
+    "react-native-isw-mobile-sdk": "^1.0.0-beta5.6",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modal": "^13.0.1",
     "react-native-otp-entry": "^1.8.3",

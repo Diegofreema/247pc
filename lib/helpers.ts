@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
 import * as StoreReview from 'expo-store-review';
 import { api } from './contants';
 export const passwordRegExp =
@@ -394,7 +395,7 @@ export const goToWebsiteForCheckout = async ({
       name
     )}/${amount}/${email}/${phoneNumber}/${reference}`
   );
-  await Linking.openURL(
+  await WebBrowser.openBrowserAsync(
     `https://blog.247pharmacy.net/users/checkoutmobile/${name}/${amount}/${email}/${phoneNumber}/${reference}`
   );
 };
