@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
+// import * as WebBrowser from 'expo-web-browser';
 import * as StoreReview from 'expo-store-review';
 import { api } from './contants';
 export const passwordRegExp =
@@ -391,11 +391,9 @@ export const goToWebsiteForCheckout = async ({
   reference,
 }: Props) => {
   console.log(
-    `https://blog.247pharmacy.net/users/checkoutmobile/${encodeURIComponent(
-      name
-    )}/${amount}/${email}/${phoneNumber}/${reference}`
+    `https://42b8-197-210-78-122.ngrok-free.app?name=${encodeURIComponent(name)}&phone=${phoneNumber}&email=${email}&paymentRef=${reference.slice(0, 20)}&amount=${amount}`,
   );
-  await WebBrowser.openBrowserAsync(
-    `https://blog.247pharmacy.net/users/checkoutmobile/${name}/${amount}/${email}/${phoneNumber}/${reference}`
+  await Linking.openURL(
+    `https://42b8-197-210-78-122.ngrok-free.app?name=${encodeURIComponent(name)}&phone=${phoneNumber}&email=${email}&paymentRef=${reference.slice(0, 20)}&amount=${amount}`
   );
 };

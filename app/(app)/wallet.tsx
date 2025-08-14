@@ -130,47 +130,7 @@ const Wallet = () => {
       <Container>
         <NavigationHeader title="Wallet" back />
         <View style={{ marginTop: 20 }} />
-        <Paystack
-          paystackKey={'pk_live_34dcb421bb4e9e6f20fdf2c993f2b44c9e436fbe'}
-          billingEmail={user?.email as string}
-          amount={finalAmount}
-          channels={[
-            'card',
-            'bank',
-            'ussd',
-            'mobile_money',
-            'qr',
-            'bank_transfer',
-          ]}
-          onCancel={() => {
-            show('Payment cancelled', {
-              type: 'success',
-              placement: 'bottom',
-              duration: 4000,
-              animationType: 'slide-in',
-            });
-          }}
-          onSuccess={() => {
-            axios
-              .post(`https://247pharmacy.net/check-out.aspx?zxc=${reference}`)
-              .then((response) => console.log(response));
 
-            show('Payment successful', {
-              type: 'success',
-              placement: 'bottom',
-              duration: 4000,
-              animationType: 'slide-in',
-            });
-
-            setReference('');
-            router.push('/order');
-            resetForm({ values: { amount: '' } });
-            walletBalanceRefetch();
-          }}
-          refNumber={reference}
-          // @ts-ignore
-          ref={paystackWebViewRef}
-        />
         <View>
           <View
             style={{
