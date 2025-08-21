@@ -9,9 +9,7 @@ import { SubCat } from '../../components/SubCat';
 import { colors } from '../../constants/Colors';
 import { useCat } from '../../lib/queries';
 
-type Props = {};
-
-const NewCat = (props: Props) => {
+const NewCat = () => {
   const { data, isPending, isFetching, isError, isPaused, refetch } = useCat();
   const [reload, setReload] = useState(false);
   const handleRefetch = () => {

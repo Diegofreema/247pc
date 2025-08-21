@@ -8,9 +8,8 @@ import { OrderCard } from '../../components/OrderCard';
 import { colors } from '../../constants/Colors';
 import { useGetFullOrder } from '../../lib/queries';
 import { Order } from '../../lib/types';
-type Props = {};
 
-const OrderScreen = (props: Props) => {
+const OrderScreen = () => {
   const { data, isPending, isPaused, isError, refetch } = useGetFullOrder();
 
   const [reload, setReload] = useState(false);

@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { Pressable, Text } from 'react-native';
 import { colors } from '../constants/Colors';
 
-export const Floating = (): JSX.Element => {
+export const Floating = () => {
   const router = useRouter();
   return (
     <Pressable

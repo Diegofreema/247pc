@@ -10,9 +10,7 @@ import { api } from '../lib/contants';
 type Prop = {
   scroll?: () => void;
 };
-export const ProductItem = (
-  item: WishlistType & Searched & Prop
-): JSX.Element => {
+export const ProductItem = (item: WishlistType & Searched & Prop) => {
   const router = useRouter();
   const { id } = useStoreId();
 

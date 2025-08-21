@@ -6,7 +6,7 @@ type Props = {
   isPending: boolean;
 };
 
-export const AuthModal = ({ isPending }: Props): JSX.Element => {
+export const AuthModal = ({ isPending }: Props) => {
   return (
     <Modal isVisible={isPending}>
       <View>

@@ -12,7 +12,7 @@ export const OrderedProductCard = ({
   rateSet,
   seller,
   statuz,
-}: Order): JSX.Element => {
+}: Order) => {
   return (
     // @ts-ignore
     <>

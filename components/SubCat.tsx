@@ -8,12 +8,7 @@ type Props = {
   index: number;
   img?: string;
 };
-export const SubCat = ({
-  category,
-  chief,
-  index,
-  img,
-}: SubProps & Props): JSX.Element => {
+export const SubCat = ({ category, chief, index, img }: SubProps & Props) => {
   const { width } = useWindowDimensions();
   const router = useRouter();
   // const Image = require(`${img}`);

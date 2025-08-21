@@ -8,7 +8,7 @@ type Props = {
   onChangeText?: (text: string) => void;
 };
 
-export const SearchHeader = ({ value, onChangeText }: Props): JSX.Element => {
+export const SearchHeader = ({ value, onChangeText }: Props) => {
   const router = useRouter();
   return (
     <View style={{ marginHorizontal: 20, marginTop: 10, paddingVertical: 20 }}>

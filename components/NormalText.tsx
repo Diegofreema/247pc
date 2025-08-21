@@ -6,7 +6,7 @@ type Props = {
   children: PropsWithChildren<string>;
 };
 
-export const NormalText = ({ children }: Props): JSX.Element => {
+export const NormalText = ({ children }: Props) => {
   return (
     <Text
       style={{ fontSize: 13, color: '#000', marginBottom: 10, lineHeight: 18 }}
@@ -16,7 +16,7 @@ export const NormalText = ({ children }: Props): JSX.Element => {
   );
 };
 
-export const BoldText = ({ children }: Props): JSX.Element => {
+export const BoldText = ({ children }: Props) => {
   return (
     <Text
       style={{
@@ -34,7 +34,7 @@ type TitleType = {
   heading: string;
   text: string;
 };
-export const TitleText = ({ heading, text }: TitleType): JSX.Element => {
+export const TitleText = ({ heading, text }: TitleType) => {
   return (
     <Text
       style={{ color: 'black', fontSize: 13, marginBottom: 10, lineHeight: 18 }}
@@ -52,11 +52,7 @@ type NumberedTextProps = {
   heading?: string;
 };
 
-export const NumberedTextBold = ({
-  number,
-  text,
-  bold,
-}: NumberedTextProps): JSX.Element => {
+export const NumberedTextBold = ({ number, text, bold }: NumberedTextProps) => {
   return (
     <View
       style={{
@@ -94,7 +90,7 @@ export const NumberedText = ({
   text,
   bold,
   heading,
-}: NumberedTextProps): JSX.Element => {
+}: NumberedTextProps) => {
   return (
     <View
       style={{

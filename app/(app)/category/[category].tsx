@@ -9,9 +9,8 @@ import NavigationHeader from '../../../components/NavigationHeader';
 import { ProductItem } from '../../../components/ProductItem';
 import { useProductCat } from '../../../lib/queries';
 // import { FlashList } from '@shopify/flash-list';
-type Props = {};
 
-const Cat = (props: Props) => {
+const Cat = () => {
   const params = useLocalSearchParams();
 
   console.log(params?.category);

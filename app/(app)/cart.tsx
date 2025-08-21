@@ -236,7 +236,7 @@ const CartScreen = () => {
                         gap: 10,
                       },
                     ]}
-                    onPress={() => router.push('/(app)/(tabs)/')}
+                    onPress={() => router.push('/(app)/(tabs)')}
                   >
                     <FontAwesome name="arrow-left" size={20} color="skyblue" />
                     <Text

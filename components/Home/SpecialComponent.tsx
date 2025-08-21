@@ -9,7 +9,7 @@ type Props = {
   special: Id[];
 };
 const width = Dimensions.get('window').width;
-export const SpecialComponent = ({ special }: Props): JSX.Element => {
+export const SpecialComponent = ({ special }: Props) => {
   const router = useRouter();
 
   return (

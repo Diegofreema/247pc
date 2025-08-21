@@ -4,7 +4,7 @@ import { Order } from '../lib/types';
 import { OrderedProductCard } from './OrderedProductCard';
 import { RatingForm } from './RatingForm';
 
-export const OrderCard = (item: Order): JSX.Element => {
+export const OrderCard = (item: Order) => {
   return (
     <View style={{ marginBottom: 20, gap: 10 }}>
       <OrderedProductCard {...item} />

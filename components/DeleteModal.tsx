@@ -13,7 +13,7 @@ type Props = {
   onClose: () => void;
 };
 
-export const DeleteModal = ({ visible, onClose }: Props): JSX.Element => {
+export const DeleteModal = ({ visible, onClose }: Props) => {
   const { id, removeId, removeUser } = useStoreId();
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();

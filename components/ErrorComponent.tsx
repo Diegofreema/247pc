@@ -9,7 +9,7 @@ type Props = {
   refetch: () => void;
 };
 
-export const ErrorComponent = ({ refetch }: Props): JSX.Element => {
+export const ErrorComponent = ({ refetch }: Props) => {
   const [, setRetry] = useState(false);
 
   const handleRetry = () => {

@@ -10,9 +10,7 @@ import { ProductItem } from '../../../components/ProductItem';
 import { colors } from '../../../constants/Colors';
 import { useSellerCat } from '../../../lib/queries';
 
-type Props = {};
-
-const SellerCat = (props: Props) => {
+const SellerCat = () => {
   const { category, id } = useLocalSearchParams();
 
   const { data, isPending, isFetching, isError, isPaused, refetch } =

@@ -9,9 +9,7 @@ import { Image } from 'expo-image';
 import { FloatingNav } from '../../../components/FloatingNav';
 import { ErrorComponent } from '../../../components/ErrorComponent';
 
-type Props = {};
-
-const Seller = (props: Props) => {
+const Seller = () => {
   const { sellerId, seller } = useLocalSearchParams();
   const router = useRouter();
   const { data, isPending, isFetching, isError, isPaused, refetch } = useSeller(
@@ -66,10 +64,7 @@ const Seller = (props: Props) => {
                   styles.container,
                 ]}
                 onPress={() =>
-                  router.push({
-                    pathname: `/sellerCat/${item.category}`,
-                    params: { id: sellerId },
-                  })
+                  router.push(`/sellerCat/${item.category}?id=${sellerId}`)
                 }
               >
                 <Image

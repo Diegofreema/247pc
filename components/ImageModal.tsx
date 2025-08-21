@@ -7,7 +7,7 @@ type Props = {
   image: string;
 };
 
-export const ImageModal = ({ image }: Props): JSX.Element => {
+export const ImageModal = ({ image }: Props) => {
   const { isOpen, onClose } = useImageModalState();
 
   return (

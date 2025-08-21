@@ -11,7 +11,7 @@ type Props = {
   count?: string;
 };
 
-export const AddToCartButton = ({ productId, count }: Props): JSX.Element => {
+export const AddToCartButton = ({ productId, count }: Props) => {
   const { mutateAsync: mutateCart, isPending: isMutatingCart } = useAddToCart();
   const [qty, setQty] = useState(1);
   const onIncrease = () => {

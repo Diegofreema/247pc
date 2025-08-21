@@ -5,7 +5,7 @@ import { Button, Modal, Portal, Text } from 'react-native-paper';
 import { colors } from '../constants/Colors';
 import { useModalState } from '../lib/zustand/modalState';
 
-export const ModalComponent = (): JSX.Element => {
+export const ModalComponent = () => {
   const { isOpen, onClose } = useModalState();
   const router = useRouter();
   const handleNav = () => {

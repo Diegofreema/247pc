@@ -25,7 +25,7 @@ export default function Categories() {
 
   const router = useRouter();
   let scrollOffsetY = useRef(new Animated.Value(0)).current;
-  const itemRef = useRef<TouchableOpacity[]>([]);
+  const itemRef = useRef<any[]>([]);
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
   let items = subCats?.[active];
@@ -38,7 +38,7 @@ export default function Categories() {
     if (selectedItem) {
       selectedItem.measureLayout(
         scrollRef.current! as any,
-        (x, y) => {
+        (x: number, y: number) => {
           scrollRef.current?.scrollTo({
             x: x - 16,
             y: 0,

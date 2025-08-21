@@ -8,9 +8,8 @@ import { FloatingNav } from '../../../components/FloatingNav';
 import NavigationHeader from '../../../components/NavigationHeader';
 import { ProductItem } from '../../../components/ProductItem';
 import { useNewCat } from '../../../lib/queries';
-type Props = {};
 
-const Chief = (props: Props) => {
+const Chief = () => {
   const { category } = useLocalSearchParams();
   const { data, isPending, isFetching, isError, isPaused, refetch } = useNewCat(
     category as string

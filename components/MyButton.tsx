@@ -21,7 +21,7 @@ export const MyButton = ({
   disabled,
   style,
   icon,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <Button
       style={[{ borderRadius: 5 }, style]}

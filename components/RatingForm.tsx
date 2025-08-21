@@ -10,7 +10,7 @@ type Props = {
   productId: string;
 };
 
-export const RatingForm = ({ productId }: Props): JSX.Element => {
+export const RatingForm = ({ productId }: Props) => {
   const [comment, setComment] = useState('');
   const { mutateAsync, isPending } = useComment();
   const [rating, setRating] = useState(0);
